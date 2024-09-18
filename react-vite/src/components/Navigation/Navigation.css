@@ -1,0 +1,9 @@
+.profile-dropdown {
+  position: absolute;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+}
