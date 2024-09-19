@@ -1,14 +1,16 @@
 import os
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, Blueprint
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, generate_csrf
-from flask_login import LoginManager
-from .models import db, User
+from flask_login import LoginManager, current_user, login_required
+from .models import db, User, Image
 from .api.user_routes import user_routes
 from .api.auth_routes import auth_routes
 from .seeds import seed_commands
 from .config import Config
+from app.api.boto import upload_file_to_s3, get_unique_filename
+from .forms import ImageForm
 
 app = Flask(__name__, static_folder='../react-vite/dist', static_url_path='/')
 
@@ -34,6 +36,16 @@ Migrate(app, db)
 # Application Security
 CORS(app)
 
+def format_errors(validation_errors):
+    """
+    Simple function that turns the WTForms validation errors into a simple list
+    """
+    errorMessages = dict()
+
+    for field in validation_errors:
+        errorMessages[field] = [error for error in validation_errors[field]]
+
+    return errorMessages
 
 # Since we are deploying with Docker and Flask,
 # we won't be using a buildpack when we deploy to Heroku.
@@ -83,6 +95,7 @@ def react_root(path):
     """
     if path == 'favicon.ico':
         return app.send_from_directory('public', 'favicon.ico')
+        # return
     return app.send_static_file('index.html')
 
 
@@ -91,19 +104,15 @@ def not_found(e):
     return app.send_static_file('index.html')
 
 
-from flask import Blueprint, request
-from app.models import db, Image
-from flask_login import current_user, login_required
-from app.s3_helpers import upload_file_to_s3, get_unique_filename
-from .forms import ImageForm
 
 image_routes = Blueprint("images", __name__)
 
 
-@image_routes.route("", methods=["POST"])
+@image_routes.route("/new", methods=["POST"])
 @login_required
 def upload_image():
     form = ImageForm()
+    form["csrf_token"].data = request.cookies["csrf_token"]
 
     if form.validate_on_submit():
         image = form.data["image"]
@@ -115,16 +124,16 @@ def upload_image():
             # if the dictionary doesn't have a url key
             # it means that there was an error when you tried to upload
             # so you send back that error message (and you printed it above)
-            return render_template("post_form.html", form=form, errors=[upload])
+            return {"errors": format_errors(upload)}
 
         url = upload["url"]
-        new_image = Post(image=url)
+        new_image = Image(image=url)
         db.session.add(new_image)
         db.session.commit()
-        return redirect("/posts/all")
+        return new_image
 
     if form.errors:
         print(form.errors)
-        return render_template("post_form.html", form=form, errors=form.errors)
+        return {"errors": format_errors(form.errors)}, 400
 
     return render_template("post_form.html", form=form, errors=None)
