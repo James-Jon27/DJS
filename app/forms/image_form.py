@@ -1,11 +1,10 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed, FileRequired
-from wtforms import SubmitField
-from app.api.boto import ALLOWED_EXTENSIONS
-
+from wtforms.validators import DataRequired
+from wtforms import  StringField
+from app.api.s3_helper import ALLOWED_EXTENSIONS
 
 class ImageForm(FlaskForm):
-    image = FileField(
-        "Image File", validators=[FileRequired(), FileAllowed(list(ALLOWED_EXTENSIONS))]
-    )
-    submit = SubmitField("Create Post")
+    image = FileField("Image File", validators=[FileRequired(), FileAllowed(list(ALLOWED_EXTENSIONS))])
+    title = StringField("title", validators=[DataRequired()])
+    description = StringField("description", validators=[DataRequired()])

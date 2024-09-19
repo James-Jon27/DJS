@@ -1,29 +1,35 @@
-const ADD_IMAGE = 'image/ADD'
+const POST_IMAGE = 'images/postImage'
 
 const addPost = (image) => ({
-    type: ADD_IMAGE,
+    type: POST_IMAGE,
     payload: image
 })
 
-export const createPost = (post) => async (dispatch) => {
-	const response = await fetch(`/images/new`, {
-		method: "POST",
-		body: post,
-	});
 
-	if (response.ok) {
-		const { resPost } = await response.json();
-		dispatch(addPost(resPost));
-	} else {
-		console.log("There was an error making your post!");
-	}
+export const createImage = (post) => async (dispatch) => {
+    const response = await fetch(`/api/images/new`, {
+      method: "POST",
+      body: post
+    });
+  
+    if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        dispatch(addPost(data));
+    } else {
+        console.log("There was an error making your post!")
+    }
 };
 
-initialState = {image : null}
 
-export default function imageReducer(state = initialState, action) {
-    switch(action.type) {
-        case ADD_IMAGE:
-            return { ...state, image: action.payload}
+function imageReducer(state = {}, action){
+    switch(action.type){
+        case POST_IMAGE:{
+            return { ...state, [action.payload.id]:action.payload }
+        }
+        default:
+            return state
     }
 }
+
+export default imageReducer
