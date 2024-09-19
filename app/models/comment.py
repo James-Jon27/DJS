@@ -22,8 +22,9 @@ class Comments(db.Model):
     )
 
     user = db.relationship("User", back_populates="comments")
+    image = db.relationship("Image", back_populates="comments")
 
-    def to_dict(self):
+    def to_dict_basic(self):
         return {
             "id": self.id,
             "comment": self.comment,
@@ -31,3 +32,9 @@ class Comments(db.Model):
             "userId": self.user_id
         }
     
+    def to_dict(self):
+        return {
+            **self.to_dict_basic(),
+            "User" : self.user.to_dict_basic(),
+            "Image" : self.image.to_dict_basic()
+        }
