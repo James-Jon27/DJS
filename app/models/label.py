@@ -1,3 +1,4 @@
+from app.models import label_image
 from .db import db, environment, SCHEMA
 
 class Label(db.Model):
@@ -9,8 +10,16 @@ class Label(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String, nullable=False, unique=True)
 
+    images = db.relationship('LabelImage', back_populates="labels", secondary="label_image")
+
     def to_dict_basic(self):
         return {
             "id": self.id,
             "name": self.name
+        }
+    
+    def to_dict(self):
+        return {
+            **self.to_dict_basic(),
+            "Images": [i.to_dict_basic() for i in self.images]
         }
