@@ -8,3 +8,9 @@ class Label(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String, nullable=False, unique=True)
+
+    def to_dict_basic(self):
+        return {
+            "id": self.id,
+            "name": self.name
+        }

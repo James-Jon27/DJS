@@ -10,6 +10,13 @@ class Favorite(db.Model):
     image_id = db.Column(db.Integer, db.ForeignKey("images.id"), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
+    def to_dict_basic(self):
+        return {
+            "id": self.id,
+            "image_id": self.image_id,
+            "user_id": self.user_id
+        }
+
 # # Will be in the user.py model soon
 # images = db.relationship("Image", secondary=favorites, back_populates="users")
 
