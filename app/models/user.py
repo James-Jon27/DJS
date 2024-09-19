@@ -1,3 +1,4 @@
+from app.models import stashimage
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -17,6 +18,8 @@ class User(db.Model, UserMixin):
     hashed_password = db.Column(db.String(255), nullable=False)
 
     comments = db.relationship("Comments", back_populates="user")
+    stashes = db.relationship("Stash", back_populates="user", secondary=stashimage)
+    images = db.relationship("Image", back_populates="user")
 
     @property
     def password(self):
@@ -29,9 +32,19 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
-    def to_dict(self):
+    def to_dict_basic(self):
         return {
             'id': self.id,
             'username': self.username,
-            'email': self.email
+            'email': self.email,
+            'firstName' : self.first_name,
+            "lastName" : self.last_name
+        }
+
+    def to_dict(self):
+        return {
+            **self.to_dict_basic(),
+            "Images": [image.to_dict_basic() for image in self.images],
+            "Comments": [comment.to_dict_basic() for comment in self.comments],
+            "Stashes" : [stash.to_dict_basic() for stash in self.stashes]
         }
