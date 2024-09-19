@@ -22,7 +22,7 @@ class Image(db.Model):
     favorites = db.relationship('Favorite', back_populates="images")
 
     #!Many to Many
-    stashes = db.relationship("StashImage", back_populates="image", secondary="stash_images")
+    stashes = db.relationship("StashImage", backref="image", secondary="stash_images")
     labels = db.relationship("LabelImage", back_populates="images", secondary="label_images")
 
     def to_dict_basic(self):

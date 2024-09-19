@@ -11,8 +11,8 @@ class LabelImage(db.Model):
     label_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("labels.id")), nullable=False)
 
 
-    labels = db.relationship("Label", back_populates="images")
-    images = db.relationship("Image", back_populates="labels")
+    # labels = db.relationship("Label", back_populates="images")
+    # images = db.relationship("Image", back_populates="labels")
 
     def to_dict_basic(self):
         return {

@@ -21,7 +21,7 @@ class Stash(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
     user = db.relationship("User", back_populates="stashes")
-    images = db.relationship("StashImage", back_populates="stashes", secondary="stash_images")
+    images = db.relationship("StashImage", backref="stash", secondary="stash_images")
 
     def to_dict(self):
         return {
