@@ -8,4 +8,4 @@ class Image(db.Model):
         __table_args__ = {"schema": SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
-    image = db.Column(db.String, validators=[DataRequired()])
+    image = db.Column(db.String, nullable=False)
