@@ -8,7 +8,7 @@ class Label(db.Model):
         __table_args__ = {"schema": SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    name = db.Column(db.String(50), nullable=False, unique=True)
+    name = db.Column(db.String(50))
 
     images = db.relationship('LabelImage', back_populates="labels", secondary="label_image")
 
