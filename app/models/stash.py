@@ -16,8 +16,8 @@ class Stash(db.Model):
     name = db.Column(db.String(30), nullable=False)
     description = db.Column(db.String(150))
 
-    user = db.relationship("User", back_populates="stash")
-    images = db.relationship("StashImage", back_populates="stash")
+    # user = db.relationship("User", back_populates="stash")
+    # images = db.relationship("StashImage", back_populates="stash")
 
     def to_dict(self):
         return {

@@ -21,8 +21,8 @@ class Comments(db.Model):
         nullable = False
     )
 
-    user = db.relationship("User", back_populates="comments")
-    image = db.relationship("Image", back_populates="comments")
+    # user = db.relationship("User", back_populates="comments")
+    # image = db.relationship("Image", back_populates="comments")
 
     def to_dict_basic(self):
         return {

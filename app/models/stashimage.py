@@ -14,8 +14,8 @@ class StashImage(db.Model):
     stash_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("stashes.id")), nullable=False)
     image_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("images.id")), nullable=False)
 
-    stash = db.relationship("Stash", back_populates="images", backref="stasheimages")
-    image = db.relationship("Image")
+    # stash = db.relationship("Stash", back_populates="images", backref="stasheimages")
+    # image = db.relationship("Image")
 
     def to_dict_basic(self):
         return {
