@@ -1,6 +1,7 @@
 from datetime import datetime
-from app.models import label_image, stash_image
+from .tables import label_image_table, stash_image_table
 from .db import db, environment, SCHEMA, add_prefix_for_prod
+
 
 class Image(db.Model):
     __tablename__ = "images"
@@ -9,22 +10,30 @@ class Image(db.Model):
         __table_args__ = {"schema": SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False)
+    user_id = db.Column(
+        db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False
+    )
     url = db.Column(db.String, nullable=False)
-    title = db.Column(db.String(50))
-    description = db.Column(db.String(255))
-    created_at = db.Column(db.DateTime, default=datetime.now)
-    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
+    title = db.Column(db.String(50), nullable=True)
+    description = db.Column(db.String(255), nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(
+        db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+    )
 
-    #!Relationships
+    # Relationships
     user = db.relationship("User", back_populates="images")
     comments = db.relationship("Comment", back_populates="image")
-    favorites = db.relationship('Favorite', back_populates="images")
+    favorites = db.relationship("Favorite", back_populates="images")
 
-    #!Many to Many
-    stashes = db.relationship("StashImage", backref="image", secondary="stash_images")
-    labels = db.relationship("LabelImage", back_populates="images", secondary="label_images")
-
+    # Many-to-Many Relationships
+    stashes = db.relationship(
+        "Stash", secondary=stash_image_table, back_populates="images"
+    )
+    labels = db.relationship(
+        "Label", secondary=label_image_table, back_populates="images"
+    ) 
+    
     def to_dict_basic(self):
         return {
             "id": self.id,
