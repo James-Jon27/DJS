@@ -3,22 +3,22 @@ from sqlalchemy.sql import text
 
 def seed_labels():
     o = Label(
-        name = "Art"
+        name = "art"
     )
     t = Label(
-        name = "Health"
+        name = "health"
     )
     thr = Label(
-        name = "Anime"
+        name = "anime"
     )
     fo = Label(
-        name ="Religion"
+        name = "religion"
     )
     fi = Label(
-        name = "Science"
+        name = "science"
     )
     si = Label(
-        name="Wallpaper"
+        name= "wallpaper"
     )
 
     lst = [o, t, thr, fo, fi, si]

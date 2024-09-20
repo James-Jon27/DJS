@@ -1,5 +1,6 @@
 from flask import Blueprint, request, redirect
-from app.models import db, Image
+from app.models import db, Image, Label
+from app.models.tables import label_image_table
 from flask_login import current_user, login_required
 from app.api.s3_helper import (
     upload_file_to_s3, get_unique_filename)
@@ -14,7 +15,7 @@ image_routes = Blueprint("images", __name__)
 # Basic Implementation, for production should only display images the current user hasn't already saved to a
 # stash, if user is not logged in then it should display any images. Also need to set a limit to how many images
 # to display on home page
-@image_routes.route("/")
+@image_routes.route("")
 def get_images():
     """
     Gets all Images in database and returns a list of basic image details
@@ -69,7 +70,6 @@ def upload_image():
     form['csrf_token'].data = request.cookies['csrf_token']
 
     if form.validate_on_submit():
-          
         image = form.data["image"]
         image.filename = get_unique_filename(image.filename)
         upload = upload_file_to_s3(image)
@@ -90,7 +90,20 @@ def upload_image():
             title = form.data["title"],
             description = form.data["description"]
             )
+        
         db.session.add(new_image)
+        
+
+        labels = form.data['labels']
+        for label in labels:
+            lower_label = label.lower()
+            if Label.query.filter(Label.name == lower_label).one_or_none() == None:
+                new_label = Label(name = lower_label)
+                db.session.add(new_label)
+                
+        
+            
+        
         db.session.commit()
         return new_image.to_dict_basic()
 

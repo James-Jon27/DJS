@@ -10,6 +10,7 @@ const UploadImage = () => {
     const [image, setImage] = useState(null);
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
+    const [labels, setLabels] = useState('')
     const [imageLoading, setImageLoading] = useState(false);
     
     
@@ -19,6 +20,8 @@ const UploadImage = () => {
         formData.append("image", image);
         formData.append("title", title)
         formData.append("description", description)
+        const label_arr = labels.replaceAll(' ', '').split(',')
+        formData.append("labels", label_arr)
         
         // aws uploads can be a bit slow—displaying
         // some sort of loading message is a good idea
@@ -48,6 +51,14 @@ const UploadImage = () => {
                  value={description}
                  onChange={(e) => setDescription(e.target.value)}
                  required 
+                />
+            </label>
+            <label>
+                Labels
+                <input 
+                 type="text"
+                 value={labels}
+                 onChange={(e) => setLabels(e.target.value)}
                 />
             </label>
             <input
