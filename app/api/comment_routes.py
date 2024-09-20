@@ -7,9 +7,19 @@ comment_routes = Blueprint("comments", __name__)
 
 
 """
+Get all comments
+"""
+@comment_routes.route('')
+def get_all_comments():
+    all_comments = Comment.query.all()
+    return {'comments': [comment.to_dict() for comment in all_comments]}
+    # return "This is a return from get all comments!"
+
+
+"""
 User can post new comments
 """
-@comment_routes.route('/<int:imageId>/new', method=['POST'])
+@comment_routes.route('/<int:imageId>/new', methods=['POST'])
 @login_required
 def post_new_comment(imageId):
     form = CommentForm()
