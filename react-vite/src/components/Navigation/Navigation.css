@@ -1,9 +1,29 @@
-.profile-dropdown {
-  position: absolute;
+.nav {
+	display: flex;
+	justify-content: space-between;
+	list-style: none;
+	font-size: xx-large;
+	align-items: start;
+	margin: 0;
+	border: 0;
+	padding: 0;
 }
 
-.nav {
-  display: flex;
-  justify-content: space-between;
-  list-style: none;
+.profile-dropdown {
+  position: absolute;
+	top: 70px;
+  right: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: max-content;
+	list-style: none;
+	padding-top: 0;
+	padding-bottom: 0;
+	border: solid 3px;
+}
+
+.user {
+	background: none;
+	border: none;
 }

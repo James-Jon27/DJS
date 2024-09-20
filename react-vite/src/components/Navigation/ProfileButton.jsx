@@ -41,7 +41,7 @@ function ProfileButton() {
 
   return (
     <>
-      <button onClick={toggleMenu}>
+      <button onClick={toggleMenu} className="user">
         <FaUserCircle />
       </button>
       {showMenu && (
@@ -55,7 +55,7 @@ function ProfileButton() {
               </li>
             </>
           ) : (
-            <>
+            <ul style={{alignItems: "start", listStyle: "none", paddingLeft : "10px", paddingRight: "70px"}}>
               <OpenModalMenuItem
                 itemText="Log In"
                 onItemClick={closeMenu}
@@ -66,7 +66,7 @@ function ProfileButton() {
                 onItemClick={closeMenu}
                 modalComponent={<SignupFormModal />}
               />
-            </>
+            </ul>
           )}
         </ul>
       )}
