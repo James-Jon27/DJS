@@ -1,19 +1,31 @@
 from flask import Blueprint, request
-from flask_login import login_required
-from app import format_errors
+from flask_login import current_user, login_required
 from app.forms import StashForm
 from app.models import db, Stash
 
 stash_routes = Blueprint('stashes', __name__)
 
-@stash_routes.route('/<int:stashId>')
+
+def format_errors(validation_errors):
+    """
+    Simple function that turns the WTForms validation errors into a simple list
+    """
+    errorMessages = dict()
+
+    for field in validation_errors:
+        errorMessages[field] = [error for error in validation_errors[field]]
+
+    return errorMessages
+
+
+@stash_routes.route('/<int:id>')
 @login_required
-def stashes(stashId):
+def stashes(id):
     '''
     Query for a specific stash owned by current user
     '''
-    stash = Stash.query.get(stashId)
-
+    stash = Stash.query.get(id)
+    
     if not stash:
         return {"error": "Stash not Found"}, 404
 
@@ -28,11 +40,12 @@ def post_a_stash():
     '''
 
     form = StashForm()
-    form["crsf_token"].data = request.cookies["csrf_token"]
+    form["csrf_token"].data = request.cookies["csrf_token"]
 
     if form.validate_on_submit():
         new_stash = Stash()
         form.populate_obj(new_stash)
+        new_stash.user_id = current_user.id
 
         db.session.add(new_stash)
         db.session.commit()
@@ -55,15 +68,18 @@ def update_stash(stashId):
         return {"error": "Stash not Found"}, 404
 
     form = StashForm()
-    form["crsf_token"].data = request.cookies["csrf_token"]
+    form["csrf_token"].data = request.cookies["csrf_token"]
 
-    if form.validate_on_submit():
+    if form.validate_on_submit() and stash.user_id == current_user.id:
         form.populate_obj(stash)
         db.session.commit()
         return stash.to_dict()
 
-    if form.errors:
+    elif form.errors:
         return {"errors": format_errors(form.errors)}, 400
+
+    elif stash.user_id != current_user.id:
+        return {"errors": "This is not your stash"}, 500
 
 
 @stash_routes.route("/<int:stashId>", methods=["DELETE"])
@@ -77,10 +93,12 @@ def delete_stash(stashId):
     if not stash:
         return {"error": "Stash not Found"}, 404
 
-    db.session.delete(stash)
-    db.session.commit()
-
-    return {"message": "Stash deleted successfully"}, 200
+    if stash.user_id == current_user.id:
+        db.session.delete(stash)
+        db.session.commit()
+        return {"message": "Stash deleted successfully"}, 200
+    else:
+        return {"errors": "This is not your stash"}, 500
 
 
 

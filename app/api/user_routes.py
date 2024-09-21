@@ -1,6 +1,7 @@
 from flask import Blueprint
 from flask_login import login_required
-from app.models import User
+from app.models import User, Stash, Favorite
+
 
 user_routes = Blueprint('users', __name__)
 
@@ -23,3 +24,23 @@ def user(id):
     """
     user = User.query.get(id)
     return user.to_dict()
+
+
+@user_routes.route('/<int:id>/stashes')
+@login_required
+def user_stashes(id):
+    """
+    Query for a user by id and returns that users stash
+    """
+    stashes = Stash.query.filter(Stash.user_id == id).all()
+    return {"stashes": [stash.to_dict_basic() for stash in stashes]}
+
+
+@user_routes.route('/<int:id>/favorites')
+@login_required
+def user_faves(id):
+    """
+    Query for a user by id and returns that users stash
+    """
+    favorites = Favorite.query.filter(Favorite.user_id == id).all()
+    return {"favorites": [fav.to_dict_basic() for fav in favorites]}
