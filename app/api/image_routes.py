@@ -4,17 +4,67 @@ from flask_login import current_user, login_required
 from app.api.s3_helper import (
     upload_file_to_s3, get_unique_filename)
 from app.forms.image_form import ImageForm
+from app.forms.image_update_form import ImageUpdateForm
 # import sys
 
 
 
 image_routes = Blueprint("images", __name__)
 
+# Basic Implementation, for production should only display images the current user hasn't already saved to a
+# stash, if user is not logged in then it should display any images. Also need to set a limit to how many images
+# to display on home page
+@image_routes.route("/")
+def get_images():
+    """
+    Gets all Images in database and returns a list of basic image details
+    """
+    images = Image.query.all()
+    return {'images': [image.to_dict_basic() for image in images]}
+
+
+@image_routes.route("/<int:id>")
+def get_specific_image(id):
+    """
+    Gets the image with the specified ID and returns a list of complete image details
+    """
+    image = Image.query.get(id)
+    return image.to_dict()
+
+@image_routes.route("/<int:id>")
+def update_specific_image(id):
+    """
+    Updates the image with the specified ID
+    """
+    form = ImageUpdateForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+
+    if form.validate_on_submit():
+        image = Image.query.get(id)
+        image.title = form.data["title"],
+        image.description = form.data["description"]
+        db.session.commit()
+        return image.to_dict()
+
+    return form.errors, 400
+
+    
+
+@image_routes.route("/<int:id>/images")
+def get_user_images(id):
+    """
+    Gets all the images posted by the specified user
+    """
+    images = Image.query.filter(Image.id == id).all()
+    return {'images': [image.to_dict_basic() for image in images]}
 
 
 @image_routes.route("/new", methods=["POST"])
 @login_required
 def upload_image():
+    """
+    Uploads image to AWS bucket and creates new image in db
+    """
     form = ImageForm()
     form['csrf_token'].data = request.cookies['csrf_token']
 
@@ -48,3 +98,4 @@ def upload_image():
         return form.errors
 
     return
+
