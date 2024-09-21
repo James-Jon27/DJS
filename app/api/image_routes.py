@@ -6,7 +6,7 @@ from app.api.s3_helper import (
     upload_file_to_s3, get_unique_filename)
 from app.forms.image_form import ImageForm
 from app.forms.image_update_form import ImageUpdateForm
-# import sys
+import sys
 
 
 
@@ -90,21 +90,34 @@ def upload_image():
             title = form.data["title"],
             description = form.data["description"]
             )
-        
-        db.session.add(new_image)
-        
 
         labels = form.data['labels']
-        for label in labels:
-            lower_label = label.lower()
-            if Label.query.filter(Label.name == lower_label).one_or_none() == None:
-                new_label = Label(name = lower_label)
-                db.session.add(new_label)
+
+        if labels != '':
+        # Checking to see if there are any labels
+            labels = labels.split(',')
+            # Splitting csv values into a list for iteration
+            for label in labels:
+            # Iterating through list to add labels
+                lower_label = label.lower()
+                find_label = Label.query.filter(Label.name == lower_label).one_or_none()
+                # Checking to see if label has already been created
+                if find_label is None:
+                # If there are no labels that match then create a new label and add it, then make the association on the
+                # label_images table for the new image for each label that is new
+                    new_label = Label(name = lower_label)
+                    new_image.labels.append(new_label)
+                    db.session.add(new_label)
+                else:
+                # If the label already exists just add that label we found to the new image on the label_image table
+                    new_image.labels.append(find_label)
                 
-        
-            
-        
+        else:
+        # If no labels were given then simply add the image
+            db.session.add(new_image)
+
         db.session.commit()
+            
         return new_image.to_dict_basic()
 
     if form.errors:
