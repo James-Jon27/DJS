@@ -8,5 +8,5 @@ class ImageForm(FlaskForm):
     image = FileField("Image File", validators=[FileRequired(), FileAllowed(list(ALLOWED_EXTENSIONS))])
     title = StringField("title", validators=[DataRequired()])
     description = StringField("description", validators=[DataRequired()])
-    labels = StringField("Label Name", validators=[Length(max=50)])
+    labels = StringField("Labels", validators=[Length(max=50)])
 

@@ -51,6 +51,72 @@ def get_specific_image(id):
     return image.to_dict()
 
 
+@image_routes.route("/new", methods=["POST"])
+@login_required
+def upload_image():
+    """
+    Uploads image to AWS bucket and creates new image in db
+    """
+    form = ImageForm()
+    form["csrf_token"].data = request.cookies["csrf_token"]
+
+    if form.validate_on_submit():
+        image = form.data["image"]
+        image.filename = get_unique_filename(image.filename)
+        upload = upload_file_to_s3(image)
+        # print(current_user.to_dict(), file=sys.stdout)
+
+        if "url" not in upload:
+            # if the dictionary doesn't have a url key
+            # it means that there was an error when you tried to upload
+            # so you send back that error message (and you printed it above)
+            print("Url not in upload")
+            return format_errors(form.errors)
+
+        url = upload["url"]
+        new_image = Image(
+            user_id=current_user.id,
+            url=url,
+            title=form.data["title"],
+            description=form.data["description"],
+        )
+
+        labels = form.data["labels"]
+
+        if labels != "":
+            # Checking to see if there are any labels
+            # TODO: When adding ", " when typing, label name now starts with " "
+            labels = labels.split(",")
+            # Splitting csv values into a list for iteration
+            for label in labels:
+                # Iterating through list to add labels
+                lower_label = label.lower()
+                find_label = Label.query.filter(Label.name == lower_label).one_or_none()
+                # Checking to see if label has already been created
+                if not find_label:
+                    # If there are no labels that match then create a new label and add it, then make the association on the
+                    # label_images table for the new image for each label that is new
+                    new_label = Label(name=lower_label)
+                    new_image.labels.append(new_label)
+                    db.session.add(new_label)
+                else:
+                    # If the label already exists just add that label we found to the new image on the label_image table
+                    new_image.labels.append(find_label)
+
+        else:
+            # If no labels were given then simply add the image
+            db.session.add(new_image)
+
+        db.session.commit()
+
+        return new_image.to_dict()
+
+    if form.errors:
+        return format_errors(form.errors)
+
+    return
+
+
 @image_routes.route("/<int:id>", methods=["PUT"])
 @login_required
 def update_specific_image(id):
@@ -69,9 +135,9 @@ def update_specific_image(id):
     #? LABEL UPDATES AS WELL
     if labels != '':
         # Checking to see if there are any labels
-        labels = labels.split(',')
+        lbl_lst = labels.split(',')
         # Splitting csv values into a list for iteration
-        for label in labels:
+        for label in lbl_lst:
             # Iterating through list to add labels
             lower_label = label.lower()
             find_label = Label.query.filter(Label.name == lower_label).one_or_none()
@@ -87,7 +153,9 @@ def update_specific_image(id):
                 image.labels.append(find_label)
                 
     if form.validate_on_submit():
-        form.populate_obj(image)
+        image.title = form.data['title']
+        image.description = form.data['description']
+
         db.session.commit()
         return image.to_dict()
 
@@ -170,76 +238,15 @@ def stash_an_image(id, stashName):
         image = Image.query.get(id)
         if not image:
             return {"errors": "Image not Found"}
+
+        for img in stash.images:
+            if img.id == id:
+                return {"errors": "Image already stashed here"}, 500
         
         stash.images.append(image)
-        return stash.to_dict()
-
-
-@image_routes.route("/new", methods=["POST"])
-@login_required
-def upload_image():
-    """
-    Uploads image to AWS bucket and creates new image in db
-    """
-    form = ImageForm()
-    form['csrf_token'].data = request.cookies['csrf_token']
-
-    if form.validate_on_submit():
-        image = form.data["image"]
-        image.filename = get_unique_filename(image.filename)
-        upload = upload_file_to_s3(image)
-        # print(current_user.to_dict(), file=sys.stdout)
-
-
-        if "url" not in upload:
-        # if the dictionary doesn't have a url key
-        # it means that there was an error when you tried to upload
-        # so you send back that error message (and you printed it above)
-            print('Url not in upload')
-            return format_errors(form.errors)
-
-        url = upload["url"]
-        new_image = Image(
-            user_id = current_user.id,
-            url = url,
-            title = form.data["title"],
-            description = form.data["description"]
-            )
-
-        labels = form.data['labels']
-
-        if labels != '':
-        # Checking to see if there are any labels
-            # TODO: When adding ", " when typing, label name now starts with " "
-            labels = labels.split(',')
-            # Splitting csv values into a list for iteration
-            for label in labels:
-            # Iterating through list to add labels
-                lower_label = label.lower()
-                find_label = Label.query.filter(Label.name == lower_label).one_or_none()
-                # Checking to see if label has already been created
-                if not find_label:
-                # If there are no labels that match then create a new label and add it, then make the association on the
-                # label_images table for the new image for each label that is new
-                    new_label = Label(name = lower_label)
-                    new_image.labels.append(new_label)
-                    db.session.add(new_label)
-                else:
-                # If the label already exists just add that label we found to the new image on the label_image table
-                    new_image.labels.append(find_label)
-                
-        else:
-        # If no labels were given then simply add the image
-            db.session.add(new_image)
-
         db.session.commit()
-            
-        return new_image.to_dict()
 
-    if form.errors:
-        return format_errors(form.errors)
-
-    return
+        return stash.to_dict()
 
 
 # ! LABEL MANIPULATION ROUTES
@@ -262,4 +269,15 @@ def del_label(id, labelName):
 # ! SEARCH FEATURE
 
 # GET api/images/:labelname
+@image_routes.route("/<string:labelName>")
+def find_by_label(labelName):
+    images = Image.query.all()
+    res = []
+    for image in images:
+        for label in image.labels:
+            if label.name == labelName:
+                res.append(image.to_dict_basic())
+                continue
+
+    return {"images": res}
 
