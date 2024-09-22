@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_login import login_required
-from app.models import User, Stash, Favorite
+from app.models import User, Stash, Favorite, Image
 
 
 user_routes = Blueprint('users', __name__)
@@ -26,6 +26,7 @@ def user(id):
     return user.to_dict()
 
 
+# ! Stashes
 @user_routes.route('/<int:id>/stashes')
 @login_required
 def user_stashes(id):
@@ -36,6 +37,7 @@ def user_stashes(id):
     return {"stashes": [stash.to_dict_basic() for stash in stashes]}
 
 
+#  ! Favorites
 @user_routes.route('/<int:id>/favorites')
 @login_required
 def user_faves(id):
@@ -44,3 +46,13 @@ def user_faves(id):
     """
     favorites = Favorite.query.filter(Favorite.user_id == id).all()
     return {"favorites": [fav.to_dict_basic() for fav in favorites]}
+
+
+# ! Images
+@user_routes.route("/<int:id>/images")
+def get_user_images(id):
+    """
+    Gets all the images posted by the specified user
+    """
+    images = Image.query.filter(Image.user_id == id).all()
+    return {"images": [image.to_dict_basic() for image in images]}

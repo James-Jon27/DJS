@@ -7,10 +7,11 @@ favorite_routes = Blueprint("favorites", __name__)
 @favorite_routes.route("/<int:id>", methods=["DELETE"])
 @login_required
 def del_fav(id):
-    fav = Favorite.query.get(id)
+    fav_to_delete = Favorite.query.get(id)
 
-    if fav.user_id == current_user.id:
-        db.session.delete(fav)
+    #! If curr user owns favorite
+    if fav_to_delete.user_id == current_user.id:
+        db.session.delete(fav_to_delete)
         db.session.commit()
         return {"message": "Successfully deleted"}
     else:

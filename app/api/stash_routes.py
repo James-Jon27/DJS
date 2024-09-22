@@ -18,11 +18,17 @@ def format_errors(validation_errors):
     return errorMessages
 
 
+@stash_routes.route("")
+def all_stashes():
+    stashes = Stash.query.all()
+    return {"stashes": [stash.to_dict_basic() for stash in stashes]}
+
+
 @stash_routes.route('/<int:id>')
 @login_required
 def stashes(id):
     '''
-    Query for a specific stash owned by current user
+    Query for a specific stash by id
     '''
     stash = Stash.query.get(id)
     
@@ -70,16 +76,16 @@ def update_stash(stashId):
     form = StashForm()
     form["csrf_token"].data = request.cookies["csrf_token"]
 
-    if form.validate_on_submit() and stash.user_id == current_user.id:
+    if stash.user_id != current_user.id:
+        return {"errors": "This is not your stash"}, 500
+
+    if form.validate_on_submit():
         form.populate_obj(stash)
         db.session.commit()
         return stash.to_dict()
 
-    elif form.errors:
+    if form.errors:
         return {"errors": format_errors(form.errors)}, 400
-
-    elif stash.user_id != current_user.id:
-        return {"errors": "This is not your stash"}, 500
 
 
 @stash_routes.route("/<int:stashId>", methods=["DELETE"])

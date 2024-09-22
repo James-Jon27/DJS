@@ -1,3 +1,4 @@
+from sqlalchemy import UniqueConstraint
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 from datetime import datetime
 
@@ -6,6 +7,7 @@ class Favorite(db.Model):
 
     if environment == "production":
         __table_args__ = {"schema": SCHEMA}
+
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     image_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("images.id")), nullable=False)

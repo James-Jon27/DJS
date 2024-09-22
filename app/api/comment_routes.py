@@ -5,82 +5,74 @@ from flask_login import current_user, login_required
 
 comment_routes = Blueprint("comments", __name__)
 
+def format_errors(validation_errors):
+    """
+    Simple function that turns the WTForms validation errors into a simple list
+    """
+    errorMessages = dict()
 
-"""
-Get all comments
-"""
+    for field in validation_errors:
+        errorMessages[field] = [error for error in validation_errors[field]]
+
+    return errorMessages
+
+
 @comment_routes.route('')
 def get_all_comments():
+    """
+    Get all comments
+    """
     all_comments = Comment.query.all()
-    return {'comments': [comment.to_dict() for comment in all_comments]}
+    return {'comments': [comment.to_dict_basic() for comment in all_comments]}
     # return "This is a return from get all comments!"
 
 
-"""
-User can post new comments
-"""
-@comment_routes.route('/<int:imageId>/new', methods=['POST'])
+@comment_routes.route('/<int:id>', methods=['PUT'])
 @login_required
-def post_new_comment(imageId):
+def update_comment(id):
+    """
+    User can update their comments
+    """
     form = CommentForm()
-    form['csrf_token'].data = request.cookies('csrf_token')
+    form['csrf_token'].data = request.cookies['csrf_token']
+    comment_to_update = Comment.query.get(id)
 
+    #! If comment does not exist
+    if not comment_to_update:
+        return {"errors": "Comment not Found"}, 404
+
+    #! If curr user does not own comment
+    if comment_to_update.user_id != current_user.id:
+        return {"errors": "This is not your comment to update!"}, 500
+
+    #! Use information from form to update 
     if form.validate_on_submit():
         comment = form.data["comment"]
-        new_comment = Comment(
-            user_id = current_user.id,
-            image_id = imageId,
-            comment = comment
-        )
-        db.session.add(new_comment)
+        comment_to_update.comment = comment
         db.session.commit()
-        return new_comment.to_dict_basic()
+        return comment_to_update.to_dict()
     
     if form.errors:
-        return form.errors
-    
-    return
+        return {"errors": format_errors(form.errors)}
 
 
-"""
-User can update their comments
-"""
-@comment_routes.route('/<int:commentId>', methods=['PUT'])
+@comment_routes.route('/<int:id>', methods=["DELETE"])
 @login_required
-def update_comment(commentId):
-    form = CommentForm()
-    form['csrf_token'].data = request.cookies('csrf_token')
+def delete_comment(id):
+    """
+    User can delete their comments
+    """
+    comment_to_delete = Comment.query.get(id)
 
-    if form.validate_on_submit():
-        comment = form.data["comment"]
-        comment_to_update = Comment.query.get(commentId)
-        comment_owner_id = comment_to_update.to_dict_basic()['userId']
-
-        if comment_owner_id == current_user.id:
-            comment_to_update.comment = comment
-            db.session.commit()
-            return comment_to_update.to_dict_basic()
-        else:
-            return "This is not your comment to update!"
+    #! If comment does not exist
+    if not comment_to_delete:
+        return {"errors": "Comment not found"}, 404
     
-    if form.errors:
-        return form.errors
+    #! If curr user does not own comment
+    if comment_to_delete.user_id != current_user.id:
+        return {"errors": "This is not your comment to delete!"}, 500
+
+    db.session.delete(comment_to_delete)
+    db.session.commit()
     
-    return
-
-
-"""
-User can delete their comments
-"""
-@comment_routes.route('/<int:commentId>', methods=["DELETE"])
-@login_required
-def delete_comment(commentId):
-    comment_to_delete = Comment.query.get(commentId)
-    comment_owner_id = comment_to_delete.to_dict_basic()['userId']
-
-    if comment_owner_id == current_user.id:
-        db.session.delete(comment_to_delete)
-        db.session.commit()
-        return f"Comment Id {commentId} has been deleted!"
-    else:
-        return "This is not your comment to delete!"
+    return {"message":"Comment has been deleted!"}

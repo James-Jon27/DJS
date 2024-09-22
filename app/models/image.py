@@ -50,5 +50,5 @@ class Image(db.Model):
             "Comments": [comment.to_dict_basic() for comment in self.comments],
             "Favorites": [fav.to_dict_basic() for fav in self.favorites],
             "Labels": [lb.to_dict_basic() for lb in self.labels],
-            "Stashes": [stash.to_dict_basic() for stash in self.labels]
+            "Stashes": [stash.to_dict_basic() for stash in self.stashes]
         }
