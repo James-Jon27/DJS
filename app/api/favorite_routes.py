@@ -9,7 +9,8 @@ favorite_routes = Blueprint("favorites", __name__)
 def del_fav(id):
     fav_to_delete = Favorite.query.get(id)
 
-    #! If curr user owns favorite
+    if not fav_to_delete:
+        return {"errors": "This image is not a favorite"}, 404    #! If curr user owns favorite
     if fav_to_delete.user_id == current_user.id:
         db.session.delete(fav_to_delete)
         db.session.commit()
