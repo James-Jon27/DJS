@@ -132,8 +132,8 @@ def update_specific_image(id):
             old_label = Label.query.get(label.id)
             image.labels.remove(old_label)
         
-
-        create_labels(labels, image)
+        if labels != "":
+            create_labels(labels, image)
         # Call function to create new labels
 
         db.session.commit()
