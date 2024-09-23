@@ -14,7 +14,7 @@ class Image(db.Model):
         db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False
     )
     url = db.Column(db.String, nullable=False)
-    title = db.Column(db.String(50), nullable=True)
+    title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(

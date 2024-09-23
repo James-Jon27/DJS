@@ -73,12 +73,17 @@ def upload_image():
             print("Url not in upload")
             return format_errors(form.errors)
 
+        desc = form.data["description"]
+        if desc == '':
+            desc = None
+
+
         url = upload["url"]
         new_image = Image(
             user_id=current_user.id,
             url=url,
             title=form.data["title"],
-            description=form.data["description"],
+            description=desc,
         )
 
         labels = form.data["labels"]
@@ -276,10 +281,12 @@ def find_by_label(labelName):
     return {"images": res}
 
 def create_labels(labels, image):
-    labels = labels.replace(' ', '')
+    labels = labels.strip()
     if(labels.endswith(',')):
-        labels = labels[:-1]
+            labels = labels[:-1]
     labels = labels.split(',')
+    for i, label in enumerate(labels):
+        labels[i] = label.strip()
     # Splitting csv values into a list for iteration
     for label in labels:
         # Iterating through list to add labels
