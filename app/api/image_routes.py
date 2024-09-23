@@ -248,7 +248,10 @@ def del_label(id, labelName):
     img = Image.query.get(id)
     
     if not img:
-        return {"errors": "Image not found"}
+        return {"errors": "Image not found"}, 404
+
+    if img.user_id != current_user.id:
+        return {"errors": "This is not your image"}, 500
 
     for lbl in img.labels:
         if lbl.name == labelName:
