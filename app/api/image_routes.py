@@ -127,6 +127,9 @@ def update_specific_image(id):
     image = Image.query.get(id)
     labels = form.data['labels']
 
+    if not image:
+        return {"errors": "Images not found"}, 404
+
     if image.user_id != current_user.id:
         return {"errors": "This is not your image"}, 500
 

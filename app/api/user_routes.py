@@ -39,7 +39,7 @@ def user_stashes(id):
     if not stashes:
         return {"errors": "Stashes not found"}, 404
 
-    return {"stashes": [stash.to_dict_basic() for stash in stashes]}
+    return {"Stashes": [stash.to_dict_basic() for stash in stashes]}
 
 
 #  ! Favorites
@@ -65,4 +65,4 @@ def get_user_images(id):
     if not images:
         return {"errors": "Images not found"}, 404
 
-    return {"images": [image.to_dict_basic() for image in images]}
+    return {"Images": [image.to_dict_basic() for image in images]}

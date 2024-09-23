@@ -23,15 +23,17 @@ class Image(db.Model):
 
     # Relationships
     user = db.relationship("User", back_populates="images")
-    comments = db.relationship("Comment", back_populates="image")
-    favorites = db.relationship("Favorite", back_populates="images")
+    comments = db.relationship("Comment", back_populates="image", cascade="all, delete")
+    favorites = db.relationship(
+        "Favorite", back_populates="images", cascade="all, delete"
+    )
 
     # Many-to-Many Relationships
     stashes = db.relationship(
-        "Stash", secondary=stash_image_table, back_populates="images"
+        "Stash", secondary=stash_image_table, back_populates="images", cascade="all, delete"
     )
     labels = db.relationship(
-        "Label", secondary=label_image_table, back_populates="images"
+        "Label", secondary=label_image_table, back_populates="images", cascade="all, delete"
     ) 
     
     def to_dict_basic(self):

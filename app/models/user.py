@@ -20,10 +20,10 @@ class User(db.Model, UserMixin):
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
     #!Relationships
-    comments = db.relationship("Comment", back_populates="user")
-    stashes = db.relationship("Stash", back_populates="user")
-    images = db.relationship("Image", back_populates="user")
-    favorites = db.relationship("Favorite", back_populates="users")
+    comments = db.relationship("Comment", back_populates="user", cascade="all, delete")
+    stashes = db.relationship("Stash", back_populates="user", cascade="all, delete")
+    images = db.relationship("Image", back_populates="user", cascade="all, delete")
+    favorites = db.relationship("Favorite", back_populates="users", cascade="all, delete")
 
     @property
     def password(self):
