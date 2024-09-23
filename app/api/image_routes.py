@@ -10,6 +10,7 @@ from app.forms.image_update_form import ImageUpdateForm
 
 
 
+
 image_routes = Blueprint("images", __name__)
 
 def format_errors(validation_errors):
@@ -72,36 +73,25 @@ def upload_image():
             print("Url not in upload")
             return format_errors(form.errors)
 
+        desc = form.data["description"]
+        if desc == '':
+            desc = None
+
+
         url = upload["url"]
         new_image = Image(
             user_id=current_user.id,
             url=url,
             title=form.data["title"],
-            description=form.data["description"],
+            description=desc,
         )
 
         labels = form.data["labels"]
 
         if labels != "":
-            # Checking to see if there are any labels
-            # TODO: When adding ", " when typing, label name now starts with " "
-            labels = labels.split(",")
-            # Splitting csv values into a list for iteration
-            for label in labels:
-                # Iterating through list to add labels
-                lower_label = label.lower()
-                find_label = Label.query.filter(Label.name == lower_label).one_or_none()
-                # Checking to see if label has already been created
-                if not find_label:
-                    # If there are no labels that match then create a new label and add it, then make the association on the
-                    # label_images table for the new image for each label that is new
-                    new_label = Label(name=lower_label)
-                    new_image.labels.append(new_label)
-                    db.session.add(new_label)
-                else:
-                    # If the label already exists just add that label we found to the new image on the label_image table
-                    new_image.labels.append(find_label)
-
+        # Checking to see if there are any labels
+            create_labels(labels, new_image)
+            
         else:
             # If no labels were given then simply add the image
             db.session.add(new_image)
@@ -111,7 +101,7 @@ def upload_image():
         return new_image.to_dict()
 
     if form.errors:
-        return format_errors(form.errors)
+        return {"errors": format_errors(form.errors)}, 400
 
     return
 
@@ -127,39 +117,34 @@ def update_specific_image(id):
     image = Image.query.get(id)
     labels = form.data['labels']
 
+
     if not image:
         return {"errors": "Images not found"}, 404
 
     if image.user_id != current_user.id:
         return {"errors": "This is not your image"}, 500
 
-
-    #? LABEL UPDATES AS WELL
-    if labels != '':
-        # Checking to see if there are any labels
-        lbl_lst = labels.split(',')
-        # Splitting csv values into a list for iteration
-        for label in lbl_lst:
-            # Iterating through list to add labels
-            lower_label = label.lower()
-            find_label = Label.query.filter(Label.name == lower_label).one_or_none()
-            # Checking to see if label has already been created
-            if not find_label:
-            # If there are no labels that match then create a new label and add it, then make the association on the
-            # label_images table for the new image for each label that is new
-                new_label = Label(name = lower_label)
-                image.labels.append(new_label)
-                db.session.add(new_label)
-            else:
-            # If the label already exists just add that label we found to the new image on the label_image table
-                image.labels.append(find_label)
                 
     if form.validate_on_submit():
         image.title = form.data['title']
         image.description = form.data['description']
-        # TODO: Update label instead of having to delete manually?
+
+
+        image_label = Label.query.filter(Label.images.any(id = id)).all()
+        # Finding all labels associated with a specific image id
+        for label in image_label:
+            # For every label, remove the association with the specified image
+            old_label = Label.query.get(label.id)
+            image.labels.remove(old_label)
+        
+        if labels != "":
+            create_labels(labels, image)
+        # Call function to create new labels
+
         db.session.commit()
+
         return image.to_dict()
+    
 
     return format_errors(form.errors), 400
 
@@ -205,7 +190,7 @@ def post_new_comment(id):
         return new_comment.to_dict_basic()
 
     if form.errors:
-        return format_errors(form.errors)
+        return {"errors" : format_errors(form.errors)}, 400
 
 
 #! Favorites
@@ -268,14 +253,16 @@ def del_label(id, labelName):
     img = Image.query.get(id)
     
     if not img:
-        return {"errors": "Image not found"}
+        return {"errors": "Image not found"}, 404
 
+    if img.user_id != current_user.id:
+        return {"errors": "This is not your image"}, 500
     for lbl in img.labels:
         if lbl.name == labelName:
             img.labels.remove(lbl)
             db.session.commit()
             return img.to_dict()
-        return {"errors": "Label not Found"}, 404
+    return {"errors": "Label not Found"}, 404
 
 
 
@@ -293,3 +280,25 @@ def find_by_label(labelName):
 
     return {"images": res}
 
+def create_labels(labels, image):
+    labels = labels.strip()
+    if(labels.endswith(',')):
+            labels = labels[:-1]
+    labels = labels.split(',')
+    for i, label in enumerate(labels):
+        labels[i] = label.strip()
+    # Splitting csv values into a list for iteration
+    for label in labels:
+        # Iterating through list to add labels
+        lower_label = label.lower()
+        find_label = Label.query.filter(Label.name == lower_label).one_or_none()
+        # Checking to see if label has already been created
+        if not find_label:
+            # If there are no labels that match then create a new label and add it, then make the association on the
+            # label_images table for the new image for each label that is new
+            new_label = Label(name=lower_label)
+            image.labels.append(new_label)
+            db.session.add(new_label)
+        else:
+            # If the label already exists just add that label we found to the new image on the label_image table
+            image.labels.append(find_label)
