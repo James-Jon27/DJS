@@ -27,7 +27,6 @@ def format_errors(validation_errors):
 # stash, if user is not logged in then it should display any images. Also need to set a limit to how many images
 # to display on home page
 @image_routes.route("")
-@login_required
 def get_images():
     """
     Gets all Images in database and returns a list of basic image details
@@ -155,7 +154,7 @@ def update_specific_image(id):
     if form.validate_on_submit():
         image.title = form.data['title']
         image.description = form.data['description']
-
+        # TODO: Update label instead of having to delete manually?
         db.session.commit()
         return image.to_dict()
 
@@ -169,6 +168,9 @@ def delete_image(id):
     Delete image by id
     """
     image_to_delete = Image.query.get(id)
+    
+    if not image_to_delete:
+        return {"errors": "Image not found"}
 
     if image_to_delete.user_id != current_user.id:
         return {"errors": "This is not your image"}, 500
@@ -212,6 +214,11 @@ def favorite_an_image(id):
         image_id = id,
         user_id = current_user.id
     )
+
+    if not img:
+        return {"errors": "Image not found"}, 404
+
+
     
     # ! Run a query for unique to avoid doubling a favorite
     favorites = Favorite.query.filter(Favorite.user_id == current_user.id).all()
@@ -226,10 +233,10 @@ def favorite_an_image(id):
 
 
 # ! Stash an Image
-@image_routes.route("/<int:id>/stashes/<string:stashName>", methods=["POST"])
+@image_routes.route("/<int:id>/stashes/<int:stashId>", methods=["POST"])
 @login_required
-def stash_an_image(id, stashName):
-    stash = Stash.query.filter_by(name=stashName).first()
+def stash_an_image(id, stashId):
+    stash = Stash.query.get(stashId)
     if not stash:
         return {"errors": "Stash not found"}
     elif stash.user_id != current_user.id:
@@ -256,13 +263,16 @@ def stash_an_image(id, stashName):
 @login_required
 def del_label(id, labelName):
     img = Image.query.get(id)
+    
+    if not img:
+        return {"errors": "Image not found"}
+
     for lbl in img.labels:
         if lbl.name == labelName:
             img.labels.remove(lbl)
             db.session.commit()
             return img.to_dict()
-
-    return {"errors": "Label not Found"}, 404
+        return {"errors": "Label not Found"}, 404
 
 
 
@@ -277,7 +287,6 @@ def find_by_label(labelName):
         for label in image.labels:
             if label.name == labelName:
                 res.append(image.to_dict_basic())
-                continue
 
     return {"images": res}
 

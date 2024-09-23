@@ -7,7 +7,6 @@ user_routes = Blueprint('users', __name__)
 
 
 @user_routes.route('/')
-@login_required
 def users():
     """
     Query for all users and returns them in a list of user dictionaries
@@ -17,35 +16,43 @@ def users():
 
 
 @user_routes.route('/<int:id>')
-@login_required
 def user(id):
     """
     Query for a user by id and returns that user in a dictionary
     """
     user = User.query.get(id)
+
+    # If user not found
+    if not user:
+        return {"errors": "User not found"}, 404
+
     return user.to_dict()
 
 
 # ! Stashes
 @user_routes.route('/<int:id>/stashes')
-@login_required
 def user_stashes(id):
     """
     Query for a user by id and returns that users stash
     """
     stashes = Stash.query.filter(Stash.user_id == id).all()
+    if not stashes:
+        return {"errors": "Stashes not found"}, 404
+
     return {"stashes": [stash.to_dict_basic() for stash in stashes]}
 
 
 #  ! Favorites
 @user_routes.route('/<int:id>/favorites')
-@login_required
 def user_faves(id):
     """
     Query for a user by id and returns that users stash
     """
     favorites = Favorite.query.filter(Favorite.user_id == id).all()
-    return {"favorites": [fav.to_dict_basic() for fav in favorites]}
+    if not favorites:
+        return {"errors": "Favorites not found"}, 404
+
+    return {"Favorites": [fav.to_dict_basic() for fav in favorites]}
 
 
 # ! Images
@@ -55,4 +62,7 @@ def get_user_images(id):
     Gets all the images posted by the specified user
     """
     images = Image.query.filter(Image.user_id == id).all()
+    if not images:
+        return {"errors": "Images not found"}, 404
+
     return {"images": [image.to_dict_basic() for image in images]}

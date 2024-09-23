@@ -50,5 +50,6 @@ class User(db.Model, UserMixin):
             **self.to_dict_basic(),
             "Images": [image.to_dict_basic() for image in self.images],
             "Comments": [comment.to_dict_basic() for comment in self.comments],
-            "Stashes" : [stash.to_dict_basic() for stash in self.stashes]
+            "Stashes" : [stash.to_dict_basic() for stash in self.stashes],
+            "Favorites": [fav.to_dict_basic() for fav in self.favorites]
         }
