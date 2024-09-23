@@ -252,7 +252,6 @@ def del_label(id, labelName):
 
     if img.user_id != current_user.id:
         return {"errors": "This is not your image"}, 500
-
     for lbl in img.labels:
         if lbl.name == labelName:
             img.labels.remove(lbl)
