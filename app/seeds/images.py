@@ -10,10 +10,12 @@ def seed_images():
     tw = Image(
         user_id=1,
         url="https://upload.wikimedia.org/wikipedia/commons/f/f1/Chess_piece_-_Black_king.JPG",
+        title="Black King"
     )
     th = Image(
         user_id=1,
         url="https://www.tvqc.com/wp-content/uploads/2019/03/That-Time-I-Got-Reincarnated-as-a-Slime.jpg",
+        title="Reincarnated as a Slime",
         description="This is NOT a good anime!"
     )
     fo = Image(
@@ -25,6 +27,7 @@ def seed_images():
     fi = Image(
         user_id=2,
         url="https://cdn.shopify.com/s/files/1/0940/8252/files/Ginger_Root-01_1024x1024.jpg?v=1538426708",
+        title="Ginger",
         description="Nuff Said"
     )
     si = Image(
@@ -41,6 +44,7 @@ def seed_images():
     ei = Image(
         user_id=2,
         url="http://topgingers.weebly.com/uploads/1/9/7/7/19776369/8794572.jpeg",
+        title="Ron Weasly"
     )
     ni = Image(
         user_id=3,
