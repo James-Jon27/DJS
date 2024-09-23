@@ -96,7 +96,7 @@ def upload_image():
         return new_image.to_dict()
 
     if form.errors:
-        return format_errors(form.errors)
+        return {"errors": format_errors(form.errors)}, 400
 
     return
 
@@ -185,7 +185,7 @@ def post_new_comment(id):
         return new_comment.to_dict_basic()
 
     if form.errors:
-        return format_errors(form.errors)
+        return {"errors" : format_errors(form.errors)}, 400
 
 
 #! Favorites
