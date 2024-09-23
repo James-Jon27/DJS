@@ -20,8 +20,7 @@ const UploadImage = () => {
         formData.append("image", image);
         formData.append("title", title)
         formData.append("description", description)
-        const label_arr = labels.replaceAll(' ', '').split(',')
-        formData.append("labels", label_arr)
+        formData.append("labels", labels)
         
         // aws uploads can be a bit slow—displaying
         // some sort of loading message is a good idea
