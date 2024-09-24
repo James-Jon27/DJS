@@ -8,6 +8,12 @@ function Navigation() {
       <li>
         <NavLink to="/">Home</NavLink>
       </li>
+      <li>
+        Explore
+      </li>
+      <li>
+        Create
+      </li>
 
       <li>
         <ProfileButton />

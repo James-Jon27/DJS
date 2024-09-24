@@ -1,0 +1,46 @@
+/* theme colors 
+    dark: o: #4C1E05, b: #05334C;
+    medium: o: #943B0A, b: #0A6494;
+    light: o: #DB570F, b: #0F94DC;
+*/
+
+.login-modal {
+    display: flex;
+    flex-direction: column;
+    border: solid 30px black;
+    border-radius: 500px;
+    align-items: center;
+    justify-content: center;
+    background-color: #0A6494;
+    padding: 75px;
+    height: 300px;
+    width: 300px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.login-form > button {
+    background-color: black;
+    color: white;
+    border: none;
+    width: 100px;
+    height: 30px;
+    align-self: center;
+    padding: 5px;
+}
+
+.login-form > button:hover {
+    background-color: #05334C;
+    cursor: pointer;
+}
+
+.login-input {
+    background-color: rgb(228, 228, 228);
+    font-size: 20px;
+    height: 50px;
+    width: 300px;
+}
