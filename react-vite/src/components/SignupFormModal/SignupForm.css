@@ -3,3 +3,55 @@
   justify-content: space-between;
   list-style: none;
 }
+
+/* theme colors 
+    dark: o: #4C1E05, b: #05334C;
+    medium: o: #943B0A, b: #0A6494;
+    light: o: #DB570F, b: #0F94DC;
+*/
+
+.sign-modal {
+    display: flex;
+    flex-direction: column;
+    border: solid 30px black;
+    border-radius: 500px;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    padding: 75px;
+    height: 560px;
+    width: 560px;
+}
+
+.sign-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sign-form > button {
+    background-color: #0A6494;
+    color: white;
+    border: none;
+    width: 100px;
+    height: 30px;
+    align-self: center;
+    padding: 5px;
+}
+
+.sign-form > button:hover {
+    background-color: #05334C;
+    cursor: pointer;
+}
+
+.sign-input {
+    font-size: 20px;
+    height: 50px;
+    width: 410px;
+}
+
+.formerr {
+  color: #943B0A;
+  margin: 0;
+  /* display: none; */
+}
