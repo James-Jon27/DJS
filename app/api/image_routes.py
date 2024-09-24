@@ -1,4 +1,5 @@
 from flask import Blueprint, request, redirect
+from  sqlalchemy.sql.expression import func
 from app.forms.comment_form import CommentForm
 from app.models import db, Image, Label, Comment, Favorite, Stash
 from app.models.tables import label_image_table
@@ -27,13 +28,17 @@ def format_errors(validation_errors):
 # Basic Implementation, for production should only display images the current user hasn't already saved to a
 # stash, if user is not logged in then it should display any images. Also need to set a limit to how many images
 # to display on home page
+#! TODO - Also filter out images that user has already stashed
 @image_routes.route("")
 def get_images():
     """
     Gets all Images in database and returns a list of basic image details
     """
-    images = Image.query.all()
-    return {'images': [image.to_dict_basic() for image in images]}
+    if(current_user.is_anonymous):
+        images = Image.query.order_by(func.random()).limit(20).all()
+    else:
+        images = Image.query.order_by(func.random()).filter(Image.user_id != current_user.id).limit(20).all()
+    return {'images': [{image.id:image.to_dict_basic()} for image in images]}
 
 
 @image_routes.route("/<int:id>")
