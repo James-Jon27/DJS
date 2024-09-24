@@ -1,7 +1,7 @@
 .Stashes {
     display: flex;
     flex-direction: row;
-    /* flex-wrap: wrap; */
+    flex-wrap: wrap;
 }
 
 .Stash, .Favorite {
