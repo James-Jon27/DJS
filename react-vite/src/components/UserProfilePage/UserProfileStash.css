@@ -1,0 +1,19 @@
+.Stashes {
+    display: flex;
+    flex-direction: row;
+    /* flex-wrap: wrap; */
+}
+
+.Stash, .Favorite {
+    aspect-ratio: 2 / 1;
+    height: 200px;
+    margin: 40px;
+    border-radius: 15px;
+
+    background-color: #555;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+}

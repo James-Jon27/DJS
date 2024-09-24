@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import LoginFormPage from '../components/LoginFormPage';
 import SignupFormPage from '../components/SignupFormPage';
-import UserProfileLayout from '../components/UserProfilePage'
+import { UserProfileLayout, UserProfilePostedImage, UserProfileStash } from '../components/UserProfilePage'
 import UploadImagePage from '../components/UploadImagePage'
 import Layout from './Layout';
 
@@ -23,7 +23,17 @@ export const router = createBrowserRouter([
       },
       {
         path: "user",
-        element: <UserProfileLayout />
+        element: <UserProfileLayout />,
+        children: [
+          {
+            path: "posted-images",
+            element: <UserProfilePostedImage />
+          },
+          {
+            path: "stashes",
+            element: <UserProfileStash />
+          }
+        ]
       },
       {
         path: "/images/new",

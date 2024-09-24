@@ -1,3 +1,4 @@
+import { Outlet } from "react-router-dom";
 import { NavLink } from "react-router-dom"
 import "./UserProfileLayout.css"
 
@@ -9,10 +10,13 @@ function UserProfileLayout() {
             </div>
             <nav>
                 <div>
-                    <NavLink className="userNav">Stashes</NavLink>
-                    <NavLink className="userNav">Posted Images</NavLink>
+                    <NavLink className={({isActive}) => isActive ? 'userNav active' : 'userNav inactive' } to="stashes">Stashes</NavLink>
+                    <NavLink className={({isActive}) => isActive ? 'userNav active' : 'userNav inactive'} to="posted-images">Posted Images</NavLink>
                 </div>
             </nav>
+            <main>
+                <Outlet />
+            </main>
         </>
     )
 }
