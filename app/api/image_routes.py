@@ -262,6 +262,7 @@ def del_label(id, labelName):
             img.labels.remove(lbl)
             db.session.commit()
             return img.to_dict()
+            
     return {"errors": "Label not Found"}, 404
 
 
