@@ -59,7 +59,7 @@ function ProfileButton() {
 					) : (
 						<ul
 							style={{
-								alignItems: "start",
+								alignItems: "center",
 								listStyle: "none",
 								paddingLeft: "10px",
 								paddingRight: "70px",

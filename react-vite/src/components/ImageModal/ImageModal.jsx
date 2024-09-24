@@ -1,4 +1,4 @@
-export default function ImageModal({}) {
+export default function ImageModal() {
 
     return (
         <div className="imgPage">

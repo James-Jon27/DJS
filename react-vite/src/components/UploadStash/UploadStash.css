@@ -4,24 +4,21 @@ body {
 		Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
-.img-create {
+.stash-create {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	background: linear-gradient(to top, rgb(190, 183, 253), #0F94DC);
+	background: linear-gradient(to top, rgb(190, 183, 253), #0f94dc);
 	color: white;
-	padding-top: 50px;
 	padding-bottom: 125px;
-
 }
 
-.img-form {
+.stash-form {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	gap: 25px;
-	height: auto;
 	background: transparent;
 	border-radius: 10px;
 	padding: 30px;
@@ -30,30 +27,30 @@ body {
 	box-shadow: 0 5px 10px black;
 }
 
-.img-form > label {
+.stash-form > label {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	height: auto;
-	font-size: 2rem;
+	font-size: 1.5rem;
 }
 
-.img-form > label > input {
+.stash-form > label > input {
 	text-align: center;
-	font-size: 1rem;
+	font-size: .5rem;
 	padding: 3px;
 	font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
 		Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
-.img-titf {
+.stash-titf {
 	width: 300px;
 	box-shadow: 0 0 5px;
 }
 
-.img-descf {
+.stash-desc {
 	width: 500px;
-	height: 100px;
+	height: 50px;
 	box-shadow: 0 0 5px;
 	text-align: center;
 	font-size: 1rem;
@@ -61,23 +58,21 @@ body {
 		Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
-.img-lblf {
-	width: 400px;
-	box-shadow: 0 0 5px;
-}
-
-.img-filef {
-    width: 215px;
-}
-
-.img-submit {
-	height: 37.5px;
+.stash-submit {
+    height: 30px;
 	width: 125px;
 	border: solid #05334c;
 	background-color: #db570f;
 }
 
-.img-submit:hover {
-	background-color: #4c1e05;
+.stash-submit:hover {
+    background-color: #4c1e05;
 	cursor: pointer;
+}
+
+.your-future {
+	margin-top: 2rem;
+	background-color: black;
+	height: 100px;
+	flex: 1;
 }

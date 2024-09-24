@@ -25,6 +25,7 @@ const UploadImage = () => {
 		// some sort of loading message is a good idea
 		setImageLoading(true);
 		await dispatch(createImage(formData));
+        //TODO: navigate to user profile to view new image
 		navigate("/");
 	};
 
@@ -37,18 +38,18 @@ const UploadImage = () => {
 					<input className="img-titf" type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
 				</label>
 				<label>
-					Description (Optional)
-					<input className="img-descf" type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
-				</label>
-				<label>
 					Labels (Optional)
 					<input className="img-lblf" type="text" value={labels} onChange={(e) => setLabels(e.target.value)} />
+				</label>
+				<label>
+					Description (Optional)
+					<textarea className="img-descf" type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
 				</label>
 				<label>
 					<input className="img-filef" type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} />
 				</label>
 				<button className="img-submit" type="submit">Post</button>
-				{imageLoading && <p>Loading...</p>}
+				{imageLoading && <p style={{color: "white", fontSize: "1rem"}}>Loading...</p>}
 			</form>
 		</div>
 	);

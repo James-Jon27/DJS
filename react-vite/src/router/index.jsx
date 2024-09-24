@@ -4,6 +4,7 @@ import SignupFormPage from '../components/SignupFormPage';
 import UserProfileLayout from '../components/UserProfilePage'
 import UploadImagePage from '../components/UploadImagePage'
 import Layout from './Layout';
+import UploadStash from '../components/UploadStash';
 
 export const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
       {
         path: "/images/new",
         element: <UploadImagePage />
+      },
+      {
+        path: "/stashes/new",
+        element: <UploadStash />
       }
       
     ],
