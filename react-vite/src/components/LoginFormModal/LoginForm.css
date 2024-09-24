@@ -11,10 +11,10 @@
     border-radius: 500px;
     align-items: center;
     justify-content: center;
-    background-color: #0A6494;
+    background-color: white;
     padding: 75px;
-    height: 300px;
-    width: 300px;
+    height: 325px;
+    width: 325px;
 }
 
 .login-form {
@@ -24,7 +24,7 @@
 }
 
 .login-form > button {
-    background-color: black;
+    background-color: #0A6494;
     color: white;
     border: none;
     width: 100px;
@@ -43,4 +43,8 @@
     font-size: 20px;
     height: 50px;
     width: 300px;
+}
+
+.formerr {
+  color: #943B0A;
 }
