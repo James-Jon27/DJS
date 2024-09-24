@@ -1,5 +1,6 @@
 const POST_IMAGE = 'images/postImage'
 const GET_IMAGES = 'images/getImages'
+const GET_ONE_IMAGE = 'images/getImageById'
 
 const addPost = (image) => ({
     type: POST_IMAGE,
@@ -11,11 +12,22 @@ const getImgs = (images) => ({
     payload: images
 })
 
+const getOneImg = (image) => ({
+    type: GET_ONE_IMAGE,
+    payload: image
+})
+
 
 export const getImages = () => async (dispatch) => {
     const res = await fetch(`/api/images`)
     const data = await res.json();
     dispatch(getImgs(data))
+}
+
+export const getImageById = (id) => async (dispatch) => {
+    const res = await fetch(`/api/images/${id}`)
+    const data = await res.json();
+    dispatch(getOneImg(data))
 }
 
 export const createImage = (post) => async (dispatch) => {
@@ -40,6 +52,9 @@ function imageReducer(state = {}, action){
         }
         case GET_IMAGES:{
             return {...action.payload.images}
+        }
+        case GET_ONE_IMAGE:{
+            return {[action.payload.id]:action.payload}
         }
         default:
             return state
