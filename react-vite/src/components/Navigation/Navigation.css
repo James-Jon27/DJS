@@ -1,12 +1,15 @@
 .nav {
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 	list-style: none;
 	font-size: xx-large;
-	align-items: start;
+	background-color: #0F94DC;
 	margin: 0;
 	border: 0;
 	padding: 0;
+	height: 50px;
+	width: 100%;
 }
 
 .profile-dropdown {
@@ -26,4 +29,28 @@
 .user {
 	background: none;
 	border: none;
+}
+
+.left {
+	display: flex;
+	padding-left: 10px;
+	gap: 20px;
+	font-size: 1.25rem;
+}
+
+.search-cont {
+	flex: 1;
+	display: flex;
+}
+
+.search {
+	margin-left: 40px;
+	margin-right: 40px;
+	height: 30px;
+	flex: 1;
+	background-color: #dbf0fc;
+}
+
+.right {
+	padding-right: 10px;
 }
