@@ -7,13 +7,21 @@ def seed_users():
     demo = User(
         username='Demo', email='demo@aa.io', password='password', first_name="Demo", last_name="Lition")
     marnie = User(
-        username='marnie', email='marnie@aa.io', password='password', first_name="Marnie", last_name="Sukh")
+        username='marnie', email='marnie@aa.io', password='password', first_name="Marnie", last_name="Smith")
     bobbie = User(
-        username='bobbie', email='bobbie@aa.io', password='password', first_name="Bobbie", last_name="Ho")
-
-    db.session.add(demo)
-    db.session.add(marnie)
-    db.session.add(bobbie)
+        username='bobbie', email='bobbie@aa.io', password='password', first_name="Bobbie", last_name="Lee")
+    andrew = User(
+        username='andrew', email='andrew@aa.io', password='password', first_name="Andrew", last_name="Santino")
+    sukhpreet = User(
+        username='sukhpreet', email='sukhpreet@aa.io', password='password', first_name="Sukhpreet", last_name="Sidhu")
+    daniel = User(
+        username='daniel', email='daniel@aa.io', password='password', first_name='Daniel', last_name='Ho')
+    james = User(
+        username='james', email='james@aa.io', password='password', first_name="James", last_name="Jones")
+    
+    lst = [demo ,marnie ,bobbie ,andrew ,sukhpreet ,daniel ,james]
+    for user in lst:
+        db.session.add(user)
     db.session.commit()
 
 
