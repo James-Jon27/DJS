@@ -1,3 +1,5 @@
-import UserProfileLayout from "./UserProfileLayout"
+import UserProfileLayout from "./UserProfileLayout";
+import UserProfilePostedImage from "./UserProfilePostedImage";
+import UserProfileStash from "./UserProfileStash";
 
-export default UserProfileLayout
+export { UserProfileLayout, UserProfilePostedImage, UserProfileStash }
