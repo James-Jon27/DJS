@@ -16,7 +16,7 @@ function OpenModalImageItem({
 	};
 
 	return (
-		<img src={src} alt={alt} onClick={onClick}/>
+		<img src={src} alt={alt} onClick={onClick} style={{cursor:"pointer"}}/>
 	);
 }
 

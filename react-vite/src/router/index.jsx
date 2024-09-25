@@ -1,14 +1,18 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter } from "react-router-dom";
 // import LoginFormPage from '../components/LoginFormPage';
 // import SignupFormPage from '../components/SignupFormPage';
-import { UserProfileLayout, UserProfilePostedImage, UserProfileStash } from '../components/UserProfilePage'
-import HomePage from '../components/HomePage';
-import ExplorePage from '../components/ExplorePage/ExplorePage';
-import UploadImagePage from '../components/UploadImagePage'
-import Layout from './Layout';
-import UploadStash from '../components/UploadStash';
-import UpdateImage from '../components/UploadImagePage/UpdateImage';
-import UpdateStash from '../components/UploadStash/UpdateStash';
+import {
+	UserProfileLayout,
+	UserProfilePostedImage,
+	UserProfileStash,
+} from "../components/UserProfilePage";
+import HomePage from "../components/HomePage";
+import ExplorePage from "../components/ExplorePage/ExplorePage";
+import UploadImagePage from "../components/UploadImagePage";
+import Layout from "./Layout";
+import UploadStash from "../components/UploadStash";
+import UpdateImage from "../components/UploadImagePage/UpdateImage";
+import UpdateStash from "../components/UploadStash/UpdateStash";
 
 export const router = createBrowserRouter([
 	{
@@ -18,14 +22,6 @@ export const router = createBrowserRouter([
 				path: "/",
 				element: <HomePage />,
 			},
-			// {
-			//   path: "login",
-			//   element: <LoginFormPage />,
-			// },
-			// {
-			//   path: "signup",
-			//   element: <SignupFormPage />,
-			// },
 			{
 				path: "explore",
 				element: <ExplorePage />,
@@ -62,7 +58,7 @@ export const router = createBrowserRouter([
 			},
 			{
 				path: "stashes/:id/edit",
-        element: <UpdateStash />
+				element: <UpdateStash />,
 			},
 			{
 				path: "*",

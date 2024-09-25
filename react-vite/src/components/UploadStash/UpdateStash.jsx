@@ -1,16 +1,33 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { createStashThunk } from "../../redux/stash";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { getStashById, updateStashById } from "../../redux/stash";
 import HomePage from "../HomePage";
 import "./UploadStash.css";
 
 export default function UpdateStash() {
 	const nav = useNavigate();
 	const dispatch = useDispatch();
+	const { id } = useParams();
+	const stash = useSelector((state) => state.stash);
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [loading, setLoading] = useState(false);
+    
+	useEffect(() => {
+		dispatch(getStashById(id));
+	}, [dispatch, id]);
+
+    useEffect(() => {
+        if(stash) {
+            setTitle(stash.name)
+            setDescription(stash.description)
+        }
+    }, [stash])
+
+	if (!stash) {
+		return <h1 style={{ textAlign: "center" }}>Loading...</h1>;
+	}
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -20,14 +37,10 @@ export default function UpdateStash() {
 		data.append("description", description);
 
 		setLoading(true);
-		const res = await dispatch(createStashThunk(data));
-		//TODO: Navigate to stash page
-		if (res.id) {
-			setLoading(false);
-			nav(`/stashes/${res.id}`);
-		} else {
-			return await res.json();
-		}
+		await dispatch(updateStashById(id, data));
+		setLoading(false);
+		nav(`/stashes/${id}`);
+
 	};
 
 	return (
@@ -63,8 +76,8 @@ export default function UpdateStash() {
 				{loading && <p>Loading...</p>}
 			</form>
 			<div className="your-future">
-                <HomePage />
-            </div>
+				<HomePage />
+			</div>
 		</div>
 	);
 }
