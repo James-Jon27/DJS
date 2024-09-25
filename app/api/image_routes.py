@@ -5,7 +5,7 @@ from app.models import db, Image, Label, Comment, Favorite, Stash
 from app.models.tables import label_image_table
 from flask_login import current_user, login_required
 from app.api.s3_helper import (
-    upload_file_to_s3, get_unique_filename)
+    upload_file_to_s3, get_unique_filename, remove_file_from_s3)
 from app.forms.image_form import ImageForm
 from app.forms.image_update_form import ImageUpdateForm
 
@@ -168,7 +168,7 @@ def delete_image(id):
     if image_to_delete.user_id != current_user.id:
         return {"errors": "This is not your image"}, 500
 
-    #? Delete from db but maybe not from bucket
+    remove_file_from_s3(image_to_delete.url)
     db.session.delete(image_to_delete)
     db.session.commit()
 
@@ -283,7 +283,7 @@ def find_by_label(labelName):
     for image in images:
         for label in image.labels:
             if label.name == labelName:
-                res.append(image.to_dict_basic())
+                res.append({image.id:image.to_dict_basic()})
 
     return {"images": res}
 
