@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+// import { useDispatch, useSelector } from 'react-redux'
 import { getImages } from '../../redux/image'
 import './HomePage.css'
 
 function HomePage() {
-    const [colNum, setColNum] = useState(parseInt((window.innerWidth - 40) / 340))
-    useEffect(() => {
-        function handleColNum() {
-            setColNum(parseInt((window.innerWidth - 40) / 340))
-        }
+    // const [colNum, setColNum] = useState(parseInt((window.innerWidth - 40) / 340))
+    // useEffect(() => {
+    //     function handleColNum() {
+    //         setColNum(parseInt((window.innerWidth - 40) / 340))
+    //     }
 
-        window.addEventListener('resize', handleColNum)
+    //     window.addEventListener('resize', handleColNum)
 
-        return () => window.removeEventListener('resize', handleColNum)
-    }, [])
+    //     return () => window.removeEventListener('resize', handleColNum)
+    // }, [])
 
     const dispatch = useDispatch()
     const [isLoaded, setIsLoaded] = useState(false)
@@ -23,7 +24,7 @@ function HomePage() {
 
     return (
         <>
-            <h1>Welcome!</h1>
+            <h1>{isLoaded && `Welcome!`}</h1>
             {/* <div className='grid' style={{"--colNum": colNum}}>
                 {isLoaded && images.map(image => {
                     return (
