@@ -3,10 +3,10 @@ import { useSelector } from 'react-redux'
 import './UserProfilePostedImage.css'
 
 function UserProfilePostedImage() {
-    const [colNum, setColNum] = useState(parseInt(window.innerWidth / 280))
+    const [colNum, setColNum] = useState(parseInt((window.innerWidth - 40) / 340))
     useEffect(() => {
         function handleColNum() {
-            setColNum(parseInt((window.innerWidth - 40) / 260))
+            setColNum(parseInt((window.innerWidth - 40) / 340))
         }
 
         window.addEventListener('resize', handleColNum)
