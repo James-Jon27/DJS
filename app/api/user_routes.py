@@ -65,4 +65,4 @@ def get_user_images(id):
     if not images:
         return {"errors": "Images not found"}, 404
 
-    return {"Images": [image.to_dict_basic() for image in images]}
+    return {"Images": [{image.id:image.to_dict_basic()} for image in images]}

@@ -168,7 +168,6 @@ def delete_image(id):
     if image_to_delete.user_id != current_user.id:
         return {"errors": "This is not your image"}, 500
 
-    #? Delete from db but maybe not from bucket
     remove_file_from_s3(image_to_delete.url)
     db.session.delete(image_to_delete)
     db.session.commit()
@@ -284,7 +283,7 @@ def find_by_label(labelName):
     for image in images:
         for label in image.labels:
             if label.name == labelName:
-                res.append(image.to_dict_basic())
+                res.append({image.id:image.to_dict_basic()})
 
     return {"images": res}
 
