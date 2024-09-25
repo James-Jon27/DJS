@@ -29,8 +29,8 @@ function SignupFormModal() {
 				email,
 				username,
 				password,
-        first_name: firstName,
-        last_name: lastName
+				first_name: firstName,
+				last_name: lastName,
 			})
 		);
 
@@ -44,6 +44,7 @@ function SignupFormModal() {
 	return (
 		<div className="sign-modal">
 			{errors.server && <p className="formerr">{errors.server}</p>}
+			<h2>Sign Up</h2>
 			<form className="sign-form" onSubmit={handleSubmit}>
 				<label>
 					<input
