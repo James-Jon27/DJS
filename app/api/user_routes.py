@@ -26,7 +26,7 @@ def user(id):
     if not user:
         return {"errors": "User not found"}, 404
 
-    return user.to_dict()
+    return user.to_dict_basic()
 
 
 # ! Stashes
