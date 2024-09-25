@@ -39,7 +39,10 @@ def user_stashes(id):
     if not stashes:
         return {"errors": "Stashes not found"}, 404
 
-    return {"Stashes": [stash.to_dict_basic() for stash in stashes]}
+    stash_holder = {}
+    for stash in stashes:
+        stash_holder[stash.id] = stash.to_dict_basic()
+    return stash_holder
 
 
 #  ! Favorites

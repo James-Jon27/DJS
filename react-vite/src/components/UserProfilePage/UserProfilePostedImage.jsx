@@ -32,7 +32,7 @@ function UserProfilePostedImage() {
     const images = useSelector((state) => state.session.user.Images);
 	
     // //Loader function
-	// if (isLoading) {
+	// if (!images) {
 	// 	return <h1 style={{textAlign:"center"}}>Loading...</h1>;
 	// }
 
