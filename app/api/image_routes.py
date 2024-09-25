@@ -38,7 +38,11 @@ def get_images():
         images = Image.query.order_by(func.random()).limit(20).all()
     else:
         images = Image.query.order_by(func.random()).filter(Image.user_id != current_user.id).limit(20).all()
-    return {'images': [{image.id:image.to_dict_basic()} for image in images]}
+    
+    image_holder = {}
+    for image in images:
+        image_holder[image.id] = image.to_dict_basic()
+    return image_holder
 
 
 @image_routes.route("/<int:id>")
