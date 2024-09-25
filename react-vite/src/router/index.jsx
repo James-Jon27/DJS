@@ -6,6 +6,7 @@ import HomePage from '../components/HomePage';
 import ExplorePage from '../components/ExplorePage/ExplorePage';
 import UploadImagePage from '../components/UploadImagePage'
 import Layout from './Layout';
+import StashPage from '../components/StashPage'
 import UploadStash from '../components/UploadStash';
 
 export const router = createBrowserRouter([
@@ -52,9 +53,8 @@ export const router = createBrowserRouter([
       }, 
       {
         path: "stashes/:id",
-        element: <h1>STASH PAGE COMPONENT COMING SOON</h1>
+        element: <StashPage />
       }
-      
     ],
   },
 ]);
