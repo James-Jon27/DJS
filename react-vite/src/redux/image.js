@@ -62,6 +62,7 @@ export const createImage = (post) => async (dispatch) => {
     });
   
     if (res.ok) {
+        console.log(res)
         const data = await res.json();
         dispatch(addPost(data));
     } else {

@@ -243,11 +243,32 @@ def stash_an_image(id, stashId):
         if not image:
             return {"errors": "Image not Found"}
 
-        for img in stash.images:
-            if img.id == id:
-                return {"errors": "Image already stashed here"}, 500
+        if image in stash.images:
+            return {"errors": "Image already stashed here"}, 500
         
         stash.images.append(image)
+        db.session.commit()
+
+        return stash.to_dict()
+
+
+#! Un-Stash an Image
+@image_routes.route("/<int:id>/stashes/<int:stashId>", methods=["DELETE"])
+@login_required
+def un_stash_an_image(id, stashId):
+    stash = Stash.query.get(stashId)
+    if not stash:
+        return {"errors": "Stash not found"}
+    elif stash.user_id != current_user.id:
+        return {"errors": "This stash is not yours"}, 500
+    else:
+        image = Image.query.get(id)
+        if not image:
+            return {"errors": "Image not Found"}
+
+        if image in stash.images:
+            stash.images.remove(image)
+
         db.session.commit()
 
         return stash.to_dict()
@@ -256,24 +277,15 @@ def stash_an_image(id, stashId):
 # ! LABEL MANIPULATION ROUTES
 
 # DELETE api/images/:imageId/label/:labelId
-@image_routes.route("/<int:id>/label/<string:labelName>", methods=["DELETE"])
+@image_routes.route("/labels")
 @login_required
-def del_label(id, labelName):
-    img = Image.query.get(id)
+def get_label():
+    """
+    Query for all labels returns them in a list
+    """
+    labels = Label.query.all()
     
-    if not img:
-        return {"errors": "Image not found"}, 404
-
-    if img.user_id != current_user.id:
-        return {"errors": "This is not your image"}, 500
-        
-    for lbl in img.labels:
-        if lbl.name == labelName:
-            img.labels.remove(lbl)
-            db.session.commit()
-            return img.to_dict()
-            
-    return {"errors": "Label not Found"}, 404
+    return [label.to_dict_basic() for label in labels]
 
 
 
