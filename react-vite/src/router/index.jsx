@@ -44,6 +44,10 @@ export const router = createBrowserRouter([
       {
         path: "stashes/new",
         element: <UploadStash />
+      }, 
+      {
+        path: "stashes/:id",
+        element: <h1>STASH PAGE COMPONENT COMING SOON</h1>
       }
       
     ],
