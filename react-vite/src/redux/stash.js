@@ -1,6 +1,7 @@
 const CREATE = 'stash/create';
 const GET_USER_STASHES = 'user/stashes'
 const GET_STASH_BY_ID = 'stashes/id'
+const UPDATE_STASH = 'stashes/id/update'
 
 //action return
 const createStash = (stash) => {
@@ -20,6 +21,13 @@ const createStash = (stash) => {
  const stashById = (stash) => {
     return {
         type: GET_STASH_BY_ID,
+        payload: stash
+    }
+ }
+
+ const updateStash = (stash) => {
+    return {
+        type: UPDATE_STASH,
         payload: stash
     }
  }
@@ -54,17 +62,31 @@ export const getStashById = (id) => async (dispatch) =>{
     
 }
 
+export const updateStashById = (id, update) => async (dispatch) => {
+    const res = await fetch(`/api/stashes/${id}`, {
+        method: "POST",
+        body: update
+    })
+
+    const data = res.json()
+    dispatch(updateStash(data))
+
+
+}
+
 const initialState = { stash: null }
 
 
 function stashReducer(state = initialState, action) {
     switch (action.type) {
         case CREATE:
-            return {...state, stash: action.payload};
+            return {...state, [action.payload.id]:action.payload};
         case GET_USER_STASHES:
             return action.payload
         case GET_STASH_BY_ID:
             return action.payload
+        case UPDATE_STASH:
+            return {...state, [action.payload.id]:action.payload}
         default:
             return state
     }
