@@ -38,7 +38,11 @@ def get_images():
         images = Image.query.order_by(func.random()).limit(20).all()
     else:
         images = Image.query.order_by(func.random()).filter(Image.user_id != current_user.id).limit(20).all()
-    return {'images': [{image.id:image.to_dict_basic()} for image in images]}
+    
+    image_holder = {}
+    for image in images:
+        image_holder[image.id] = image.to_dict_basic()
+    return image_holder
 
 
 @image_routes.route("/<int:id>")
@@ -279,13 +283,13 @@ def del_label(id, labelName):
 @image_routes.route("/<string:labelName>")
 def find_by_label(labelName):
     images = Image.query.all()
-    res = []
+    res = {}
     for image in images:
         for label in image.labels:
             if label.name == labelName:
-                res.append({image.id:image.to_dict_basic()})
+                res[image.id] = image.to_dict_basic()
 
-    return {"images": res}
+    return res
 
 def create_labels(labels, image):
     labels = labels.strip()

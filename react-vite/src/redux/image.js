@@ -91,7 +91,7 @@ function imageReducer(state = {}, action){
             return { ...state, [action.payload.id]:action.payload }
         }
         case GET_IMAGES:{
-            return {...action.payload.images}
+            return action.payload
         }
         case GET_ONE_IMAGE:{
             return {[action.payload.id]:action.payload}
