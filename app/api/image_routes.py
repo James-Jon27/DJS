@@ -283,13 +283,13 @@ def del_label(id, labelName):
 @image_routes.route("/<string:labelName>")
 def find_by_label(labelName):
     images = Image.query.all()
-    res = []
+    res = {}
     for image in images:
         for label in image.labels:
             if label.name == labelName:
-                res.append({image.id:image.to_dict_basic()})
+                res[image.id] = image.to_dict_basic()
 
-    return {"images": res}
+    return res
 
 def create_labels(labels, image):
     labels = labels.strip()
