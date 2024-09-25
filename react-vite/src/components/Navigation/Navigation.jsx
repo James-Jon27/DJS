@@ -6,26 +6,24 @@ function Navigation() {
 	return (
 		<ul className="nav">
 			<div className="left">
-				<li>
-					<NavLink to="/">Home</NavLink>
-				</li>
-				<li>Explore</li>
-				<li>Create</li>
+				<NavLink className="navs" to="/">
+					<li>Home</li>
+				</NavLink>
+				<NavLink className="navs" to="/">
+					<li>Explore</li>
+				</NavLink>
+				<NavLink className="navs" to="/">
+					<li>Create</li>
+				</NavLink>
 			</div>
-      <div className="search-cont">
-
-      <input
-      className="search"
-      type="search"
-      placeholder="Search"
-      />
-      </div>
-      <div>
-
-			<li className="right">
-				<ProfileButton />
-			</li>
-      </div>
+			<div className="search-cont">
+				<input className="search" type="search" placeholder="Search" />
+			</div>
+			<div>
+				<li className="right">
+					<ProfileButton />
+				</li>
+			</div>
 		</ul>
 	);
 }

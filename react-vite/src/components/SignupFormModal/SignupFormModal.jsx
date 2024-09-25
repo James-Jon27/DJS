@@ -44,6 +44,7 @@ function SignupFormModal() {
 	return (
 		<div className="sign-modal">
 			{errors.server && <p className="formerr">{errors.server}</p>}
+			<h2>Sign Up</h2>
 			<form className="sign-form" onSubmit={handleSubmit}>
 				<label>
 					<input
