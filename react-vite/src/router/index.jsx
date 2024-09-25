@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
-import LoginFormPage from '../components/LoginFormPage';
-import SignupFormPage from '../components/SignupFormPage';
+// import LoginFormPage from '../components/LoginFormPage';
+// import SignupFormPage from '../components/SignupFormPage';
 import { UserProfileLayout, UserProfilePostedImage, UserProfileStash } from '../components/UserProfilePage'
 import UploadImagePage from '../components/UploadImagePage'
 import Layout from './Layout';
@@ -43,6 +43,10 @@ export const router = createBrowserRouter([
       {
         path: "stashes/new",
         element: <UploadStash />
+      }, 
+      {
+        path: "stashes/:id",
+        element: <h1>STASH PAGE COMPONENT COMING SOON</h1>
       }
       
     ],

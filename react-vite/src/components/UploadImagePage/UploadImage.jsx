@@ -26,7 +26,7 @@ const UploadImage = () => {
 		setImageLoading(true);
 		await dispatch(createImage(formData));
         //TODO: navigate to user profile to view new image
-		navigate("/");
+		navigate("/user/posted-images");
 	};
 
 	return (

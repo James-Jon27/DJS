@@ -12,7 +12,8 @@ function Navigation() {
 				<NavLink className="navs" to="/">
 					<li>Explore</li>
 				</NavLink>
-				<NavLink className="navs" to="/">
+				{/* TODO: MAKE DROPDOWN THAT SAYS STASH OR IMG, ONLY VISIBLE TO A LOGGED IN USER */}
+				<NavLink className="navs" to="/stashes/new">
 					<li>Create</li>
 				</NavLink>
 			</div>

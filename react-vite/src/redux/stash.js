@@ -11,15 +11,15 @@ const createStash = (stash) => {
 
 //thunk create a stash
 export const createStashThunk = (stash) => async dispatch => {
-    const res = await fetch("/api/stashes", {
+    const res = await fetch(`/api/stashes`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(stash)
+            body: stash
         });
 
     if(res.ok) {
         const data = await res.json()
         dispatch(createStash(data))
+        return data
     } else {
         const err = await res.json()
         return err
@@ -33,6 +33,9 @@ function stashReducer(state = initialState, action) {
     switch (action.type) {
         case CREATE:
             return {...state, stash: action.payload};
+        
+        default:
+            return state
     }
 }
 
