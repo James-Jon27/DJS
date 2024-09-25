@@ -1,12 +1,14 @@
-import { Outlet } from "react-router-dom";
-import { NavLink } from "react-router-dom"
+import { useSelector } from "react-redux"
+import { Outlet, NavLink } from "react-router-dom";
 import "./UserProfileLayout.css"
 
 function UserProfileLayout() {
+    const firstInitial = useSelector(state => state.session.user.firstName)[0]
+
     return (
         <>
             <div className="top">
-                <div className="circle">This is your User Profile Page!</div>
+                <div className="circle">{firstInitial}</div>
             </div>
             <nav>
                 <div>
