@@ -200,6 +200,19 @@ def post_new_comment(id):
 
     if form.errors:
         return {"errors" : format_errors(form.errors)}, 400
+    
+@image_routes.route("/<int:id>/comments")
+def getImageComments(id):
+    """
+    Get comments on image by id
+    """
+    comments = Comment.query.filter(Comment.image_id == id).all()
+    
+    comment_holder = {}
+    for comment in comments:
+        comment_holder[comment.id] = comment.to_dict()
+    return comment_holder
+
 
 
 #! Favorites

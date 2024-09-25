@@ -8,11 +8,13 @@ import thunk from "redux-thunk";
 import sessionReducer from "./session";
 import imageReducer from "./image";
 import stashReducer from "./stash";
+import commentReducer from "./comment";
 
 const rootReducer = combineReducers({
   session: sessionReducer,
   image: imageReducer,
-  stash: stashReducer
+  stash: stashReducer,
+  comment: commentReducer
 });
 
 let enhancer;

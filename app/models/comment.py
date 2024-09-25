@@ -39,5 +39,4 @@ class Comment(db.Model):
         return {
             **self.to_dict_basic(),
             "User" : self.user.to_dict_basic(),
-            "Image" : self.image.to_dict_basic()
         }
