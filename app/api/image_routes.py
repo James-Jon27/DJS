@@ -296,9 +296,14 @@ def get_label():
     """
     Query for all labels returns them in a list
     """
+    # labels = Label.query.order_by(func.random()).limit(10).all()
     labels = Label.query.all()
+
+    label_holder = {}
+    for label in labels:
+        label_holder[label.id] = label.to_dict_basic()
     
-    return [label.to_dict_basic() for label in labels]
+    return label_holder
 
 
 

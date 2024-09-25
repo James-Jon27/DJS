@@ -81,7 +81,7 @@ export const updateImage = (id, update) => async (dispatch) => {
 
 export const imageByLabel = (label) => async (dispatch) => {
     const res = await fetch(`/api/images/${label}`)
-    const data = res.json()
+    const data = await res.json()
     dispatch(getImgs(data))
 }
 

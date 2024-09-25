@@ -9,12 +9,14 @@ import sessionReducer from "./session";
 import imageReducer from "./image";
 import stashReducer from "./stash";
 import commentReducer from "./comment";
+import labelReducer from "./label";
 
 const rootReducer = combineReducers({
   session: sessionReducer,
   image: imageReducer,
   stash: stashReducer,
-  comment: commentReducer
+  comment: commentReducer,
+  label: labelReducer
 });
 
 let enhancer;
