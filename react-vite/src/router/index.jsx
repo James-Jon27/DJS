@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 // import SignupFormPage from '../components/SignupFormPage';
 import { UserProfileLayout, UserProfilePostedImage, UserProfileStash } from '../components/UserProfilePage'
 import HomePage from '../components/HomePage';
+import ExplorePage from '../components/ExplorePage/ExplorePage';
 import UploadImagePage from '../components/UploadImagePage'
 import Layout from './Layout';
 import UploadStash from '../components/UploadStash';
@@ -23,6 +24,10 @@ export const router = createBrowserRouter([
       //   path: "signup",
       //   element: <SignupFormPage />,
       // },
+      {
+        path: "explore",
+        element: <ExplorePage />
+      },
       {
         path: "user",
         element: <UserProfileLayout />,

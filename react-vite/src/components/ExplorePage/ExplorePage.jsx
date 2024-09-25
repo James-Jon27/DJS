@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getImages } from '../../redux/image'
-import './HomePage.css'
+import './ExplorePage.css'
 
-function HomePage() {
+function ExplorePage() {
     const [colNum, setColNum] = useState(parseInt((window.innerWidth - 40) / 340))
     useEffect(() => {
         function handleColNum() {
@@ -33,4 +33,4 @@ function HomePage() {
     )
 }
 
-export default HomePage
+export default ExplorePage
