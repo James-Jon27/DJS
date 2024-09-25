@@ -59,24 +59,23 @@ export const createStashThunk = (stash) => async dispatch => {
 
 export const getUserStashes = (id) => async (dispatch) => {
     const res = await fetch(`/api/users/${id}/stashes`)
-    const data = res.json();
+    const data = await res.json();
     dispatch(userStashes(data))
 }
 
 export const getStashById = (id) => async (dispatch) =>{
     const res = await fetch(`/api/stashes/${id}`)
-    const data = res.json()
+    const data = await res.json()
     dispatch(stashById(data))
-    
 }
 
 export const updateStashById = (id, update) => async (dispatch) => {
     const res = await fetch(`/api/stashes/${id}`, {
-        method: "POST",
+        method: "PUT",
         body: update
     })
 
-    const data = res.json()
+    const data = await res.json()
     dispatch(updateStash(data))
 
 

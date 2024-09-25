@@ -9,7 +9,7 @@ body {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	background: linear-gradient(to top, rgb(190, 183, 253), #0f94dc);
+	background: linear-gradient(to top, white, #0f94dc);
 	color: white;
 	padding-bottom: 125px;
 }
@@ -72,7 +72,6 @@ body {
 
 .your-future {
 	margin-top: 2rem;
-	background-color: black;
 	height: 100px;
 	flex: 1;
 }

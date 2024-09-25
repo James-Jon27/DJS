@@ -94,7 +94,7 @@ function imageReducer(state = {}, action){
             return action.payload
         }
         case GET_ONE_IMAGE:{
-            return {[action.payload.id]:action.payload}
+            return {...state, [action.payload.id]:action.payload}
         }
         case DELETE_IMAGE:{
             const newState = {...state}
