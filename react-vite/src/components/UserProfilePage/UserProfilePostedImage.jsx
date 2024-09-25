@@ -1,7 +1,30 @@
+import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import './UserProfilePostedImage.css'
+
 function UserProfilePostedImage() {
+    const [colNum, setColNum] = useState(parseInt(window.innerWidth / 280))
+    useEffect(() => {
+        function handleColNum() {
+            setColNum(parseInt((window.innerWidth - 40) / 260))
+        }
+
+        window.addEventListener('resize', handleColNum)
+
+        return () => window.removeEventListener('resize', handleColNum)
+    }, [])
+
+    const images = useSelector(state => state.session.user.Images)
+
     return (
         <>
-            <h1>This is where all the {`user's`} posted images are on.</h1>
+            <div className='grid' style={{"--colNum": colNum}}>
+                {images.map(image => {
+                    return (
+                        <img src={image.url} key={image.id} />
+                    )
+                })}
+            </div>
         </>
     )
 }
