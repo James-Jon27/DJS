@@ -1,0 +1,13 @@
+.grid {
+    width: calc(100% - 40px);
+    margin: 20px;
+    columns: var(--colNum);
+}
+
+img {
+    width: 320px;
+    border-radius: 15px;
+    margin-top: 10px;
+    margin-right: 20px;
+    break-inside: avoid;
+}

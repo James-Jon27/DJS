@@ -9,7 +9,7 @@ function Navigation() {
 				<NavLink className="navs" to="/">
 					<li>Home</li>
 				</NavLink>
-				<NavLink className="navs" to="/">
+				<NavLink className="navs" to="/explore">
 					<li>Explore</li>
 				</NavLink>
 				{/* TODO: MAKE DROPDOWN THAT SAYS STASH OR IMG, ONLY VISIBLE TO A LOGGED IN USER */}
