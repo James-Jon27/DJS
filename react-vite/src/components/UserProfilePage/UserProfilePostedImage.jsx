@@ -6,6 +6,8 @@ import ImageModal from "../ImageModal/ImageModal";
 
 function UserProfilePostedImage() {
 	const [colNum, setColNum] = useState(parseInt((window.innerWidth - 40) / 340));
+	// const [isLoading, setLoading] = useState(true);
+
 	useEffect(() => {
 		function handleColNum() {
 			setColNum(parseInt((window.innerWidth - 40) / 340));
@@ -16,7 +18,23 @@ function UserProfilePostedImage() {
 		return () => window.removeEventListener("resize", handleColNum);
 	}, []);
 
-	const images = useSelector((state) => state.session.user.Images);
+    // // Loader function doesn't work
+	// useEffect(() => {
+	// 	const load = async () => {
+	// 		const timer = setTimeout(() => {
+	// 			setLoading(false);
+	// 		}, 5000);
+	// 		return () => clearTimeout(timer);
+	// 	};
+	// 	load();
+	// }, []);
+
+    const images = useSelector((state) => state.session.user.Images);
+	
+    // //Loader function
+	// if (isLoading) {
+	// 	return <h1 style={{textAlign:"center"}}>Loading...</h1>;
+	// }
 
 	return (
 		<>
@@ -30,7 +48,6 @@ function UserProfilePostedImage() {
 								alt={image.title ? image.title : "Image"}
 							/>
 						</div>
-						// <img src={image.url} key={image.id} />
 					);
 				})}
 			</div>
