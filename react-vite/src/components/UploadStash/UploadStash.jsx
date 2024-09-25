@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch} from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createStashThunk } from "../../redux/stash";
 import "./UploadStash.css"
@@ -11,17 +11,24 @@ export default function UploadStash() {
 	const [description, setDescription] = useState("");
 	const [loading, setLoading] = useState(false);
 
+
+	
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-
-		const data = new FormData();
-		data.append("title", title);
+		
+		const data = new FormData()
+		data.append("name", title);
 		data.append("description", description);
-
+		
 		setLoading(true);
-		await dispatch(createStashThunk(data));
+		const res = await dispatch(createStashThunk(data));
 		//TODO: Navigate to stash page
-		nav("/");
+		if(res.id) {
+			setLoading(false)
+			nav(`/stashes/${res.id}`);
+		} else {
+			return await res.json()
+		}
 	};
 
 	return (
