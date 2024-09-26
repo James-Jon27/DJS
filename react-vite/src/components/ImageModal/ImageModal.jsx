@@ -3,38 +3,54 @@ import { getImageById } from "../../redux/image";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useModal } from "../../context/Modal";
-import { getImageComments } from "../../redux/comment";
+import { getImageComments, postComment } from "../../redux/comment";
 import "./ImageModal.css";
-import OpenModalButton from "../OpenModalButton/OpenModalButton";
-import CommentModal from "../CommentModal/CommentModal";
 
 export default function ImageModal({ id }) {
 	const dispatch = useDispatch();
-	const {closeModal} = useModal()
-	const sessionUser = useSelector((state) => state.session.user);
+	const { closeModal } = useModal();
 	const userStashes = useSelector((state) => state.session.user.Stashes);
+	const sessionUser = useSelector((state) => state.session.user);
 	const imageSelect = useSelector((state) => state.image);
-	const commentSelect = useSelector(state => state.comment)
-	const comments = Object.values(commentSelect)
-	const image = imageSelect[id];
-
+	const commentSelect = useSelector((state) => state.comment);
+	const comments = Object.values(commentSelect);
+	const [loading, setLoading] = useState(true);
+	const [image, setImage] = useState(null);
 	const [checkedStashes, setCheckedStashes] = useState(new Set());
+	const [comment, setComment] = useState("");
 
 	useEffect(() => {
-		dispatch(getImageById(id));
-	}, [dispatch, id]);
-
-	useEffect(() => {
-		if (image) {
-			const initStashSet = new Set(image.Stashes.map((stash) => stash.id));
-			setCheckedStashes(initStashSet);
+		const fetchAllData = async () => {
+			setLoading(true);
+			await dispatch(getImageById(id))
+			await dispatch(getImageComments(id))
+			const imageData = imageSelect[id]
+			setImage(imageData)
+			if (imageData) {
+				const initStashSet = new Set(imageData.Stashes.map((stash) => stash.id))
+				setCheckedStashes(initStashSet)
+			}
+			setLoading(false)
 		}
 
-		if(image) {
-			dispatch(getImageComments(id))
-		}
+		fetchAllData();
+	}, [dispatch, id])
 
-	}, [image, dispatch, id]);
+	const refetch = async () => {
+		await dispatch(getImageById(id));
+		await dispatch(getImageComments(id));
+		const imageData = imageSelect[id];
+		setImage(imageData);
+	};
+
+	const handleSubmit = async (e) => {
+		e.preventDefault()
+		const res =  await dispatch(postComment(image.id, comment))
+		if(res) {
+			refetch();
+			setComment("")
+		}
+	}
 
 	const drop = () => {
 		document.getElementById("myDropdown").classList.toggle("show");
@@ -50,12 +66,8 @@ export default function ImageModal({ id }) {
 		setCheckedStashes(currChecks);
 	};
 
-	const refetch = async (id) => {
-		await dispatch(getImageComments(id))
-	} 
-
-	if (!image || !comments) {
-		return <h1>💥</h1>;
+	if (loading || !image) {
+		return <h1 style={{color: "white"}}>Loading...💥</h1>;
 	}
 
 	const owner = image.User;
@@ -109,17 +121,24 @@ export default function ImageModal({ id }) {
 			</span>
 			<span className="comments">
 				<h3>Comments</h3>
-				{sessionUser && sessionUser.id !== owner.id && <OpenModalButton className="comment" buttonText="Add a Comment" modalComponent={<CommentModal image={image.id}/>} onModalClose={refetch(image.id)} />}
-				<button className="comment">Add a Comment</button>
-				{comments &&
-					comments.map((comment) => {
-						return (
-							<div key={comment.id}>
-								<h5>{comment.User.username}</h5>
-								<p>{comment.comment}</p>
-							</div>
-						);
-					})}
+				{sessionUser && sessionUser.id !== owner.id && (
+					<form onSubmit={handleSubmit}>
+						<textarea
+							placeholder="Leave your comment here..."
+							value={comment}
+							onChange={(e) => setComment(e.target.value)}
+						/>
+						<button className="comment" type="submit" disabled={comment.length < 7}>
+							Add a Comment
+						</button>
+					</form>
+				)}
+				{comments.map((comment) => (
+					<div key={comment.id}>
+						<h5>{comment.User.username}</h5>
+						<p>{comment.comment}</p>
+					</div>
+				))}
 			</span>
 		</div>
 	);

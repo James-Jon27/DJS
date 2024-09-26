@@ -11,6 +11,7 @@ import stashReducer from "./stash";
 import commentReducer from "./comment";
 import labelReducer from "./label";
 
+
 const rootReducer = combineReducers({
   session: sessionReducer,
   image: imageReducer,
