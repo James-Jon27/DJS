@@ -37,7 +37,7 @@ function UserProfilePostedImage() {
 	})
     const images = Object.values(useSelector((state) => state.image));
 	
-    // //Loader function
+    //Loader function
 	// if (!images) {
 	// 	return <h1 style={{textAlign:"center"}}>Loading...</h1>;
 	// }

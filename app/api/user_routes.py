@@ -70,5 +70,5 @@ def get_user_images(id):
 
     image_holder = {}
     for image in images:
-        image_holder[image.id] = image.to_dict_basic()
+        image_holder[image.id] = image.to_dict()
     return image_holder
