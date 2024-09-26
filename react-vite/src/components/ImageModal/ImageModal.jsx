@@ -5,10 +5,13 @@ import { NavLink } from "react-router-dom";
 import { useModal } from "../../context/Modal";
 import { getImageComments } from "../../redux/comment";
 import "./ImageModal.css";
+import OpenModalButton from "../OpenModalButton/OpenModalButton";
+import CommentModal from "../CommentModal/CommentModal";
 
 export default function ImageModal({ id }) {
 	const dispatch = useDispatch();
 	const {closeModal} = useModal()
+	const sessionUser = useSelector((state) => state.session.user);
 	const userStashes = useSelector((state) => state.session.user.Stashes);
 	const imageSelect = useSelector((state) => state.image);
 	const commentSelect = useSelector(state => state.comment)
@@ -46,6 +49,10 @@ export default function ImageModal({ id }) {
 		}
 		setCheckedStashes(currChecks);
 	};
+
+	const refetch = async (id) => {
+		await dispatch(getImageComments(id))
+	} 
 
 	if (!image || !comments) {
 		return <h1>💥</h1>;
@@ -102,15 +109,17 @@ export default function ImageModal({ id }) {
 			</span>
 			<span className="comments">
 				<h3>Comments</h3>
+				{sessionUser && sessionUser.id !== owner.id && <OpenModalButton className="comment" buttonText="Add a Comment" modalComponent={<CommentModal image={image.id}/>} onModalClose={refetch(image.id)} />}
 				<button className="comment">Add a Comment</button>
-				{comments && comments.map((comment) => {
-					return (
-						<div key={comment.id}>
-							<h5>{comment.User.username}</h5>
-							<p>{comment.comment}</p>
-						</div>
-					);
-				})}
+				{comments &&
+					comments.map((comment) => {
+						return (
+							<div key={comment.id}>
+								<h5>{comment.User.username}</h5>
+								<p>{comment.comment}</p>
+							</div>
+						);
+					})}
 			</span>
 		</div>
 	);
