@@ -1,6 +1,13 @@
 .imgPage {
-	background: #943b0a;
-    height: 750px;
+	background: #05334C;
+    padding: 25px;
+    color: white;
+    max-height: 800px;
+    overflow-y: scroll;
+}
+
+.imgPage::-webkit-scrollbar {
+    display: none;
 }
 
 .dropdown {
@@ -12,12 +19,75 @@
 	display: none;
 	position: absolute;
 	background-color: #f6f6f6;
-	min-width: 230px;
-	border: 1px solid #ddd;
+	min-width: 250px;
 	z-index: 1;
 }
 
 .show {
 	display: flex;
 	flex-direction: column;
+}
+
+.imgUser {
+    display: flex;
+}
+
+.img-modal > img {
+    border: 3px solid #4C1E05;
+    box-shadow: 10px 10px 10px 0 black;
+    height: 500px;
+    width: auto;
+}
+
+.prof {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 300px;
+}
+
+.userInt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.favorite,
+.dropbtn,
+.comment {
+    margin-top: 25px;
+    width: 250px;
+    font-size: 1.75em;
+    background-color: #555;
+    border: solid 2px #DB570F;
+    color: white;
+}
+
+.circle-modal {
+        /* Shape */
+    aspect-ratio: 1 / 1;
+    height: 250px;
+    margin: 30px;
+    background-color: #555;
+    border-radius: 50%;
+    border: solid 2px #4C1E05;
+
+    /* Text */
+    display: flex;
+    text-decoration: none;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 100px;
+}
+
+.imgInfo {
+    display: flex;
+    justify-content: space-between ;
+    height: 120px;
+}
+
+.comments {
+    overflow: scroll;
 }

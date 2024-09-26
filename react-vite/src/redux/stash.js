@@ -71,7 +71,7 @@ export const getStashById = (id) => async (dispatch) =>{
 
 export const updateStashById = (id, update) => async (dispatch) => {
     const res = await fetch(`/api/stashes/${id}`, {
-        method: "POST",
+        method: "PUT",
         body: update
     })
 

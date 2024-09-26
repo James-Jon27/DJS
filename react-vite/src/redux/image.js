@@ -81,7 +81,7 @@ export const updateImage = (id, update) => async (dispatch) => {
 
 export const imageByLabel = (label) => async (dispatch) => {
     const res = await fetch(`/api/images/${label}`)
-    const data = res.json()
+    const data = await res.json()
     dispatch(getImgs(data))
 }
 
@@ -94,7 +94,7 @@ function imageReducer(state = {}, action){
             return action.payload
         }
         case GET_ONE_IMAGE:{
-            return {[action.payload.id]:action.payload}
+            return {...state, [action.payload.id]:action.payload}
         }
         case DELETE_IMAGE:{
             const newState = {...state}

@@ -1,40 +1,51 @@
-import { useState } from "react";
-import { useDispatch} from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { createStashThunk } from "../../redux/stash";
-import "./UploadStash.css"
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { getStashById, updateStashById } from "../../redux/stash";
 import HomePage from "../HomePage";
+import "./UploadStash.css";
 
-export default function UploadStash() {
+export default function UpdateStash() {
 	const nav = useNavigate();
 	const dispatch = useDispatch();
+	const { id } = useParams();
+	const stash = useSelector((state) => state.stash);
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [loading, setLoading] = useState(false);
+    
+	useEffect(() => {
+		dispatch(getStashById(id));
+	}, [dispatch, id]);
 
+    useEffect(() => {
+        if(stash) {
+            setTitle(stash.name)
+            setDescription(stash.description)
+        }
+    }, [stash])
 
-	
+	if (!stash) {
+		return <h1 style={{ textAlign: "center" }}>Loading...</h1>;
+	}
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		
-		const data = new FormData()
+
+		const data = new FormData();
 		data.append("name", title);
 		data.append("description", description);
-		
+
 		setLoading(true);
-		const res = await dispatch(createStashThunk(data));
-		//TODO: Navigate to stash page
-		if(res.id) {
-			setLoading(false)
-			nav(`/stashes/${res.id}`);
-		} else {
-			return await res.json()
-		}
+		await dispatch(updateStashById(id, data));
+		setLoading(false);
+		nav(`/stashes/${id}`);
+
 	};
 
 	return (
 		<div className="stash-create">
-			<h1 style={{ textDecoration: "underline", fontSize: "3.5rem" }}>Create A Stash</h1>
+			<h1 style={{ textDecoration: "underline", fontSize: "3.5rem" }}>Update Your Stash</h1>
 			<form className="stash-form" onSubmit={handleSubmit} encType="multipart/form-data">
 				<label>
 					Title
@@ -60,7 +71,7 @@ export default function UploadStash() {
 					/>
 				</label>
 				<button className="stash-submit" type="submit">
-					Create
+					Finish
 				</button>
 				{loading && <p>Loading...</p>}
 			</form>
