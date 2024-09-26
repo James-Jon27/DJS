@@ -2,6 +2,12 @@
 	background: #05334C;
     padding: 25px;
     color: white;
+    max-height: 800px;
+    overflow-y: scroll;
+}
+
+.imgPage::-webkit-scrollbar {
+    display: none;
 }
 
 .dropdown {
@@ -80,4 +86,8 @@
     display: flex;
     justify-content: space-between ;
     height: 120px;
+}
+
+.comments {
+    overflow: scroll;
 }

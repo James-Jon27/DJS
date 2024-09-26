@@ -2,12 +2,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { getImageById } from "../../redux/image";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useModal } from "../../context/Modal";
+import { getImageComments } from "../../redux/comment";
 import "./ImageModal.css";
 
 export default function ImageModal({ id }) {
 	const dispatch = useDispatch();
+	const {closeModal} = useModal()
 	const userStashes = useSelector((state) => state.session.user.Stashes);
 	const imageSelect = useSelector((state) => state.image);
+	const commentSelect = useSelector(state => state.comment)
+	const comments = Object.values(commentSelect)
 	const image = imageSelect[id];
 
 	const [checkedStashes, setCheckedStashes] = useState(new Set());
@@ -21,7 +26,12 @@ export default function ImageModal({ id }) {
 			const initStashSet = new Set(image.Stashes.map((stash) => stash.id));
 			setCheckedStashes(initStashSet);
 		}
-	}, [image]);
+
+		if(image) {
+			dispatch(getImageComments(id))
+		}
+
+	}, [image, dispatch, id]);
 
 	const drop = () => {
 		document.getElementById("myDropdown").classList.toggle("show");
@@ -37,14 +47,12 @@ export default function ImageModal({ id }) {
 		setCheckedStashes(currChecks);
 	};
 
-	if (!image) {
+	if (!image || !comments) {
 		return <h1>💥</h1>;
 	}
 
 	const owner = image.User;
-	const comments = image.Comments;
 	const faves = image.Favorites.length;
-	console.log(image);
 
 	return (
 		<div className="imgPage">
@@ -54,7 +62,7 @@ export default function ImageModal({ id }) {
 				</div>
 				<div className="userInt">
 					<div className="prof">
-						<NavLink className="circle-modal" to={`user/${owner.id}`}>
+						<NavLink className="circle-modal" to={`user/${owner.id}`} onClick={closeModal}>
 							{owner.firstName[0]}
 						</NavLink>
 						<h2>{owner.username}</h2>
@@ -95,10 +103,10 @@ export default function ImageModal({ id }) {
 			<span className="comments">
 				<h3>Comments</h3>
 				<button className="comment">Add a Comment</button>
-				{comments.map((comment) => {
+				{comments && comments.map((comment) => {
 					return (
 						<div key={comment.id}>
-							<h5>Username</h5>
+							<h5>{comment.User.username}</h5>
 							<p>{comment.comment}</p>
 						</div>
 					);
