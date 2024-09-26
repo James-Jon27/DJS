@@ -42,7 +42,7 @@ function ProfileButton() {
 		nav("/")
 	};
 
-	const faviconStyle = { fontSize: "28px", padding: "0" };
+	const faviconStyle = { fontSize: "28px", padding: "0", cursor: "pointer" };
 
 	return (
 		<>

@@ -59,7 +59,7 @@ export default function ImageModal({ id }) {
 		}
 	};
 
-	const handelDelete = async (e) => {
+	const handleDelete = async (e) => {
 		e.preventDefault();
 		await dispatch(deleteImage(id));
 		closeModal();
@@ -108,7 +108,7 @@ export default function ImageModal({ id }) {
 						{sessionUser.id == owner.id && (
 							<div style={{ display: "flex" }}>
 								<button
-									onClick={handelDelete}
+									onClick={handleDelete}
 									style={{ cursor: "pointer", background: "none", border: "none" }}>
 									<MdDeleteForever style={{ height: "35px", width: "35px" }} />
 								</button>
