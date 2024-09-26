@@ -1,7 +1,8 @@
-// action
+// actions
 const GET_USER_BY_ID = 'user/getUserById'
+const GET_STASH_FROM_USER = 'user/getStashFromUser'
 
-// action creator
+// action creators
 const getUserById = (user) => {
     return {
         type: GET_USER_BY_ID,
@@ -9,7 +10,8 @@ const getUserById = (user) => {
     }
 }
 
-// thunk
+
+// thunks
 export const thunkGetUserById = userId => async dispatch => {
     const response = await fetch(`/api/users/${userId}`);
     if (response.ok) {

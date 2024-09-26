@@ -13,12 +13,12 @@ function UserProfileLayout() {
         dispatch(thunkGetUserById(userId)).then(() => setIsLoaded(true))
     }, [dispatch, userId])
 
-    const firstInitial = useSelector(state => state.user.firstName)[0]
+    const firstName = useSelector(state => state.user.firstName)
 
     return (
         <>
             <div className="top">
-                <div className="circle">{isLoaded && firstInitial}</div>
+                <div className="circle">{isLoaded && firstName[0]}</div>
             </div>
             <nav>
                 <div>
