@@ -4,6 +4,7 @@
     color: white;
     max-height: 800px;
     overflow-y: scroll;
+    border: solid 2px #4C1E05;
 }
 
 .imgPage::-webkit-scrollbar {

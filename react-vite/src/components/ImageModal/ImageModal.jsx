@@ -112,7 +112,9 @@ export default function ImageModal({ id }) {
 									style={{ cursor: "pointer", background: "none", border: "none" }}>
 									<MdDeleteForever style={{ height: "35px", width: "35px" }} />
 								</button>
-								<button onClick={handleEdit} style={{ cursor: "pointer", background: "none", border: "none" }}>
+								<button
+									onClick={handleEdit}
+									style={{ cursor: "pointer", background: "none", border: "none" }}>
 									<FaEdit style={{ height: "35px", width: "35px" }} />
 								</button>
 							</div>
@@ -121,29 +123,39 @@ export default function ImageModal({ id }) {
 					<div className="stashDropdown">
 						{sessionUser && (
 							<div className="dropdown">
-								<button className="dropbtn" onClick={drop}>
+								<button style={{ cursor: "pointer" }} className="dropbtn" onClick={drop}>
 									Add to Stash 👇
 								</button>
-								<div id="myDropdown" className="dropdown-content">
-									{userStashes.map((stash) => {
-										return (
-											<label key={stash.id}>
-												<input
-													type="checkbox"
-													checked={checkedStashes.has(stash.id)}
-													onChange={() => checkbox(stash.id)}
-												/>
-												{stash.name}
-											</label>
-										);
-									})}
-								</div>
+								{/* TODO: WORK */}
+								{userStashes.length > 0 ? (
+									<div id="myDropdown" className="dropdown-content">
+										{userStashes.map((stash) => {
+											return (
+												<label key={stash.id}>
+													<input
+														type="checkbox"
+														checked={checkedStashes.has(stash.id)}
+														onChange={() => checkbox(stash.id)}
+													/>
+													{stash.name}
+												</label>
+											);
+										})}
+									</div>
+								) : (
+									<div id="myDropdown" className="dropdown-content">
+										<label style={{ textAlign: "center" }}>No User Stashes</label>
+									</div>
+								)}
 							</div>
 						)}
 					</div>
 					{sessionUser && (
+						// TODO: Favorite
 						<div>
-							<button className="favorite">Favorite</button>
+							<button style={{ cursor: "pointer" }} className="favorite">
+								Favorite
+							</button>
 						</div>
 					)}
 				</div>
