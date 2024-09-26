@@ -13,9 +13,7 @@ function ExplorePage() {
 		function handleColNum() {
 			setColNum(parseInt((window.innerWidth - 40) / 340));
 		}
-
 		window.addEventListener("resize", handleColNum);
-
 		return () => window.removeEventListener("resize", handleColNum);
 	}, []);
 
@@ -25,12 +23,12 @@ function ExplorePage() {
 		dispatch(getImages()).then(() => setIsLoaded(true));
 	}, [dispatch]);
 	const images = Object.values(useSelector((state) => state.image));
+	useEffect(() => {
+		if (detail) {
+			dispatch(getImageById(detail));
+		}
+	}, [dispatch, detail]);
 
-		useEffect(() => {
-			if (detail) {
-				dispatch(getImageById(detail));
-			}
-		}, [dispatch, detail]);
 	return (
 		<div className="grid" style={{ "--colNum": colNum }}>
 			{isLoaded &&

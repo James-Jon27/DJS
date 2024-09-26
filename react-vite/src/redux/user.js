@@ -1,6 +1,6 @@
 // actions
 const GET_USER_BY_ID = 'user/getUserById'
-const GET_STASH_FROM_USER = 'user/getStashFromUser'
+
 
 // action creators
 const getUserById = (user) => {

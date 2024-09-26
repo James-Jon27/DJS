@@ -1,8 +1,12 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import ProfileButton from "./ProfileButton";
+import { FaSearch } from "react-icons/fa";
 import "./Navigation.css";
 
 function Navigation() {
+	const [searchLabel, setSearchLabel] = useState("");
+
 	return (
 		<ul className="nav">
 			<div className="left">
@@ -18,7 +22,14 @@ function Navigation() {
 				</NavLink>
 			</div>
 			<div className="search-cont">
-				<input className="search" type="search" placeholder="Search" />
+				<input 
+					className="search" 
+					type="search" 
+					placeholder="Search for images by label" 
+					value={searchLabel}
+					onChange={(e) => setSearchLabel(e.target.value)}
+				/>
+				<button><FaSearch /></button>
 			</div>
 			<div>
 				<li className="right">

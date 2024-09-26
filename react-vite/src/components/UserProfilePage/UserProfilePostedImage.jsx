@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "./UserProfilePostedImage.css";
+import { userImages } from "../../redux/image";
 import OpenModalImageItem from "../ImageModal/OpenModalImageItem";
 import ImageModal from "../ImageModal/ImageModal";
+import { useParams } from "react-router-dom";
 
 function UserProfilePostedImage() {
 	const [colNum, setColNum] = useState(parseInt((window.innerWidth - 40) / 340));
@@ -12,9 +14,7 @@ function UserProfilePostedImage() {
 		function handleColNum() {
 			setColNum(parseInt((window.innerWidth - 40) / 340));
 		}
-
 		window.addEventListener("resize", handleColNum);
-
 		return () => window.removeEventListener("resize", handleColNum);
 	}, []);
 
@@ -29,7 +29,13 @@ function UserProfilePostedImage() {
 	// 	load();
 	// }, []);
 
-    const images = useSelector((state) => state.session.user.Images);
+	const [isLoaded, setIsLoaded] = useState(false)
+	const { userId } = useParams()
+	const dispatch = useDispatch()
+	useEffect(() => {
+		dispatch(userImages(userId)).then(() => setIsLoaded(true))
+	})
+    const images = Object.values(useSelector((state) => state.image));
 	
     // //Loader function
 	// if (!images) {
@@ -37,7 +43,7 @@ function UserProfilePostedImage() {
 	// }
 
 	return (
-		<>
+		isLoaded && 
 			<div className="grid" style={{ "--colNum": colNum }}>
 				{images.map((image) => {
 					return (
@@ -51,7 +57,6 @@ function UserProfilePostedImage() {
 					);
 				})}
 			</div>
-		</>
 	);
 }
 
