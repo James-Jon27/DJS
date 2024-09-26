@@ -12,7 +12,10 @@ def users():
     Query for all users and returns them in a list of user dictionaries
     """
     users = User.query.all()
-    return {'users': [user.to_dict() for user in users]}
+    user_holder = {}
+    for user in users:
+        user_holder[user.id] = user.to_dict_basic()
+    return user_holder
 
 
 @user_routes.route('/<int:id>')
@@ -54,8 +57,10 @@ def user_faves(id):
     favorites = Favorite.query.filter(Favorite.user_id == id).all()
     if not favorites:
         return {"errors": "Favorites not found"}, 404
-
-    return {"Favorites": [fav.to_dict_basic() for fav in favorites]}
+    fav_holder = {}
+    for favorite in favorites:
+        fav_holder[favorite.id] = favorite.to_dict_basic()
+    return fav_holder
 
 
 # ! Images
