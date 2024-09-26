@@ -8,7 +8,14 @@ import { useParams } from "react-router-dom";
 
 function UserProfilePostedImage() {
 	const [colNum, setColNum] = useState(parseInt((window.innerWidth - 40) / 340));
+	const [isLoaded, setIsLoaded] = useState(false)
+	const { userId } = useParams()
+	const dispatch = useDispatch()
 	// const [isLoading, setLoading] = useState(true);
+	
+	useEffect(() => {
+		dispatch(userImages(userId)).then(() => setIsLoaded(true))
+	}, [dispatch, userId])
 
 	useEffect(() => {
 		function handleColNum() {
@@ -18,34 +25,12 @@ function UserProfilePostedImage() {
 		return () => window.removeEventListener("resize", handleColNum);
 	}, []);
 
-    // // Loader function doesn't work
-	// useEffect(() => {
-	// 	const load = async () => {
-	// 		const timer = setTimeout(() => {
-	// 			setLoading(false);
-	// 		}, 5000);
-	// 		return () => clearTimeout(timer);
-	// 	};
-	// 	load();
-	// }, []);
-
-	const [isLoaded, setIsLoaded] = useState(false)
-	const { userId } = useParams()
-	const dispatch = useDispatch()
-	useEffect(() => {
-		dispatch(userImages(userId)).then(() => setIsLoaded(true))
-	}, [dispatch, userId])
     const images = Object.values(useSelector((state) => state.image));
-	
-    //Loader function
-	// if (!images) {
-	// 	return <h1 style={{textAlign:"center"}}>Loading...</h1>;
-	// }
 
 	return (
 		isLoaded && 
 			<div className="grid" style={{ "--colNum": colNum }}>
-				{images.map((image) => {
+				{images.reverse().map((image) => {
 					return (
 						<div key={image.id} style={{ cursor: "pointer" }}>
 							<OpenModalImageItem

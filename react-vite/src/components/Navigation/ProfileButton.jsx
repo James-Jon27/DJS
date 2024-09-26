@@ -53,7 +53,7 @@ function ProfileButton() {
 				<ul className={"profile-dropdown"} ref={ulRef}>
 					{user ? (
 						<>
-							<NavLink to={`/user/${user.id}`}  className="user-page">
+							<NavLink to={`/user/${user.id}/posted-images`}  className="user-page">
 								<li onClick={closeMenu}>{user.username}</li>
 							</NavLink>
 							<li>{user.email}</li>

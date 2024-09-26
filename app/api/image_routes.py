@@ -196,7 +196,7 @@ def post_new_comment(id):
         )
         db.session.add(new_comment)
         db.session.commit()
-        return new_comment.to_dict_basic()
+        return new_comment.to_dict()
 
     if form.errors:
         return {"errors" : format_errors(form.errors)}, 400

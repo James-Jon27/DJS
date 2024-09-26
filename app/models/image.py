@@ -39,10 +39,11 @@ class Image(db.Model):
     def to_dict_basic(self):
         return {
             "id": self.id,
-            "userId" : self.user_id,
+            "userId": self.user_id,
             "url": self.url,
             "title": self.title,
-            "description": self.description
+            "description": self.description,
+            "updatedAt": self.updated_at,
         }
 
     def to_dict(self):

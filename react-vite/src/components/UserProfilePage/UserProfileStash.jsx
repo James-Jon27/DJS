@@ -27,7 +27,7 @@ function UserProfileStash() {
 						style={{ textDecoration: "none", color: "black" }}
 						to={`/stashes/new`}>
 							<div className="Stash">No Stashes, Click to Create</div>
-						</NavLink>
+					</NavLink>
 				</div>
 			)
 		);

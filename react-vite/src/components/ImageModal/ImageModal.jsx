@@ -44,15 +44,18 @@ export default function ImageModal({ id }) {
 	}, [dispatch, id]);
 
 	const refetch = async () => {
-		await dispatch(getImageById(id));
+		// await dispatch(getImageById(id));
 		await dispatch(getImageComments(id));
 		const imageData = imageSelect[id];
 		setImage(imageData);
 	};
 
-	const handleSubmit = async (e) => {
+	const handleCommentSubmit = async (e) => {
 		e.preventDefault();
-		const res = await dispatch(postComment(image.id, comment));
+		const form = new FormData()
+		form.append("comment", comment)
+		const res = await dispatch(postComment(image.id, form));
+
 		if (res) {
 			refetch();
 			setComment("");
@@ -170,7 +173,7 @@ export default function ImageModal({ id }) {
 			<span className="comments">
 				<h3>Comments</h3>
 				{sessionUser && sessionUser.id !== owner.id && (
-					<form onSubmit={handleSubmit}>
+					<form onSubmit={handleCommentSubmit}>
 						<textarea
 							placeholder="Leave your comment here..."
 							value={comment}
@@ -181,7 +184,7 @@ export default function ImageModal({ id }) {
 						</button>
 					</form>
 				)}
-				{comments.map((comment) => (
+				{comments.reverse().map((comment) => (
 					<div key={comment.id}>
 						<h5>{comment.User.username}</h5>
 						<p>{comment.comment}</p>

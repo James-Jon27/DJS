@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getImages, getImageById } from "../../redux/image";
+import { getImages } from "../../redux/image";
 import "./HomePage.css";
 import OpenModalImageItem from "../ImageModal/OpenModalImageItem";
 import ImageModal from "../ImageModal/ImageModal";
 
 function HomePage() {
 	const [colNum, setColNum] = useState(parseInt((window.innerWidth - 40) / 340));
-	const [detail, setDetail] = useState(null);
 
 	useEffect(() => {
 		function handleColNum() {
@@ -27,12 +26,6 @@ function HomePage() {
 
 	const images = Object.values(useSelector((state) => state.image));
 
-	useEffect(() => {
-		if (detail) {
-			dispatch(getImageById(detail));
-		}
-	}, [dispatch, detail]);
-
 	return (
 		<div className="grid" style={{ "--colNum": colNum }}>
 			{isLoaded &&
@@ -40,11 +33,10 @@ function HomePage() {
 					<div key={image.id} style={{ cursor: "pointer" }}>
 						<OpenModalImageItem
 							modalComponent={
-								<ImageModal id={detail} /> // Pass detail directly to the modal
+								<ImageModal id={image.id} /> // Pass detail directly to the modal
 							}
 							src={image.url}
 							alt={image.title ? image.title : "Image"}
-							onItemClick={() => setDetail(image.id)} // Set detail on click
 						/>
 					</div>
 				))}

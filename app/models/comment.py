@@ -32,7 +32,8 @@ class Comment(db.Model):
             "id": self.id,
             "comment": self.comment,
             "imageId": self.image_id,
-            "userId": self.user_id
+            "userId": self.user_id,
+            "updatedAt": self.updated_at
         }
     
     def to_dict(self):
