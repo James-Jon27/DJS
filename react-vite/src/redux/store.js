@@ -11,6 +11,8 @@ import stashReducer from "./stash";
 import commentReducer from "./comment";
 import labelReducer from "./label";
 import userReducer from "./user";
+import favoriteReducer from "./favorite";
+
 
 
 const rootReducer = combineReducers({
@@ -19,7 +21,8 @@ const rootReducer = combineReducers({
   stash: stashReducer,
   comment: commentReducer,
   label: labelReducer,
-  user: userReducer
+  user: userReducer,
+  favorite: favoriteReducer
 });
 
 let enhancer;
