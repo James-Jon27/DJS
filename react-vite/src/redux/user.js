@@ -1,10 +1,15 @@
+// action
 const GET_USER_BY_ID = 'user/getUserById'
 
-const getUserById = (user) => ({
-    type: GET_USER_BY_ID,
-    payload: user
-})
+// action creator
+const getUserById = (user) => {
+    return {
+        type: GET_USER_BY_ID,
+        payload: user
+    }
+}
 
+// thunk
 export const thunkGetUserById = userId => async dispatch => {
     const response = await fetch(`/api/users/${userId}`);
     if (response.ok) {
@@ -14,6 +19,10 @@ export const thunkGetUserById = userId => async dispatch => {
         }
 
         dispatch(getUserById(user))
+    }
+    else {
+        const err = await response.json()
+        return err
     }
 }
 

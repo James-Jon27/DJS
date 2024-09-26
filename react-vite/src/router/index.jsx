@@ -30,7 +30,7 @@ export const router = createBrowserRouter([
         element: <ExplorePage />
       },
       {
-        path: "user",
+        path: "user/:userId",
         element: <UserProfileLayout />,
         children: [
           {

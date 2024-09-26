@@ -1,14 +1,24 @@
-import { useSelector } from "react-redux"
-import { Outlet, NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux"
+import { Outlet, NavLink, useParams } from "react-router-dom";
+import { thunkGetUserById } from '../../redux/user';
 import "./UserProfileLayout.css"
 
 function UserProfileLayout() {
-    const firstInitial = useSelector(state => state.session.user.firstName)[0]
+    const [isLoaded, setIsLoaded] = useState(false)
+    const dispatch = useDispatch()
+
+    const { userId } = useParams()
+    useEffect(() => {
+        dispatch(thunkGetUserById(userId)).then(() => setIsLoaded(true))
+    }, [dispatch, userId])
+
+    const firstInitial = useSelector(state => state.user.firstName)[0]
 
     return (
         <>
             <div className="top">
-                <div className="circle">{firstInitial}</div>
+                <div className="circle">{isLoaded && firstInitial}</div>
             </div>
             <nav>
                 <div>
