@@ -34,7 +34,7 @@ function UserProfilePostedImage() {
 	const dispatch = useDispatch()
 	useEffect(() => {
 		dispatch(userImages(userId)).then(() => setIsLoaded(true))
-	})
+	}, [dispatch, userId])
     const images = Object.values(useSelector((state) => state.image));
 	
     //Loader function
