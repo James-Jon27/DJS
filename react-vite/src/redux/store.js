@@ -12,6 +12,7 @@ import commentReducer from "./comment";
 import labelReducer from "./label";
 import userReducer from "./user";
 
+
 const rootReducer = combineReducers({
   session: sessionReducer,
   image: imageReducer,
