@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import ProfileButton from "./ProfileButton";
 import { FaSearch } from "react-icons/fa";
 import "./Navigation.css";
 
 function Navigation() {
 	const [searchLabel, setSearchLabel] = useState("");
+	const navigate = useNavigate()
 
 	return (
 		<ul className="nav">
@@ -29,7 +30,11 @@ function Navigation() {
 					value={searchLabel}
 					onChange={(e) => setSearchLabel(e.target.value)}
 				/>
-				<button><FaSearch /></button>
+				<button 
+					onClick={() => navigate(`/explore?label=${encodeURIComponent(searchLabel)}`)}
+				>
+					<FaSearch />
+				</button>
 			</div>
 			<div>
 				<li className="right">

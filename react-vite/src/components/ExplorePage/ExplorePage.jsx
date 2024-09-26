@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getImageById, getImages } from "../../redux/image";
+import { useSearchParams } from "react-router-dom";
+import { getImageById, imageByLabel } from "../../redux/image";
+import { getLabelsForExplore } from "../../redux/label";
 import "./ExplorePage.css";
 import OpenModalImageItem from "../ImageModal/OpenModalImageItem";
 import ImageModal from "../ImageModal/ImageModal";
 
 function ExplorePage() {
 	
+	// For organizing the loaded images
 	const [colNum, setColNum] = useState(parseInt((window.innerWidth - 40) / 340));
 	const [detail, setDetail] = useState(null);
 	useEffect(() => {
@@ -18,11 +21,38 @@ function ExplorePage() {
 	}, []);
 
 	const dispatch = useDispatch();
-	const [isLoaded, setIsLoaded] = useState(false);
+	const [labelIsLoaded, setLabelIsLoaded] = useState(false);
+	const [imageIsLoaded, setImageIsLoaded] = useState(false);
+	const [searchParams] = useSearchParams()
+
+	// For loading the available labels
 	useEffect(() => {
-		dispatch(getImages()).then(() => setIsLoaded(true));
-	}, [dispatch]);
-	const images = Object.values(useSelector((state) => state.image));
+		dispatch(getLabelsForExplore()).then(() => setLabelIsLoaded(true))
+	}, [dispatch, setLabelIsLoaded])
+	const labelOptions = Object.values(useSelector(state => state.label))
+
+	// For getting the user's input label or choosing a label for the user
+	let label = useRef(null)
+	useEffect(() => {
+		label.current = searchParams.get('label')
+		if (label.current) {
+			label.current = decodeURIComponent(label.current)
+		}
+		else if (labelIsLoaded) {
+			const indexChoice = Math.floor(Math.random() * labelOptions.length)
+			label.current = labelOptions[indexChoice].name
+		}
+	}, [labelIsLoaded, labelOptions, searchParams])
+
+	// For loading the images with the specified label
+	useEffect(() => {
+		if (label.current) {
+			dispatch(imageByLabel(label.current)).then(() => setImageIsLoaded(true))
+		}
+	}, [dispatch, setImageIsLoaded])
+	const images = Object.values(useSelector(state => state.image))
+
+	// For getting the image detail that the user clicked
 	useEffect(() => {
 		if (detail) {
 			dispatch(getImageById(detail));
@@ -31,7 +61,7 @@ function ExplorePage() {
 
 	return (
 		<div className="grid" style={{ "--colNum": colNum }}>
-			{isLoaded &&
+			{imageIsLoaded &&
 				images.map((image) => {
 					return (
 						<div key={image.id} style={{ cursor: "pointer" }}>
