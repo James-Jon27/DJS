@@ -16,55 +16,55 @@ import UpdateImage from "../components/UploadImagePage/UpdateImage";
 import UpdateStash from "../components/UploadStash/UpdateStash";
 
 export const router = createBrowserRouter([
-  {
-    element: <Layout />,
-    children: [
-      {
-        path: "/",
-        element: <HomePage />,
-      },
-      {
-        path: "explore",
-        element: <ExplorePage />
-      },
-      {
-        path: "user/:userId",
-        element: <UserProfileLayout />,
-        children: [
-          {
-            path: "posted-images",
-            element: <UserProfilePostedImage />
-          },
-          {
-            path: "stashes",
-            element: <UserProfileStash />
-          }
-        ]
-      },
-      {
-        path: "images/new",
-        element: <UploadImagePage />
-      },
-	  {
-		path: "images/:id/edit",
-		element: <UpdateImage />,
-	  },
-      {
-        path: "stashes/new",
-        element: <UploadStash />
-      }, 
-      {
-        path: "stashes/:id",
-        element: <StashPage />
-      },
-      {
-		path: "stashes/:id/edit",
-		element: <UpdateStash />,
-	  },
-	  {
-		path: "*",
-		element: "Page Not Found",
-	  },
-    ],
-  },
+	{
+		element: <Layout />,
+		children: [
+			{
+				path: "/",
+				element: <HomePage />,
+			},
+			{
+				path: "explore",
+				element: <ExplorePage />
+			},
+			{
+				path: "user/:userId",
+				element: <UserProfileLayout />,
+				children: [
+					{
+					path: "posted-images",
+					element: <UserProfilePostedImage />
+					},
+					{
+					path: "stashes",
+					element: <UserProfileStash />
+					}
+				]
+			},
+			{
+				path: "images/new",
+				element: <UploadImagePage />
+			},
+			{
+				path: "images/:id/edit",
+				element: <UpdateImage />
+			},
+			{
+				path: "stashes/new",
+				element: <UploadStash />
+			}, 
+			{
+				path: "stashes/:id",
+				element: <StashPage />
+			},
+			{
+				path: "stashes/:id/edit",
+				element: <UpdateStash />
+			},
+			{
+				path: "*",
+				element: "Page Not Found",
+			},
+		],
+	},
 ]);
