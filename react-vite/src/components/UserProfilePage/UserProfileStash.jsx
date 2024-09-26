@@ -11,12 +11,29 @@ function UserProfileStash() {
 	const { userId } = useParams()
 	const dispatch = useDispatch()
 	useEffect(() => {
-		dispatch(getUserStashes(userId)).then(() => setIsLoaded(true))
+		dispatch(getUserStashes(userId))
+		setIsLoaded(true)
 	}, [dispatch, userId])
-	const userStashes = Object.values(useSelector((state) => state.stash));
 
-	return ( 
-		isLoaded &&
+	const userStashes = Object.values(useSelector((state) => state.stash));
+	console.log(userStashes)
+	
+	if(userStashes[0] ==='Stashes not found' || !userStashes[0]) {
+		return (
+			isLoaded && (
+				<div className="Stashes">
+					<div className="Favorite">Favorites</div>
+					<NavLink
+						style={{ textDecoration: "none", color: "black" }}
+						to={`/stashes/new`}>
+							<div className="Stash">No Stashes, Click to Create</div>
+						</NavLink>
+				</div>
+			)
+		);
+	} else {
+		return ( 
+			isLoaded &&
 			<div className="Stashes">
 				<div className="Favorite">Favorites</div>
 				{userStashes.map((stash) => {
@@ -28,6 +45,7 @@ function UserProfileStash() {
 				})}
 			</div>
 	);
+}
 }
 
 export default UserProfileStash;

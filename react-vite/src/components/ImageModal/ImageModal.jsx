@@ -1,15 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
-import { getImageById } from "../../redux/image";
+import { deleteImage, getImageById, userImages } from "../../redux/image";
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useModal } from "../../context/Modal";
 import { getImageComments, postComment } from "../../redux/comment";
+import { MdDeleteForever } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
 import "./ImageModal.css";
 
 export default function ImageModal({ id }) {
 	const dispatch = useDispatch();
+	const nav = useNavigate();
 	const { closeModal } = useModal();
-	const userStashes = useSelector((state) => state.session.user.Stashes);
 	const sessionUser = useSelector((state) => state.session.user);
 	const imageSelect = useSelector((state) => state.image);
 	const commentSelect = useSelector((state) => state.comment);
@@ -19,22 +21,27 @@ export default function ImageModal({ id }) {
 	const [checkedStashes, setCheckedStashes] = useState(new Set());
 	const [comment, setComment] = useState("");
 
+	let userStashes;
+	if (sessionUser) {
+		userStashes = sessionUser.Stashes;
+	}
+
 	useEffect(() => {
 		const fetchAllData = async () => {
 			setLoading(true);
-			await dispatch(getImageById(id))
-			await dispatch(getImageComments(id))
-			const imageData = imageSelect[id]
-			setImage(imageData)
+			await dispatch(getImageById(id));
+			await dispatch(getImageComments(id));
+			const imageData = imageSelect[id];
+			setImage(imageData);
 			if (imageData) {
-				const initStashSet = new Set(imageData.Stashes.map((stash) => stash.id))
-				setCheckedStashes(initStashSet)
+				const initStashSet = new Set(imageData.Stashes.map((stash) => stash.id));
+				setCheckedStashes(initStashSet);
 			}
-			setLoading(false)
-		}
+			setLoading(false);
+		};
 
 		fetchAllData();
-	}, [dispatch, id])
+	}, [dispatch, id]);
 
 	const refetch = async () => {
 		await dispatch(getImageById(id));
@@ -44,13 +51,26 @@ export default function ImageModal({ id }) {
 	};
 
 	const handleSubmit = async (e) => {
-		e.preventDefault()
-		const res =  await dispatch(postComment(image.id, comment))
-		if(res) {
+		e.preventDefault();
+		const res = await dispatch(postComment(image.id, comment));
+		if (res) {
 			refetch();
-			setComment("")
+			setComment("");
 		}
-	}
+	};
+
+	const handelDelete = async (e) => {
+		e.preventDefault();
+		await dispatch(deleteImage(id));
+		closeModal();
+		await dispatch(userImages(sessionUser.id))
+	};
+
+	const handleEdit = async (e) => {
+		e.preventDefault()
+		closeModal()
+		nav(`/images/${id}/edit`)
+	};
 
 	const drop = () => {
 		document.getElementById("myDropdown").classList.toggle("show");
@@ -67,7 +87,7 @@ export default function ImageModal({ id }) {
 	};
 
 	if (loading || !image) {
-		return <h1 style={{color: "white"}}>Loading...💥</h1>;
+		return <h1 style={{ color: "white" }}>Loading...💥</h1>;
 	}
 
 	const owner = image.User;
@@ -85,31 +105,47 @@ export default function ImageModal({ id }) {
 							{owner.firstName[0]}
 						</NavLink>
 						<h2>{owner.username}</h2>
+						{sessionUser.id == owner.id && (
+							<div style={{ display: "flex" }}>
+								<button
+									onClick={handelDelete}
+									style={{ cursor: "pointer", background: "none", border: "none" }}>
+									<MdDeleteForever style={{ height: "35px", width: "35px" }} />
+								</button>
+								<button onClick={handleEdit} style={{ cursor: "pointer", background: "none", border: "none" }}>
+									<FaEdit style={{ height: "35px", width: "35px" }} />
+								</button>
+							</div>
+						)}
 					</div>
 					<div className="stashDropdown">
-						<div className="dropdown">
-							<button className="dropbtn" onClick={drop}>
-								Add to Stash 👇
-							</button>
-							<div id="myDropdown" className="dropdown-content">
-								{userStashes.map((stash) => {
-									return (
-										<label key={stash.id}>
-											<input
-												type="checkbox"
-												checked={checkedStashes.has(stash.id)}
-												onChange={() => checkbox(stash.id)}
-											/>
-											{stash.name}
-										</label>
-									);
-								})}
+						{sessionUser && (
+							<div className="dropdown">
+								<button className="dropbtn" onClick={drop}>
+									Add to Stash 👇
+								</button>
+								<div id="myDropdown" className="dropdown-content">
+									{userStashes.map((stash) => {
+										return (
+											<label key={stash.id}>
+												<input
+													type="checkbox"
+													checked={checkedStashes.has(stash.id)}
+													onChange={() => checkbox(stash.id)}
+												/>
+												{stash.name}
+											</label>
+										);
+									})}
+								</div>
 							</div>
+						)}
+					</div>
+					{sessionUser && (
+						<div>
+							<button className="favorite">Favorite</button>
 						</div>
-					</div>
-					<div>
-						<button className="favorite">Favorite</button>
-					</div>
+					)}
 				</div>
 			</div>
 			<span className="imgInfo">

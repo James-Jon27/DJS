@@ -37,7 +37,7 @@ def user_stashes(id):
     """
     stashes = Stash.query.filter(Stash.user_id == id).all()
     if not stashes:
-        return {"errors": "Stashes not found"}, 404
+        return {"errors": "Stashes not found"}
 
     stash_holder = {}
     for stash in stashes:

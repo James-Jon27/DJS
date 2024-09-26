@@ -14,9 +14,9 @@ def seed_images():
     )
     th = Image(
         user_id=1,
-        url="https://www.tvqc.com/wp-content/uploads/2019/03/That-Time-I-Got-Reincarnated-as-a-Slime.jpg",
+        url="https://wallpapercave.com/wp/wp5498884.png",
         title="Reincarnated as a Slime",
-        description="This is NOT a good anime!"
+        description="This is NOT a good anime!",
     )
     fo = Image(
         user_id=2,

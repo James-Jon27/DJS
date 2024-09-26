@@ -71,7 +71,7 @@ def update_stash(stashId):
     stash = Stash.query.get(stashId)
 
     if not stash:
-        return {"error": "Stash not Found"}, 404
+        return {"error": "Stash not Found"}
 
     form = StashForm()
     form["csrf_token"].data = request.cookies["csrf_token"]

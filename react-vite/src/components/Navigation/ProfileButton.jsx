@@ -54,7 +54,7 @@ function ProfileButton() {
 					{user ? (
 						<>
 							<NavLink to={`/user/${user.id}`}  className="user-page">
-								<li>{user.username}</li>
+								<li onClick={closeMenu}>{user.username}</li>
 							</NavLink>
 							<li>{user.email}</li>
 							<li>
