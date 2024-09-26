@@ -1,5 +1,5 @@
+import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { NavLink } from "react-router-dom";
 import ProfileButton from "./ProfileButton";
 import { FaSearch } from "react-icons/fa";
 import "./Navigation.css";
@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 function Navigation() {
 	const ulRef = useRef();
 	const [searchLabel, setSearchLabel] = useState("");
+	const navigate = useNavigate()
 	const [showMenu, setShowMenu] = useState(false);
 	const sessionUser = useSelector((state) => state.session.user);
 
@@ -65,7 +66,9 @@ function Navigation() {
 					value={searchLabel}
 					onChange={(e) => setSearchLabel(e.target.value)}
 				/>
-				<button>
+				<button 
+					onClick={() => navigate(`/explore?label=${encodeURIComponent(searchLabel)}`)}
+				>
 					<FaSearch />
 				</button>
 			</div>
