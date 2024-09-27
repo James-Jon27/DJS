@@ -23,20 +23,20 @@ function ExplorePage() {
 	// Creating dispatch 
 	// Ensuring that the labels and images are fully loaded
 	const dispatch = useDispatch();
-	const [labelsIsLoaded, setLabelsIsLoaded] = useState(false);
-	const [imageIsLoaded, setImageIsLoaded] = useState(false);
+	const [labelsAreLoaded, setLabelsAreLoaded] = useState(false);
+	const [imagesAreLoaded, setImagesAreLoaded] = useState(false);
 
 	// For loading the available labels
 	useEffect(() => {
-		if (!labelsIsLoaded) {
-			dispatch(getLabelsForExplore()).then(() => setLabelsIsLoaded(true));
+		if (!labelsAreLoaded) {
+			dispatch(getLabelsForExplore()).then(() => setLabelsAreLoaded(true));
 		}
-	}, [dispatch, labelsIsLoaded, setLabelsIsLoaded]);
+	}, [dispatch, labelsAreLoaded, setLabelsAreLoaded]);
 	const labelOptions = Object.values(useSelector(state => state.label));
 
 	// For getting the user's input label or choosing a label for the user
 	let label = useSelector(state => state.search_label);
-	if (!label && labelsIsLoaded) {
+	if (!label && labelsAreLoaded) {
 		const indexChoice = Math.floor(Math.random() * labelOptions.length);
 		label = labelOptions[indexChoice].name;
 		dispatch(getSearchLabel(label))
@@ -45,9 +45,9 @@ function ExplorePage() {
 	// For loading the images with the specified label
 	useEffect(() => {
 		if (label) {
-			dispatch(imageByLabel(label)).then(() => setImageIsLoaded(true));
+			dispatch(imageByLabel(label)).then(() => setImagesAreLoaded(true));
 		}
-	}, [dispatch, label, setImageIsLoaded]);
+	}, [dispatch, label, setImagesAreLoaded]);
 	const images = Object.values(useSelector(state => state.image));
 
 	// For getting the image detail that the user clicked
@@ -58,7 +58,7 @@ function ExplorePage() {
 	}, [dispatch, detail]);
 
 	return (
-		imageIsLoaded && images.length 
+		imagesAreLoaded && images.length 
 			?
 				(
 					<div className="grid" style={{ "--colNum": colNum }}>

@@ -291,7 +291,6 @@ def un_stash_an_image(id, stashId):
 
 # DELETE api/images/:imageId/label/:labelId
 @image_routes.route("/labels")
-@login_required
 def get_label():
     """
     Query for all labels returns them in a list
