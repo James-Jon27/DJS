@@ -25,7 +25,6 @@ def all_stashes():
 
 
 @stash_routes.route('/<int:id>')
-@login_required
 def stashes(id):
     '''
     Query for a specific stash by id

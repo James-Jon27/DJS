@@ -1,6 +1,4 @@
 import { createBrowserRouter } from "react-router-dom";
-// import LoginFormPage from '../components/LoginFormPage';
-// import SignupFormPage from '../components/SignupFormPage';
 import {
 	UserProfileLayout,
 	UserProfilePostedImage,
@@ -14,6 +12,7 @@ import StashPage from '../components/StashPage'
 import UploadStash from "../components/UploadStash";
 import UpdateImage from "../components/UploadImagePage/UpdateImage";
 import UpdateStash from "../components/UploadStash/UpdateStash";
+import FavoritesPage from "../components/StashPage/FavoritesPage";
 
 export const router = createBrowserRouter([
 	{
@@ -38,8 +37,12 @@ export const router = createBrowserRouter([
 					{
 					path: "stashes",
 					element: <UserProfileStash />
-					}
+					},
 				]
+			},
+			{
+				path: "user/:userId/favorites",
+				element: <FavoritesPage />
 			},
 			{
 				path: "images/new",

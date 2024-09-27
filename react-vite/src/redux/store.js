@@ -11,7 +11,8 @@ import stashReducer from "./stash";
 import commentReducer from "./comment";
 import labelReducer from "./label";
 import userReducer from "./user";
-import favoriteReducer from "./favorite";
+import favoriteReducer from "./favorites";
+
 
 
 

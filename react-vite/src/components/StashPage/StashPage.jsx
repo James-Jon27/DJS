@@ -9,6 +9,11 @@ import "./StashPage.css";
 function StashPage() {
 	const [colNum, setColNum] = useState(parseInt((window.innerWidth - 40) / 340));
 	const sessionUser = useSelector((state) => state.session.user);
+	const stash = useSelector((state) => state.stash);
+	const { id: stashId } = useParams();
+	const dispatch = useDispatch();
+	const [isLoaded, setIsLoaded] = useState(false);
+
 	useEffect(() => {
 		function handleColNum() {
 			setColNum(parseInt((window.innerWidth - 40) / 340));
@@ -19,13 +24,9 @@ function StashPage() {
 		return () => window.removeEventListener("resize", handleColNum);
 	}, []);
 
-	const { id: stashId } = useParams();
-	const dispatch = useDispatch();
-	const [isLoaded, setIsLoaded] = useState(false);
 	useEffect(() => {
 		dispatch(getStashById(stashId)).then(() => setIsLoaded(true));
 	}, [dispatch, stashId]);
-	const stash = useSelector((state) => state.stash);
 
 	const navigate = useNavigate();
 	const handleDelete = async (e) => {
@@ -39,6 +40,10 @@ function StashPage() {
 		navigate(`/stashes/${stashId}/edit`);
 	};
 
+	if(!stash){
+		return <h1>Loading...</h1>
+	}
+
 	const owner = stash.User;
 
 	return (
@@ -49,7 +54,7 @@ function StashPage() {
 					<p>- by {stash.User.username}</p>
 				</div>
 				<p id="description">{stash.description}</p>
-				{sessionUser.id == owner.id && (
+				{sessionUser && sessionUser.id == owner.id && (
 					<div style={{ display: "flex", paddingTop: "25px" }}>
 						<button
 							onClick={handleDelete}
@@ -82,7 +87,7 @@ function StashPage() {
 				) : (
 					<div className="emptyStashBox">
 						<h1>No Images Stashed</h1>
-						{sessionUser.id == owner.id && (
+						{sessionUser && sessionUser.id == owner.id && (
 							<button style={{cursor: "pointer"}}onClick={() => navigate(`/explore`)}>Go stash some!</button>
 						)}
 					</div>

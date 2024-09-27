@@ -7,6 +7,9 @@ import { getImageComments, postComment } from "../../redux/comment";
 import { MdDeleteForever } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import "./ImageModal.css";
+import { addFavToUser, delFavFromUser, getFavoritesThunk } from "../../redux/favorites";
+import LoginFormModal from "../LoginFormModal";
+import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
 
 export default function ImageModal({ id }) {
 	const dispatch = useDispatch();
@@ -52,8 +55,8 @@ export default function ImageModal({ id }) {
 
 	const handleCommentSubmit = async (e) => {
 		e.preventDefault();
-		const form = new FormData()
-		form.append("comment", comment)
+		const form = new FormData();
+		form.append("comment", comment);
 		const res = await dispatch(postComment(image.id, form));
 
 		if (res) {
@@ -66,13 +69,13 @@ export default function ImageModal({ id }) {
 		e.preventDefault();
 		await dispatch(deleteImage(id));
 		closeModal();
-		await dispatch(userImages(sessionUser.id))
+		await dispatch(userImages(sessionUser.id));
 	};
 
 	const handleEdit = async (e) => {
-		e.preventDefault()
-		closeModal()
-		nav(`/images/${id}/edit`)
+		e.preventDefault();
+		closeModal();
+		nav(`/images/${id}/edit`);
 	};
 
 	const drop = () => {
@@ -89,12 +92,27 @@ export default function ImageModal({ id }) {
 		setCheckedStashes(currChecks);
 	};
 
+	const favoriteToggle = async (e) => {
+		e.preventDefault()
+		if(sessionUser && favoriteCheck.background) {
+			await dispatch(delFavFromUser(sessionUser.id))
+			await dispatch(getImageById(id));
+			await dispatch(getFavoritesThunk(sessionUser.id))
+		} else if (sessionUser) {
+			await dispatch(addFavToUser(id))
+		} else {
+			return
+		}
+	}
+
 	if (loading || !image) {
 		return <h1 style={{ color: "white" }}>Loading...💥</h1>;
 	}
 
 	const owner = image.User;
-	const faves = image.Favorites.length;
+	const faves = image.Favorites;
+	const favoriteCheck = faves.some(fav => fav.user_id === sessionUser.id) ? {cursor: "pointer", background: "#DB570F"} : {cursor: "pointer"}
+	const faveCount = image.Favorites.length;
 
 	return (
 		<div className="imgPage">
@@ -108,7 +126,7 @@ export default function ImageModal({ id }) {
 							{owner.firstName[0]}
 						</NavLink>
 						<h2>{owner.username}</h2>
-						{sessionUser.id == owner.id && (
+						{sessionUser && sessionUser.id == owner.id && (
 							<div style={{ display: "flex" }}>
 								<button
 									onClick={handleDelete}
@@ -130,7 +148,7 @@ export default function ImageModal({ id }) {
 									Add to Stash 👇
 								</button>
 								{/* TODO: WORK */}
-								{userStashes.length > 0 ? (
+								{!userStashes || userStashes.length > 0 ? (
 									<div id="myDropdown" className="dropdown-content">
 										{userStashes.map((stash) => {
 											return (
@@ -156,7 +174,7 @@ export default function ImageModal({ id }) {
 					{sessionUser && (
 						// TODO: Favorite
 						<div>
-							<button style={{ cursor: "pointer" }} className="favorite">
+							<button onClick={favoriteToggle} style={favoriteCheck} className="favorite">
 								Favorite
 							</button>
 						</div>
@@ -168,7 +186,8 @@ export default function ImageModal({ id }) {
 					{image.title && <h1>{image.title}</h1>}
 					{image.description && <p>{image.description}</p>}
 				</div>
-				<h3>❤️ {faves} favorites</h3>
+				<h3>❤️ {faveCount} Favorites</h3>
+				{image.labels && <h3>{image.labels}</h3>}
 			</span>
 			<span className="comments">
 				<h3>Comments</h3>

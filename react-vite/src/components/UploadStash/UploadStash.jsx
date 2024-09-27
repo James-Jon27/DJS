@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch} from "react-redux";
+import { useDispatch, useSelector} from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createStashThunk } from "../../redux/stash";
 import "./UploadStash.css"
@@ -8,6 +8,7 @@ import HomePage from "../HomePage";
 export default function UploadStash() {
 	const nav = useNavigate();
 	const dispatch = useDispatch();
+	const sessionUser = useSelector(state => state.session.user)
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [loading, setLoading] = useState(false);
@@ -59,7 +60,8 @@ export default function UploadStash() {
 						}}
 					/>
 				</label>
-				<button className="stash-submit" type="submit">
+				{!sessionUser && <p style={{color:"red", fontWeight: "bold"}}>Please Log In to Create!</p>}
+				<button className="stash-submit" type="submit" 	disabled={!sessionUser}>
 					Create
 				</button>
 				{loading && <p>Loading...</p>}

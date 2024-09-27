@@ -1,8 +1,9 @@
 .imgPage {
+    max-width: 80vw;
 	background: #05334C;
     padding: 25px;
     color: white;
-    max-height: 800px;
+    max-height: 80vh;
     overflow-y: scroll;
     border: solid 2px #4C1E05;
 }
@@ -37,8 +38,8 @@
 .img-modal > img {
     border: 3px solid #4C1E05;
     box-shadow: 10px 10px 10px 0 black;
-    height: 500px;
-    width: auto;
+    width: 100%;
+    max-height: 75vh;
 }
 
 .prof {
@@ -56,8 +57,7 @@
 }
 
 .favorite,
-.dropbtn,
-.comment {
+.dropbtn {
     margin-top: 25px;
     width: 250px;
     font-size: 1.75em;
@@ -92,4 +92,25 @@
 
 .comments {
     overflow: scroll;
+}
+
+.comments > form {
+    display: flex;
+    align-items: flex-start;
+}
+
+.comments > form > textarea {
+    height: 40px;
+    width: 75%;
+    margin-right: 10px;
+    resize: none;
+}
+
+.comment {
+    height: 45px;;
+    width: 250px;
+    font-size: 125%;
+    background-color: #555;
+    border: solid 2px #DB570F;
+    color: white;
 }

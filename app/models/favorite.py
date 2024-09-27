@@ -28,7 +28,9 @@ class Favorite(db.Model):
         }
 
     def to_dict(self):
+        print("Users", self.users)
         return {
             **self.to_dict_basic(),
-            "Users" : [user.to_dict_basic() for user in self.users]
+            "Users" : [user.to_dict() for user in self.users],
+            "Images" : [img.to_dict() for img in self.images]
         }
