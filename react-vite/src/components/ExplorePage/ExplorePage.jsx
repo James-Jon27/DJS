@@ -1,16 +1,17 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams } from "react-router-dom";
-import { imageByLabel } from "../../redux/image";
+import { getImageById, imageByLabel } from "../../redux/image";
 import { getLabelsForExplore } from "../../redux/label";
 import "./ExplorePage.css";
 import OpenModalImageItem from "../ImageModal/OpenModalImageItem";
 import ImageModal from "../ImageModal/ImageModal";
+import { getSearchLabel } from "../../redux/searchLabel";
 
 function ExplorePage() {
 	
 	// For organizing the loaded images
 	const [colNum, setColNum] = useState(parseInt((window.innerWidth - 40) / 340));
+	const [detail, setDetail] = useState(null);
 	useEffect(() => {
 		function handleColNum() {
 			setColNum(parseInt((window.innerWidth - 40) / 340));
@@ -19,55 +20,72 @@ function ExplorePage() {
 		return () => window.removeEventListener("resize", handleColNum);
 	}, []);
 
+	// Creating dispatch 
+	// Ensuring that the labels and images are fully loaded
 	const dispatch = useDispatch();
-	const [labelIsLoaded, setLabelIsLoaded] = useState(false);
-	const [imageIsLoaded, setImageIsLoaded] = useState(false);
-	const [searchParams] = useSearchParams()
+	const [labelsAreLoaded, setLabelsAreLoaded] = useState(false);
+	const [imagesAreLoaded, setImagesAreLoaded] = useState(false);
 
 	// For loading the available labels
 	useEffect(() => {
-		dispatch(getLabelsForExplore()).then(() => setLabelIsLoaded(true))
-	}, [dispatch, setLabelIsLoaded])
-	const labelOptions = Object.values(useSelector(state => state.label))
+		if (!labelsAreLoaded) {
+			dispatch(getLabelsForExplore()).then(() => setLabelsAreLoaded(true));
+		}
+	}, [dispatch, labelsAreLoaded, setLabelsAreLoaded]);
+	const labelOptions = Object.values(useSelector(state => state.label));
 
 	// For getting the user's input label or choosing a label for the user
-	let label = useRef(null)
-	useEffect(() => {
-		label.current = searchParams.get('label')
-		if (label.current) {
-			label.current = decodeURIComponent(label.current)
-		}
-		else if (labelIsLoaded) {
-			const indexChoice = Math.floor(Math.random() * labelOptions.length)
-			label.current = labelOptions[indexChoice].name
-		}
-	}, [labelIsLoaded, labelOptions, searchParams])
-
+	const labelFromState = useSelector(state => state.search_label);
+	let label = labelFromState;
+	if (!label && labelsAreLoaded) {
+		const indexChoice = Math.floor(Math.random() * labelOptions.length);
+		label = labelOptions[indexChoice].name;
+	}
+	
+	// If the user's input label is empty in state, then fill it in with a random available label
 	// For loading the images with the specified label
 	useEffect(() => {
-		if (label.current) {
-			dispatch(imageByLabel(label.current)).then(() => setImageIsLoaded(true))
+		if (label) {
+			if (!labelFromState) {
+				dispatch(getSearchLabel(label))
+			}
+			dispatch(imageByLabel(label)).then(() => setImagesAreLoaded(true));
 		}
-	}, [dispatch, setImageIsLoaded])
-	const images = Object.values(useSelector(state => state.image))
+	}, [dispatch, label, labelFromState, setImagesAreLoaded]);
+	const images = Object.values(useSelector(state => state.image));
+
+	// For getting the image detail that the user clicked
+	useEffect(() => {
+		if (detail) {
+			dispatch(getImageById(detail));
+		}
+	}, [dispatch, detail]);
 
 	return (
-		<div className="grid" style={{ "--colNum": colNum }}>
-			{imageIsLoaded &&
-				images.map((image) => {
-					return (
-						<div key={image.id} style={{ cursor: "pointer" }}>
-							<OpenModalImageItem
-								modalComponent={
-									<ImageModal id={image.id} /> // Pass detail directly to the modal
-								}
-								src={image.url}
-								alt={image.title ? image.title : "Image"}
-							/>
-						</div>
-					);
-				})}
-		</div>
+		imagesAreLoaded && images.length 
+			?
+				(
+					<div className="grid" style={{ "--colNum": colNum }}>
+						{images.map((image) => {
+							return (
+								<div key={image.id} style={{ cursor: "pointer" }}>
+									<OpenModalImageItem
+										modalComponent={
+											<ImageModal id={detail} /> // Pass detail directly to the modal
+										}
+										src={image.url}
+										alt={image.title ? image.title : "Image"}
+										onItemClick={() => setDetail(image.id)} // Set detail on click
+									/>
+								</div>
+							);
+						})}
+					</div>
+				)
+			:
+				(
+					<h1>No such image with label {`"${label}"`} found!</h1>
+				)
 	);
 }
 
