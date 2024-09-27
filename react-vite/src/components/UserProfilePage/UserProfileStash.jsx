@@ -23,7 +23,7 @@ function UserProfileStash() {
 		return (
 			isLoaded && (
 				<div className="Stashes">
-					<NavLink style={{ textDecoration: "none", color: "black" }} to={`/user/${sessionUser.id}/favorites`}>
+					<NavLink style={{ textDecoration: "none", color: "black" }} to={`/user/${userId}/favorites`}>
 						<div className="Favorite">Favorites</div>
 					</NavLink>
 					<NavLink style={{ textDecoration: "none", color: "black" }} to={`/stashes/new`}>

@@ -35,7 +35,7 @@ function FavoritesPage() {
 
 
 	if (!isLoaded) {
-		return <h1>Loading...</h1>;
+		return <h1 style={{textAlign: "center"}}>Loading...</h1>;
 	}
 
     const owner = user

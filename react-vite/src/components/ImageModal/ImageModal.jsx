@@ -18,14 +18,17 @@ export default function ImageModal({ id }) {
 	const sessionUser = useSelector((state) => state.session.user);
 	const imageSelect = useSelector((state) => state.image);
 	const commentSelect = useSelector((state) => state.comment);
-	const comments = Object.values(commentSelect);
 	const userFaves = useSelector((state) => state.favorite);
+	const stashed = useSelector((state) => state.stash)
+	const stashes = Object.values(stashed)
+	const comments = Object.values(commentSelect);
 	const [loading, setLoading] = useState(true);
 	const [image, setImage] = useState(null);
 	const [checkedStashes, setCheckedStashes] = useState(new Set());
 	const [comment, setComment] = useState("");
 	const [favoriteCheck, setFavoriteCheck] = useState(false);
 	const [faveCount, setFaveCount] = useState(0);
+	console.log(stashes)
 
 	useEffect(() => {
 		const fetchAllData = async () => {
@@ -60,11 +63,6 @@ export default function ImageModal({ id }) {
 			setFaveCount(image.Favorites.length);
 		}
 	}, [sessionUser, image]);
-
-	let userStashes;
-	if (sessionUser) {
-		userStashes = sessionUser.Stashes;
-	}
 
 	const refetch = async () => {
 		if (image) {
@@ -201,9 +199,9 @@ export default function ImageModal({ id }) {
 									Add to Stash 👇
 								</button>
 								{/* TODO: WORK */}
-								{userStashes && userStashes.length > 0 ? (
+								{stashes && stashes.length > 0 ? (
 									<div id="myDropdown" className="dropdown-content">
-										{userStashes.map((stash) => {
+										{stashes.map((stash) => {
 											return (
 												<label key={stash.id}>
 													<input
