@@ -1,5 +1,6 @@
 from flask import Blueprint
 from flask_login import login_required
+from flask_sqlalchemy import query
 from app.models import User, Stash, Favorite, Image
 
 
@@ -44,7 +45,7 @@ def user_stashes(id):
 
     stash_holder = {}
     for stash in stashes:
-        stash_holder[stash.id] = stash.to_dict_basic()
+        stash_holder[stash.id] = stash.to_dict()
     return stash_holder
 
 
@@ -62,6 +63,17 @@ def user_faves(id):
         fav_holder[favorite.id] = favorite.to_dict_basic()
     return fav_holder
 
+
+@user_routes.route("/<int:id>/favorites/all")
+def fav_images(id):
+    favorites = Favorite.query.filter(Favorite.user_id == id).all()
+    img_holder = {}
+
+    for fav in favorites:
+        image = Image.query.get(fav.image_id)
+        img_holder[image.id] = image.to_dict_basic()
+
+    return img_holder
 
 # ! Images
 @user_routes.route("/<int:id>/images")

@@ -70,7 +70,7 @@ def delete_comment(id):
     
     #! If curr user does not own comment
     if comment_to_delete.user_id != current_user.id:
-        return {"errors": "This is not your comment to delete!"}, 500
+        return {"errors": "This is not your comment to delete!"}, 403
 
     db.session.delete(comment_to_delete)
     db.session.commit()

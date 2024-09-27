@@ -49,14 +49,15 @@ export const delFavFromUser = (id) => async (dispatch) => {
 export default function favoriteReducer(state = {}, action) {
     switch(action.type) {
         case GET_FAVES: {
-            const newState = {...action.payload}
-            return newState
+            return action.payload
         }
         case ADD_FAV: {
-            return {}
+            return {...state, [action.payload.id]: action.payload}
         }
         case DEL_FAV: {
-            return {}
+            const newState = {...state}
+            delete newState[action.payload]
+            return newState
         }
         default:
             return state

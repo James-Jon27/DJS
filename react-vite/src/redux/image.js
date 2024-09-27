@@ -55,6 +55,12 @@ export const userImages = (id) => async (dispatch) => {
     
 }
 
+export const favoriteImages = (userId) => async (dispatch) => {
+    const res = await fetch(`/api/users/${userId}/favorites/all`)
+    const data = await res.json();
+    dispatch(getImgs(data))
+}
+
 export const createImage = (post) => async (dispatch) => {
     const res = await fetch(`/api/images/new`, {
       method: "POST",
@@ -62,7 +68,6 @@ export const createImage = (post) => async (dispatch) => {
     });
   
     if (res.ok) {
-        console.log(res)
         const data = await res.json();
         dispatch(addPost(data));
     } else {

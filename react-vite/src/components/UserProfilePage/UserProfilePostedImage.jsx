@@ -11,7 +11,6 @@ function UserProfilePostedImage() {
 	const [isLoaded, setIsLoaded] = useState(false)
 	const { userId } = useParams()
 	const dispatch = useDispatch()
-	// const [isLoading, setLoading] = useState(true);
 	
 	useEffect(() => {
 		dispatch(userImages(userId)).then(() => setIsLoaded(true))

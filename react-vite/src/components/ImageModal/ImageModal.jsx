@@ -3,13 +3,13 @@ import { deleteImage, getImageById, userImages } from "../../redux/image";
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useModal } from "../../context/Modal";
-import { getImageComments, postComment } from "../../redux/comment";
+import { deleteComment, getImageComments, postComment } from "../../redux/comment";
 import { MdDeleteForever } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import "./ImageModal.css";
 import { addFavToUser, delFavFromUser, getFavoritesThunk } from "../../redux/favorites";
-import LoginFormModal from "../LoginFormModal";
-import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
+import { getUserStashes, stashAnImage, unStashAnImage } from "../../redux/stash";
+import { thunkGetUserById } from "../../redux/user";
 
 export default function ImageModal({ id }) {
 	const dispatch = useDispatch();
@@ -19,15 +19,13 @@ export default function ImageModal({ id }) {
 	const imageSelect = useSelector((state) => state.image);
 	const commentSelect = useSelector((state) => state.comment);
 	const comments = Object.values(commentSelect);
+	const userFaves = useSelector((state) => state.favorite);
 	const [loading, setLoading] = useState(true);
 	const [image, setImage] = useState(null);
 	const [checkedStashes, setCheckedStashes] = useState(new Set());
 	const [comment, setComment] = useState("");
-
-	let userStashes;
-	if (sessionUser) {
-		userStashes = sessionUser.Stashes;
-	}
+	const [favoriteCheck, setFavoriteCheck] = useState(false);
+	const [faveCount, setFaveCount] = useState(0);
 
 	useEffect(() => {
 		const fetchAllData = async () => {
@@ -35,22 +33,43 @@ export default function ImageModal({ id }) {
 			await dispatch(getImageById(id));
 			await dispatch(getImageComments(id));
 			const imageData = imageSelect[id];
-			setImage(imageData);
+
 			if (imageData) {
+				setImage(imageData);
 				const initStashSet = new Set(imageData.Stashes.map((stash) => stash.id));
 				setCheckedStashes(initStashSet);
 			}
 			setLoading(false);
 		};
 
-		fetchAllData();
+		if (id) {
+			fetchAllData();
+		}
 	}, [dispatch, id]);
 
+	useEffect(() => {
+		if (sessionUser) {
+			dispatch(getUserStashes(sessionUser.id));
+		}
+	}, [dispatch, sessionUser]);
+
+	useEffect(() => {
+		if (image && sessionUser) {
+			const isFavorite = image.Favorites.some((fav) => fav.user_id === sessionUser.id);
+			setFavoriteCheck(isFavorite);
+			setFaveCount(image.Favorites.length);
+		}
+	}, [sessionUser, image]);
+
+	let userStashes;
+	if (sessionUser) {
+		userStashes = sessionUser.Stashes;
+	}
+
 	const refetch = async () => {
-		// await dispatch(getImageById(id));
-		await dispatch(getImageComments(id));
-		const imageData = imageSelect[id];
-		setImage(imageData);
+		if (image) {
+			await dispatch(getImageComments(image.id));
+		}
 	};
 
 	const handleCommentSubmit = async (e) => {
@@ -62,6 +81,15 @@ export default function ImageModal({ id }) {
 		if (res) {
 			refetch();
 			setComment("");
+		}
+	};
+
+	const deleteCommentHandler = async (commentId) => {
+		try {
+			await dispatch(deleteComment(commentId));
+			refetch();
+		} catch (error) {
+			console.error("Error deleting comment:", error);
 		}
 	};
 
@@ -86,33 +114,58 @@ export default function ImageModal({ id }) {
 		const currChecks = new Set(checkedStashes);
 		if (currChecks.has(stashId)) {
 			currChecks.delete(stashId);
+			uncheck(stashId);
 		} else {
 			currChecks.add(stashId);
+			check(stashId);
 		}
 		setCheckedStashes(currChecks);
 	};
 
-	const favoriteToggle = async (e) => {
-		e.preventDefault()
-		if(sessionUser && favoriteCheck.background) {
-			await dispatch(delFavFromUser(sessionUser.id))
-			await dispatch(getImageById(id));
-			await dispatch(getFavoritesThunk(sessionUser.id))
-		} else if (sessionUser) {
-			await dispatch(addFavToUser(id))
-		} else {
-			return
+	const check = async (stashId) => {
+		if (!sessionUser) return;
+
+		const alreadyThere = checkedStashes.has(image.id);
+		if (!alreadyThere) {
+			await dispatch(stashAnImage(image.id, stashId));
+			await dispatch(thunkGetUserById(sessionUser.id));
 		}
-	}
+	};
+
+	const uncheck = async (stashId) => {
+		if (!sessionUser) return;
+
+		const alreadyThere = checkedStashes.has(image.id);
+		if (alreadyThere) {
+			await dispatch(unStashAnImage(image.id, stashId));
+			await dispatch(thunkGetUserById(sessionUser.id));
+		}
+	};
+
+	const favoriteToggle = async (e) => {
+		e.preventDefault();
+
+		if (sessionUser) {
+			const existingFavorite = Object.values(userFaves).find((fav) => fav.image_id === image.id);
+			if (existingFavorite) {
+				await dispatch(delFavFromUser(existingFavorite.id));
+				setFaveCount((prevCount) => prevCount - 1);
+				setFavoriteCheck(false);
+			} else {
+				await dispatch(addFavToUser(image.id));
+				setFaveCount((prevCount) => prevCount + 1);
+				setFavoriteCheck(true);
+			}
+
+			await dispatch(getFavoritesThunk(sessionUser.id));
+		}
+	};
 
 	if (loading || !image) {
 		return <h1 style={{ color: "white" }}>Loading...💥</h1>;
 	}
 
 	const owner = image.User;
-	const faves = image.Favorites;
-	const favoriteCheck = faves.some(fav => fav.user_id === sessionUser.id) ? {cursor: "pointer", background: "#DB570F"} : {cursor: "pointer"}
-	const faveCount = image.Favorites.length;
 
 	return (
 		<div className="imgPage">
@@ -148,7 +201,7 @@ export default function ImageModal({ id }) {
 									Add to Stash 👇
 								</button>
 								{/* TODO: WORK */}
-								{!userStashes || userStashes.length > 0 ? (
+								{userStashes && userStashes.length > 0 ? (
 									<div id="myDropdown" className="dropdown-content">
 										{userStashes.map((stash) => {
 											return (
@@ -174,7 +227,14 @@ export default function ImageModal({ id }) {
 					{sessionUser && (
 						// TODO: Favorite
 						<div>
-							<button onClick={favoriteToggle} style={favoriteCheck} className="favorite">
+							<button
+								onClick={favoriteToggle}
+								style={
+									favoriteCheck
+										? { cursor: "pointer", background: "#DB570F" }
+										: { cursor: "pointer" }
+								}
+								className="favorite">
 								Favorite
 							</button>
 						</div>
@@ -198,15 +258,24 @@ export default function ImageModal({ id }) {
 							value={comment}
 							onChange={(e) => setComment(e.target.value)}
 						/>
-						<button className="comment" type="submit" disabled={comment.length < 7}>
+						<button className="comment" type="submit" disabled={comment.length < 3}>
 							Add a Comment
 						</button>
 					</form>
 				)}
 				{comments.reverse().map((comment) => (
-					<div key={comment.id}>
-						<h5>{comment.User.username}</h5>
-						<p>{comment.comment}</p>
+					<div
+						style={{ display: "flex", justifyContent: "space-between", marginTop: "10px" }}
+						key={comment.id}>
+						<div className="content">
+							<h5>{comment.User.username}</h5>
+							<p>{comment.comment}</p>
+						</div>
+						{sessionUser && sessionUser.id === comment.User.id && (
+							<button className="delete" onClick={() => deleteCommentHandler(comment.id)}>
+								Delete
+							</button>
+						)}
 					</div>
 				))}
 			</span>

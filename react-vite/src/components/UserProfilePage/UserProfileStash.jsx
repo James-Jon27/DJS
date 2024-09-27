@@ -18,7 +18,6 @@ function UserProfileStash() {
 	}, [dispatch, userId]);
 
 	const userStashes = Object.values(useSelector((state) => state.stash));
-	console.log(userStashes);
 
 	if (userStashes[0] === "Stashes not found" || !userStashes[0]) {
 		return (
@@ -39,7 +38,7 @@ function UserProfileStash() {
 				<div className="Stashes">
 					<NavLink
 						style={{ textDecoration: "none", color: "black" }}
-						to={`/user/${sessionUser.id}/favorites`}>
+						to={`/user/${userId}/favorites`}>
 						<div className="Favorite">Favorites</div>
 					</NavLink>
 					{userStashes.map((stash) => {

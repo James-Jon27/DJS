@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import "./StashPage.css";
 import { getFavoritesThunk } from "../../redux/favorites";
+import { thunkGetUserById } from "../../redux/user";
+import { favoriteImages } from "../../redux/image";
 
 function FavoritesPage() {
     const navigate = useNavigate();
@@ -10,10 +12,10 @@ function FavoritesPage() {
 	const [colNum, setColNum] = useState(parseInt((window.innerWidth - 40) / 340));
 	const [isLoaded, setIsLoaded] = useState(false);
 	const sessionUser = useSelector((state) => state.session.user);
-	const faves = useSelector((state) => state.favorites);
+	const favImg = useSelector((state) => state.image);
+	const faves = Object.values(favImg)
+    const user = useSelector(state => state.user)
 	const { userId } = useParams();
-    console.log(userId)
-
 	useEffect(() => {
 		function handleColNum() {
 			setColNum(parseInt((window.innerWidth - 40) / 340));
@@ -25,26 +27,29 @@ function FavoritesPage() {
 	}, []);
 
 	useEffect(() => {
+		dispatch(thunkGetUserById(userId))
 		dispatch(getFavoritesThunk(userId))
+		dispatch(favoriteImages(userId))
+		.then(() => setIsLoaded(true))
 	}, [dispatch, userId]);
 
 
-	if (!faves) {
+	if (!isLoaded) {
 		return <h1>Loading...</h1>;
 	}
 
-    const owner = faves.Users
+    const owner = user
 
 	return (
 		isLoaded && (
 			<div className="stashContainer">
 				<div className="titleUser">
-					<h1>User&apos;s Favorites</h1>
+					<h1>{owner.username}&apos;s Favorites</h1>
 				</div>
 				<p id="description">Favorite Images</p>
-				{!faves || faves.Images.length ? (
+				{faves && faves.length ? (
 					<div className="grid" style={{ "--colNum": colNum }}>
-						{faves.Images.map((image) => {
+						{faves.map((image) => {
 							return <img src={image.url} key={image.id} />;
 						})}
 					</div>
