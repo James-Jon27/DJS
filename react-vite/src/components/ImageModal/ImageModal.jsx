@@ -41,7 +41,7 @@ export default function ImageModal({ id }) {
 		};
 
 		fetchAllData();
-	}, [dispatch, id]);
+	}, [dispatch, id, imageSelect]);
 
 	const refetch = async () => {
 		// await dispatch(getImageById(id));

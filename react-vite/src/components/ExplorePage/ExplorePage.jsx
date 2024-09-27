@@ -11,6 +11,7 @@ function ExplorePage() {
 	
 	// For organizing the loaded images
 	const [colNum, setColNum] = useState(parseInt((window.innerWidth - 40) / 340));
+	const [detail, setDetail] = useState(null);
 	useEffect(() => {
 		function handleColNum() {
 			setColNum(parseInt((window.innerWidth - 40) / 340));
