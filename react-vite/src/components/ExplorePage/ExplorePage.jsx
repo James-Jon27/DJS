@@ -35,19 +35,23 @@ function ExplorePage() {
 	const labelOptions = Object.values(useSelector(state => state.label));
 
 	// For getting the user's input label or choosing a label for the user
-	let label = useSelector(state => state.search_label);
+	const labelFromState = useSelector(state => state.search_label);
+	let label = labelFromState;
 	if (!label && labelsAreLoaded) {
 		const indexChoice = Math.floor(Math.random() * labelOptions.length);
 		label = labelOptions[indexChoice].name;
-		dispatch(getSearchLabel(label))
 	}
-
+	
+	// If the user's input label is empty in state, then fill it in with a random available label
 	// For loading the images with the specified label
 	useEffect(() => {
 		if (label) {
+			if (!labelFromState) {
+				dispatch(getSearchLabel(label))
+			}
 			dispatch(imageByLabel(label)).then(() => setImagesAreLoaded(true));
 		}
-	}, [dispatch, label, setImagesAreLoaded]);
+	}, [dispatch, label, labelFromState, setImagesAreLoaded]);
 	const images = Object.values(useSelector(state => state.image));
 
 	// For getting the image detail that the user clicked
