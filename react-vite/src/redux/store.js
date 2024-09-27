@@ -10,6 +10,7 @@ import imageReducer from "./image";
 import stashReducer from "./stash";
 import commentReducer from "./comment";
 import labelReducer from "./label";
+import searchLabelReducer from "./searchLabel";
 import userReducer from "./user";
 
 
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   stash: stashReducer,
   comment: commentReducer,
   label: labelReducer,
+  search_label: searchLabelReducer,
   user: userReducer
 });
 

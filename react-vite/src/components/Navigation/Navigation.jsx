@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import ProfileButton from "./ProfileButton";
 import { FaSearch } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import ProfileButton from "./ProfileButton";
+import { getSearchLabel } from "../../redux/searchLabel";
 import "./Navigation.css";
 
 function Navigation() {
 	const [searchLabel, setSearchLabel] = useState("");
 	const navigate = useNavigate()
+	const dispatch = useDispatch()
 
 	return (
 		<ul className="nav">
@@ -14,7 +17,7 @@ function Navigation() {
 				<NavLink className="navs" to="/">
 					<li>Home</li>
 				</NavLink>
-				<NavLink className="navs" to="/explore">
+				<NavLink className="navs" to="/explore" onClick={() => dispatch(getSearchLabel(""))}>
 					<li>Explore</li>
 				</NavLink>
 				{/* TODO: MAKE DROPDOWN THAT SAYS STASH OR IMG, ONLY VISIBLE TO A LOGGED IN USER */}
@@ -31,7 +34,10 @@ function Navigation() {
 					onChange={(e) => setSearchLabel(e.target.value)}
 				/>
 				<button 
-					onClick={() => navigate(`/explore?label=${encodeURIComponent(searchLabel)}`)}
+					onClick={() => {
+						dispatch(getSearchLabel(searchLabel))
+						navigate(`/explore`)
+					}}
 				>
 					<FaSearch />
 				</button>
