@@ -1,4 +1,3 @@
-from sqlalchemy import UniqueConstraint
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 from datetime import datetime
 
@@ -24,7 +23,8 @@ class Favorite(db.Model):
         return {
             "id": self.id,
             "image_id": self.image_id,
-            "user_id": self.user_id
+            "user_id": self.user_id,
+            "updatedAt": self.updated_at,
         }
 
     def to_dict(self):

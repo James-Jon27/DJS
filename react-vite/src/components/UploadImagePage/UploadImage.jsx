@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createImage } from "../../redux/image";
 import "./UploadImage.css";
@@ -12,6 +12,7 @@ const UploadImage = () => {
 	const [description, setDescription] = useState("");
 	const [labels, setLabels] = useState("");
 	const [imageLoading, setImageLoading] = useState(false);
+	const sessionUser = useSelector(state => state.session.user)
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -26,7 +27,7 @@ const UploadImage = () => {
 		setImageLoading(true);
 		await dispatch(createImage(formData));
         //TODO: navigate to user profile to view new image
-		navigate("/user/posted-images");
+		navigate(`/user/${sessionUser.id}/posted-images`);
 	};
 
 	return (

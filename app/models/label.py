@@ -15,10 +15,7 @@ class Label(db.Model):
     )
 
     def to_dict_basic(self):
-        return {
-            "id": self.id,
-            "name": self.name
-        }
+        return {"id": self.id, "name": self.name}
     
     def to_dict(self):
         return {

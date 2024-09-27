@@ -42,7 +42,7 @@ function ProfileButton() {
 		nav("/")
 	};
 
-	const faviconStyle = { fontSize: "28px", padding: "0" };
+	const faviconStyle = { fontSize: "28px", padding: "0", cursor: "pointer" };
 
 	return (
 		<>
@@ -53,8 +53,8 @@ function ProfileButton() {
 				<ul className={"profile-dropdown"} ref={ulRef}>
 					{user ? (
 						<>
-							<NavLink to={`/user/${user.id}`}  className="user-page">
-								<li>{user.username}</li>
+							<NavLink to={`/user/${user.id}/posted-images`}  className="user-page">
+								<li onClick={closeMenu}>{user.username}</li>
 							</NavLink>
 							<li>{user.email}</li>
 							<li>

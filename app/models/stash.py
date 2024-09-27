@@ -27,10 +27,11 @@ class Stash(db.Model):
 
     def to_dict_basic(self):
         return {
-            "id" : self.id,
-            "userId" : self.user_id,
-            "name" : self.name,
-            "description" : self.description
+            "id": self.id,
+            "userId": self.user_id,
+            "name": self.name,
+            "description": self.description,
+            "updatedAt": self.updated_at,
         }
 
     def to_dict(self):

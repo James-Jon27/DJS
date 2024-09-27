@@ -12,6 +12,8 @@ import commentReducer from "./comment";
 import labelReducer from "./label";
 import searchLabelReducer from "./searchLabel";
 import userReducer from "./user";
+import favoriteReducer from "./favorite";
+
 
 
 const rootReducer = combineReducers({
@@ -21,7 +23,8 @@ const rootReducer = combineReducers({
   comment: commentReducer,
   label: labelReducer,
   search_label: searchLabelReducer,
-  user: userReducer
+  user: userReducer,
+  favorite: favoriteReducer
 });
 
 let enhancer;

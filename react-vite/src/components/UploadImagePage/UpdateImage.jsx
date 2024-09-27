@@ -7,37 +7,35 @@ import "./UploadImage.css";
 const UpdateImage = () => {
 	const navigate = useNavigate(); // so that you can redirect after the image upload is successful
 	const dispatch = useDispatch();
-    const {id} = useParams();
+	const { id } = useParams();
 	const imageSelect = useSelector((state) => state.image);
+	const sessionUser = useSelector((state) => state.session.user);
 	const img = imageSelect[id];
-	const [image, setImage] = useState(null);
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [labels, setLabels] = useState("");
 	const [imageLoading, setImageLoading] = useState(false);
 
-    useEffect(() =>{
-        dispatch(getImageById(id))
-    }, [dispatch, id])
+	useEffect(() => {
+		dispatch(getImageById(id));
+	}, [dispatch, id]);
 
-    useEffect(() => {
-        if(img) {
-            setTitle(img.title)
-            setDescription(img.description)
-            // TODO: Sukh work your magic
-            setLabels()
-            setImage()
-        }
-    }, [img])
+	useEffect(() => {
+		if (img) {
+			setTitle(img.title);
+			setDescription(img.description);
+			// TODO: Sukh work your magic
+			setLabels();
+		}
+	}, [img]);
 
-    if(!img) {
-        return <h1 style={{ textAlign: "center" }}>Loading...</h1>;
-    }
+	if (!img) {
+		return <h1 style={{ textAlign: "center" }}>Loading...</h1>;
+	}
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const formData = new FormData();
-		formData.append("image", image);
 		formData.append("title", title);
 		formData.append("description", description);
 		formData.append("labels", labels);
@@ -47,7 +45,7 @@ const UpdateImage = () => {
 		setImageLoading(true);
 		await dispatch(updateImage(id, formData));
 		//TODO: navigate to user profile to view new image
-		navigate("/user/posted-images");
+		navigate(`/user/${sessionUser.id}/posted-images`);
 	};
 
 	return (
@@ -80,14 +78,6 @@ const UpdateImage = () => {
 						type="text"
 						value={description}
 						onChange={(e) => setDescription(e.target.value)}
-					/>
-				</label>
-				<label>
-					<input
-						className="img-filef"
-						type="file"
-						accept="image/*"
-						onChange={(e) => setImage(e.target.files[0])}
 					/>
 				</label>
 				<button className="img-submit" type="submit">
