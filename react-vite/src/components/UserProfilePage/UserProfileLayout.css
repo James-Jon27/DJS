@@ -32,6 +32,7 @@ nav {
     margin: 30px;
     background-color: #555;
     border-radius: 50%;
+    border: solid 2px #4C1E05;
 
     /* Text */
     display: flex;

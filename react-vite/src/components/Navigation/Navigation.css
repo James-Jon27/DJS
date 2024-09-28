@@ -1,10 +1,14 @@
+html, body {
+	background: #02669c;
+}
+
 .nav {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	list-style: none;
 	font-size: xx-large;
-	background-color: #0f94dc;
+	background-color: #0F94DC;
 	margin: 0;
 	border: 0;
 	padding: 0;
@@ -23,7 +27,7 @@
 	list-style: none;
 	padding: 0 15px 15px 15px;
 	border: solid #db570f 3px;
-	background-color: #db560f70;
+	background-color: #db560fc9;
 }
 
 .profile-dropdown-create {
@@ -37,7 +41,7 @@
 	list-style: none;
 	padding: 0 15px 15px 15px;
 	border: solid #db570f 3px;
-	background-color: #db560f3a;
+	background-color: #db560fc2;
 }
 
 .navs-create {

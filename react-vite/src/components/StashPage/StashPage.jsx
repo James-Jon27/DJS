@@ -61,7 +61,7 @@ function StashPage() {
 							style={{
 								border: "solid 2px red",
 								cursor: "pointer",
-								background: "none",
+								background: "#943B0A",
 								marginRight: "10px",
 							}}>
 							<MdDeleteForever style={{ height: "35px", width: "35px" }} />
@@ -71,7 +71,7 @@ function StashPage() {
 							style={{
 								border: "solid 2px red",
 								cursor: "pointer",
-								background: "none",
+								background: "#943B0A",
 								marginLeft: "10px",
 							}}>
 							<FaEdit style={{ height: "35px", width: "35px" }} />

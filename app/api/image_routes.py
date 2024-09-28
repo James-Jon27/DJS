@@ -46,7 +46,6 @@ def get_images():
 
 
 @image_routes.route("/<int:id>")
-@login_required
 def get_specific_image(id):
     """
     Gets the image with the specified ID and returns a list of complete image details

@@ -11,6 +11,7 @@
     border-radius: 15px;
 
     background-color: #555;
+    border: solid 2px #4C1E05;
 
     display: flex;
     justify-content: center;

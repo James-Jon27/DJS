@@ -10,7 +10,6 @@ function UserProfileStash() {
 	const [isLoaded, setIsLoaded] = useState(false);
 	const { userId } = useParams();
 	const dispatch = useDispatch();
-	const sessionUser = useSelector(state => state.session.user)
 
 	useEffect(() => {
 		dispatch(getUserStashes(userId));
@@ -23,7 +22,9 @@ function UserProfileStash() {
 		return (
 			isLoaded && (
 				<div className="Stashes">
-					<NavLink style={{ textDecoration: "none", color: "black" }} to={`/user/${userId}/favorites`}>
+					<NavLink
+						style={{ textDecoration: "none", color: "black" }}
+						to={`/user/${userId}/favorites`}>
 						<div className="Favorite">Favorites</div>
 					</NavLink>
 					<NavLink style={{ textDecoration: "none", color: "black" }} to={`/stashes/new`}>

@@ -4,7 +4,7 @@ import "./UserProfilePostedImage.css";
 import { userImages } from "../../redux/image";
 import OpenModalImageItem from "../ImageModal/OpenModalImageItem";
 import ImageModal from "../ImageModal/ImageModal";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 
 function UserProfilePostedImage() {
 	const [colNum, setColNum] = useState(parseInt((window.innerWidth - 40) / 340));
@@ -24,7 +24,17 @@ function UserProfilePostedImage() {
 		return () => window.removeEventListener("resize", handleColNum);
 	}, []);
 
-    const images = Object.values(useSelector((state) => state.image));
+	const images = Object.values(useSelector((state) => state.image));
+
+    if(images[0] === 'Images not found') {
+		return (
+			<div className="Stashes">
+				<NavLink style={{ textDecoration: "none", color: "black" }} to={`/images/new`}>
+					<div className="Stash">No Images, Click to Create</div>
+				</NavLink>
+			</div>
+		);
+	}
 
 	return (
 		isLoaded && 

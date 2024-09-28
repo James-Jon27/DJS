@@ -28,7 +28,6 @@ export default function ImageModal({ id }) {
 	const [comment, setComment] = useState("");
 	const [favoriteCheck, setFavoriteCheck] = useState(false);
 	const [faveCount, setFaveCount] = useState(0);
-	console.log(stashes)
 
 	useEffect(() => {
 		const fetchAllData = async () => {
