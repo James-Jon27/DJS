@@ -11,7 +11,7 @@ import { addFavToUser, delFavFromUser, getFavoritesThunk } from "../../redux/fav
 import { getUserStashes, stashAnImage, unStashAnImage } from "../../redux/stash";
 import { thunkGetUserById } from "../../redux/user";
 
-export default function ImageModal({ id }) {
+function ImageModal({ id }) {
 	const dispatch = useDispatch();
 	const nav = useNavigate();
 	const { closeModal } = useModal();
@@ -19,8 +19,8 @@ export default function ImageModal({ id }) {
 	const imageSelect = useSelector((state) => state.image);
 	const commentSelect = useSelector((state) => state.comment);
 	const userFaves = useSelector((state) => state.favorite);
-	const stashed = useSelector((state) => state.stash)
-	const stashes = Object.values(stashed)
+	const stashed = useSelector((state) => state.stash);
+	const stashes = Object.values(stashed);
 	const comments = Object.values(commentSelect);
 	const [loading, setLoading] = useState(true);
 	const [image, setImage] = useState(null);
@@ -163,6 +163,8 @@ export default function ImageModal({ id }) {
 	}
 
 	const owner = image.User;
+	const labels = image.Labels.map((label, el) => image.Labels[el].name);
+	console.log(labels);
 
 	return (
 		<div className="imgPage">
@@ -198,7 +200,7 @@ export default function ImageModal({ id }) {
 									Add to Stash 👇
 								</button>
 								{/* TODO: WORK */}
-								{stashes && stashes.length > 0 ? (
+								{stashes && stashes.length > 0 && stashes[0] !== "Stashes not found" ? (
 									<div id="myDropdown" className="dropdown-content">
 										{stashes.map((stash) => {
 											return (
@@ -243,8 +245,15 @@ export default function ImageModal({ id }) {
 					{image.title && <h1>{image.title}</h1>}
 					{image.description && <p>{image.description}</p>}
 				</div>
-				<h3>❤️ {faveCount} Favorites</h3>
-				{image.labels && <h3>{image.labels}</h3>}
+				<div>
+					<h3>❤️ {faveCount} Favorites</h3>
+					<div style={{ display: "flex", gap: "10px" }}>
+						{labels &&
+							labels.map((label, el) => {
+								return <h4 key={el}>{label}</h4>;
+							})}
+					</div>
+				</div>
 			</span>
 			<span className="comments">
 				<h3>Comments</h3>
@@ -279,3 +288,5 @@ export default function ImageModal({ id }) {
 		</div>
 	);
 }
+
+export default ImageModal;
