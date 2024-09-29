@@ -39,6 +39,7 @@ When redirected and clicking on the user interaction button again you will see t
 ![](MDP/jdsS3.22.png)
 
 Clicking on the username will take you to your posted images, and you may click on the abs to switch back and forth between your stashes or posted images. As a new user you may not have anything to view.
+
 ![](MDP/jdsS4.41.png)
 ![](MDP/jdsS4.42.png)
 
@@ -62,6 +63,7 @@ Upon creating a stash you will be taken to that stashes page with otptions to de
 ![](MDP/jdsS4.33.png)
 
 Upon creating a new image, you will be taken to your "Posted Images" page where the image will appear among the top images. When opening your images, tou will be presented with an option to delete or edit that image.
+
 ![](MDP/jdsS4.55.png)
 ![](MDP/jdsS4.52.png)
 
