@@ -49,6 +49,7 @@ const UploadImage = () => {
 				<label>
 					<input className="img-filef" type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} />
 				</label>
+				{!sessionUser && <p style={{color:"red", fontWeight: "bold"}}>Please Log In to Create!</p>}
 				<button className="img-submit" type="submit">Post</button>
 				{imageLoading && <p style={{color: "white", fontSize: "1rem"}}>Loading...</p>}
 			</form>
