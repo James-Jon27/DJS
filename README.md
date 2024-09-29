@@ -1,5 +1,5 @@
 # Just Digital Stashes
-_By Sukhpreet Sidhu[https://github.com/sukhpreet-sidhu-AA], Daniel Ho[https://github.com/dwho0937wei-dotcom], and James Jones[https://github.com/James-Jon27]
+_By Sukhpreet Sidhu(https://github.com/sukhpreet-sidhu-AA), Daniel Ho(https://github.com/dwho0937wei-dotcom), and James Jones(https://github.com/James-Jon27)
 This is our the Flask React project.
 
 ## Introduction
