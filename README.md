@@ -1,8 +1,32 @@
-# Flask React Project
+# Just Digital Stashes
+_By [Sukhpreet Sidhu](https://github.com/sukhpreet-sidhu-AA), [Daniel Ho](https://github.com/dwho0937wei-dotcom), and [James Jones](https://github.com/James-Jon27)
+This is our the Flask React project.
 
-This is the starter for the Flask React project.
+## Introduction
 
-## Getting started
+Wlecome to **Just Digital Stashes**! This project aims to provide a user-friendly platform for stashing photos you make. Whether you're a professional photographer, a mom saving photos of her kid's achievements, or just someone who likes to see life from another perspective, Just Digital Stashes provides a intuitive interface for exploring this unique art form.
+
+## Overview
+Just digital Stashes is a Pinterest clone, created to allow photograhers and others to react and save images they enjoy. Whena user first accesses the site they are bought to the home page where they will see 20  random images from across the site. 
+
+![](MDP/jdsS1.png)
+
+When clicking on an image in the homepage a modal appears with all of that images information, such as the title, description, how many users have favorited the images, and the user who posted this image. Scrollin gon the modal will reveal user's comments for that post.
+
+![](MDP/jdsS2.png) ![](MDP/jdsS2.1.png)
+
+In the upper left hand corner of the page is a user interaction button where you can Log In or Sign up for the site. Both buttons open a modal with thier respective functionality.
+
+![](MDP/jdsS3.21.png) ![](MDP/jdsS3.31.png)
+
+When redirected and clicking on the user interaction button again you will see that it displays the user's username and email, with a log out button, that will log you out and take you back to an unlogged out home page.
+![](MDP/jdsS3.22.png)
+
+The difference between a logged in and logged out user is the Create tab that appears next to the search bar.
+![](MDP/jds3.32.png)
+
+
+## Getting started - 
 
 1. Clone this repository (only this branch).
 
