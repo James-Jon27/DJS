@@ -17,7 +17,13 @@ When clicking on an image in the homepage a modal appears with all of that image
 
 In the upper left hand corner of the page is a user interaction button where you can Log In or Sign up for the site. Both buttons open a modal with thier respective functionality.
 
-![](MDP/jdsS2.21.png) ![](MDP/jdsS3.31.png)
+![](MDP/jdsS3.21.png) ![](MDP/jdsS3.31.png)
+
+When redirected and clicking on the user interaction button again you will see that it displays the user's username and email, with a log out button, that will log you out and take you back to an unlogged out home page.
+![](MDP/jdsS3.22.png)
+
+The difference between a logged in and logged out user is the Create tab that appears next to the search bar.
+![](MDP/jdsS3.32.png)
 
 
 ## Getting started - 
