@@ -1,12 +1,28 @@
 # Just Digital Stashes
 _By [Sukhpreet Sidhu](https://github.com/sukhpreet-sidhu-AA), [Daniel Ho](https://github.com/dwho0937wei-dotcom), and [James Jones](https://github.com/James-Jon27)
-This is our the Flask React project.
 
 ## Introduction
 
 Wlecome to **Just Digital Stashes**! This project aims to provide a user-friendly platform for stashing photos you make. Whether you're a professional photographer, a mom saving photos of her kid's achievements, or just someone who likes to see life from another perspective, Just Digital Stashes provides a intuitive interface for exploring this unique art form.
 
+## Index
+- [User Stories](https://github.com/James-Jon27/DJS/wiki/User-Stories)
+- [MVP-List](https://github.com/James-Jon27/DJS/wiki/MVP-List)
+- [Database Schema](https://github.com/James-Jon27/DJS/wiki/Database-Schema)
+- [API Routes](https://github.com/James-Jon27/Just-Digital-Stashes/wiki/API-Routes)
+
+## Technologies Used
+
+
+- JavaScript
+- React/Redux
+- CSS
+- HTML
+- Python
+- Flask/SQLAlchemy
+
 ## Overview
+
 Just digital Stashes is a Pinterest clone, created to allow photograhers and others to react and save images they enjoy. Whena user first accesses the site they are bought to the home page where they will see 20  random images from across the site. 
 
 ![](MDP/jdsS1.png)
@@ -22,8 +38,33 @@ In the upper left hand corner of the page is a user interaction button where you
 When redirected and clicking on the user interaction button again you will see that it displays the user's username and email, with a log out button, that will log you out and take you back to an unlogged out home page.
 ![](MDP/jdsS3.22.png)
 
+Clicking on the username will take you to your posted images, and you may click on the abs to switch back and forth between your stashes or posted images. As a new user you may not have anything to view.
+![](MDP/jdsS4.41.png)
+![](MDP/jdsS4.42.png)
+
 The difference between a logged in and logged out user is the Create tab that appears next to the search bar.
+
 ![](MDP/jds3.32.png)
+
+Now, as a logged in user you may open an image and see more features, such as the ability to post/delete a comment, favorite/unfavorite the image, and even add it to a stash.
+
+![](MDP/jdsS4.11.png)
+![](MDP/jdsS4.13.png)
+![](MDP/jdsS4.21.png)
+
+If you are a new user, you may want to create a stash to start saving photos by clicking the create tab in  the upper right corner. you can also create an image from here.
+
+![](MDP/jdsS4.32.png)
+![](MDP/jdsS5.51.png)
+
+Upon creating a stash you will be taken to that stashes page with otptions to delete or edit the stash. since its made empty, you will also see an option to go find some images to stash. Upon clicking that button you will be taken to the explore page.
+
+![](MDP/jdsS4.33.png)
+
+Upon creating a new image, you will be taken to your "Posted Images" page where the image will appear among the top images. When opening your images, tou will be presented with an option to delete or edit that image.
+![](MDP/jdsS4.55.png)
+![](MDP/jdsS4.52.png)
+
 
 
 ## Getting started - 
