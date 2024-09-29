@@ -23,7 +23,7 @@ When redirected and clicking on the user interaction button again you will see t
 ![](MDP/jdsS3.22.png)
 
 The difference between a logged in and logged out user is the Create tab that appears next to the search bar.
-![](MDP/jdsS3.32.png)
+![](MDP/jds3.32.png)
 
 
 ## Getting started - 
