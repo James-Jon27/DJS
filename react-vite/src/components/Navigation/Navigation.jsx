@@ -34,7 +34,6 @@ function Navigation() {
 
 		return () => document.removeEventListener("click", closeMenu);
 	}, [showMenu]);
-	console.log(searchLabel)
 
 	return (
 		<ul className="nav">
