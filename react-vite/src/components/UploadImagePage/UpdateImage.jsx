@@ -26,7 +26,6 @@ const UpdateImage = () => {
 			if (img.description !== "null") {
 				setDescription(img.description);
 			}
-			// TODO: Sukh work your magic
 			const imgLabels = img.Labels.map((label, el) => img.Labels[el].name);
 			setLabels(imgLabels);
 		}

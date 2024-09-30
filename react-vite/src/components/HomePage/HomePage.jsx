@@ -4,6 +4,7 @@ import { getImages } from "../../redux/image";
 import "./HomePage.css";
 import OpenModalImageItem from "../ImageModal/OpenModalImageItem";
 import ImageModal from "../ImageModal/ImageModal";
+import { getLabelsForExplore } from "../../redux/label";
 
 function HomePage() {
 	const [colNum, setColNum] = useState(parseInt((window.innerWidth - 40) / 340));
@@ -21,6 +22,7 @@ function HomePage() {
 	const [isLoaded, setIsLoaded] = useState(false);
 
 	useEffect(() => {
+		dispatch(getLabelsForExplore())
 		dispatch(getImages()).then(() => setIsLoaded(true));
 	}, [dispatch]);
 

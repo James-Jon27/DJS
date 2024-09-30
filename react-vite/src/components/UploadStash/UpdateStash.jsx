@@ -13,17 +13,17 @@ export default function UpdateStash() {
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [loading, setLoading] = useState(false);
-    
+
 	useEffect(() => {
 		dispatch(getStashById(id));
 	}, [dispatch, id]);
 
-    useEffect(() => {
-        if(stash) {
-            setTitle(stash.name)
-            setDescription(stash.description)
-        }
-    }, [stash])
+	useEffect(() => {
+		if (stash) {
+			setTitle(stash.name);
+			setDescription(stash.description);
+		}
+	}, [stash]);
 
 	if (!stash) {
 		return <h1 style={{ textAlign: "center" }}>Loading...</h1>;
@@ -40,7 +40,12 @@ export default function UpdateStash() {
 		await dispatch(updateStashById(id, data));
 		setLoading(false);
 		nav(`/stashes/${id}`);
+	};
 
+	const disabled = () => {
+		if (title.length > 30 || title.length < 1 || (description && description.length > 150)) {
+			return true;
+		} else return false;
 	};
 
 	return (
@@ -49,6 +54,11 @@ export default function UpdateStash() {
 			<form className="stash-form" onSubmit={handleSubmit} encType="multipart/form-data">
 				<label>
 					Title
+					{title.length > 30 && (
+						<p style={{ color: "red", fontSize: "1rem" }}>
+							Title can not be more than 30 characters
+						</p>
+					)}
 					<input
 						className="stash-titf"
 						type="text"
@@ -61,6 +71,11 @@ export default function UpdateStash() {
 				</label>
 				<label>
 					Description
+					{description && description.length > 150 && (
+						<p style={{ color: "red", fontSize: "1rem" }}>
+							Description can not be more than 150 characters
+						</p>
+					)}
 					<textarea
 						className="stash-desc"
 						type="text"
@@ -70,7 +85,7 @@ export default function UpdateStash() {
 						}}
 					/>
 				</label>
-				<button className="stash-submit" type="submit">
+				<button className="stash-submit" type="submit" disabled={disabled()}>
 					Finish
 				</button>
 				{loading && <p>Loading...</p>}
