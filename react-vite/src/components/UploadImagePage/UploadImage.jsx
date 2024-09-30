@@ -11,6 +11,7 @@ const UploadImage = () => {
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [labels, setLabels] = useState("");
+	const [errors, setErrors] = useState({})
 	const [imageLoading, setImageLoading] = useState(false);
 	const sessionUser = useSelector(state => state.session.user)
 
@@ -25,8 +26,12 @@ const UploadImage = () => {
 		// aws uploads can be a bit slow—displaying
 		// some sort of loading message is a good idea
 		setImageLoading(true);
-		await dispatch(createImage(formData));
-        //TODO: navigate to user profile to view new image
+		const serverResponse = await dispatch(createImage(formData));
+		if(serverResponse) {
+			setErrors(serverResponse)
+			console.log(errors)
+		}
+		
 		navigate(`/user/${sessionUser.id}/posted-images`);
 	};
 
