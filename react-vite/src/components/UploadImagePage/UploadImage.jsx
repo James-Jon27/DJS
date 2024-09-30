@@ -29,10 +29,23 @@ const UploadImage = () => {
 		const serverResponse = await dispatch(createImage(formData));
 		if (serverResponse) {
 			setErrors(serverResponse);
-			console.log(errors);
+			return errors;
 		} else {
 			navigate(`/user/${sessionUser.id}/posted-images`);
 		}
+	};
+
+	const disabled = () => {
+		if (
+			description.length > 250 ||
+			title.length > 50 ||
+			title.length < 1 ||
+			labels.length > 50 ||
+			!image
+		) {
+			return true;
+		}
+		return false;
 	};
 
 	return (
@@ -41,6 +54,11 @@ const UploadImage = () => {
 			<form className="img-form" onSubmit={handleSubmit} encType="multipart/form-data">
 				<label>
 					Title
+					{title.length > 49 && (
+						<p style={{ color: "red", fontSize: "1rem" }}>
+							Title can not be more than 50 characters
+						</p>
+					)}
 					<input
 						className="img-titf"
 						type="text"
@@ -51,6 +69,11 @@ const UploadImage = () => {
 				</label>
 				<label>
 					Labels (Separated by Comma)
+					{labels.length > 49 && (
+						<p style={{ color: "red", fontSize: "1rem" }}>
+							A label can not be more than 50 characters
+						</p>
+					)}
 					<input
 						className="img-lblf"
 						type="text"
@@ -60,6 +83,11 @@ const UploadImage = () => {
 				</label>
 				<label>
 					Description (Optional)
+					{description.length > 250 && (
+						<p style={{ color: "red", fontSize: "1rem" }}>
+							Description can not be more than 255 characters
+						</p>
+					)}
 					<textarea
 						className="img-descf"
 						type="text"
@@ -78,7 +106,7 @@ const UploadImage = () => {
 				{!sessionUser && (
 					<p style={{ color: "red", fontWeight: "bold" }}>Please Log In to Create!</p>
 				)}
-				<button className="img-submit" type="submit">
+				<button className="img-submit" type="submit" disabled={disabled()}>
 					Post
 				</button>
 				{imageLoading && <p style={{ color: "white", fontSize: "1rem" }}>Loading...</p>}

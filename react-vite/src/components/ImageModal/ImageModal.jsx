@@ -293,7 +293,6 @@ function ImageModal({ id }) {
 						)}
 					</div>
 					{sessionUser && (
-						// TODO: Favorite
 						<div>
 							<button
 								onClick={favoriteToggle}
@@ -312,7 +311,7 @@ function ImageModal({ id }) {
 			<span className="imgInfo">
 				<div>
 					{image.title && <h1>{image.title}</h1>}
-					{image.description && <p>{image.description}</p>}
+					{image.description && image.description !== "null" && <p>{image.description}</p>}
 				</div>
 				<div>
 					<h3>❤️ {faveCount} Favorites</h3>

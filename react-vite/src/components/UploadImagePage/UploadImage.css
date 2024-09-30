@@ -77,6 +77,11 @@ body {
 	background-color: #db570f;
 }
 
+.img-submit:disabled {
+	cursor:none;
+	background-color: #4c1e05;
+}
+
 .img-submit:hover {
 	background-color: #4c1e05;
 	cursor: pointer;

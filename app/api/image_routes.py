@@ -70,10 +70,8 @@ def upload_image():
 
     if form.validate_on_submit():
         image = form.data["image"]
-        print("\n\n\n\n\n\n\n\n\nIMAGE", image)
         image.filename = get_unique_filename(image.filename)
         upload = upload_file_to_s3(image)
-        print(upload, "UPLOAD\n\n\n\n\n\n\n\n\n\n\n")
         # print(current_user.to_dict(), file=sys.stdout)
 
         if "url" not in upload:
@@ -81,7 +79,6 @@ def upload_image():
             # it means that there was an error when you tried to upload
             # so you send back that error message (and you printed it above)
             print("Url not in upload")
-            print(form.errors,"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
             return format_errors(form.errors), 500
 
         desc = form.data["description"]
