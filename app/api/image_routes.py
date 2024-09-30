@@ -72,6 +72,7 @@ def upload_image():
         image = form.data["image"]
         image.filename = get_unique_filename(image.filename)
         upload = upload_file_to_s3(image)
+        print(upload)
         # print(current_user.to_dict(), file=sys.stdout)
 
         if "url" not in upload:
