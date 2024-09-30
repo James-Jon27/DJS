@@ -118,7 +118,7 @@ function StashPage() {
 						{stash.Images.map((image) => {
 							return (
 								<NavLink key={image.id} to={`/user/${image.userId}/posted-images`}>
-									<img src={image.url} alt={image.title ? image.title : "Image"} />;
+									<img src={image.url} alt={image.title ? image.title : "Image"} />
 								</NavLink>
 							);
 						})}
