@@ -71,7 +71,7 @@ def fav_images(id):
 
     for fav in favorites:
         image = Image.query.get(fav.image_id)
-        img_holder[image.id] = image.to_dict_basic()
+        img_holder[image.id] = image.to_dict()
 
     return img_holder
 

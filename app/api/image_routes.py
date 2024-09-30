@@ -315,7 +315,7 @@ def find_by_label(labelName):
     for image in images:
         for label in image.labels:
             if label.name == labelName:
-                res[image.id] = image.to_dict_basic()
+                res[image.id] = image.to_dict()
 
     return res
 

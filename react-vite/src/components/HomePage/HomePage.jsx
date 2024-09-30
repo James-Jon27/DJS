@@ -30,8 +30,9 @@ function HomePage() {
 		<div className="grid" style={{ "--colNum": colNum }}>
 			{isLoaded &&
 				images.map((image) => (
-					<div key={image.id} style={{ cursor: "pointer" }}>
+					<div key={image.id}>
 						<OpenModalImageItem
+							style={{ cursor: "pointer" }}
 							modalComponent={
 								<ImageModal id={image.id} /> // Pass detail directly to the modal
 							}

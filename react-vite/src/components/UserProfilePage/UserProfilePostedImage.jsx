@@ -8,13 +8,13 @@ import { NavLink, useParams } from "react-router-dom";
 
 function UserProfilePostedImage() {
 	const [colNum, setColNum] = useState(parseInt((window.innerWidth - 40) / 340));
-	const [isLoaded, setIsLoaded] = useState(false)
-	const { userId } = useParams()
-	const dispatch = useDispatch()
-	
+	const [isLoaded, setIsLoaded] = useState(false);
+	const { userId } = useParams();
+	const dispatch = useDispatch();
+
 	useEffect(() => {
-		dispatch(userImages(userId)).then(() => setIsLoaded(true))
-	}, [dispatch, userId])
+		dispatch(userImages(userId)).then(() => setIsLoaded(true));
+	}, [dispatch, userId]);
 
 	useEffect(() => {
 		function handleColNum() {
@@ -26,7 +26,7 @@ function UserProfilePostedImage() {
 
 	const images = Object.values(useSelector((state) => state.image));
 
-    if(images[0] === 'Images not found') {
+	if (images[0] === "Images not found") {
 		return (
 			<div className="Stashes">
 				<NavLink style={{ textDecoration: "none", color: "black" }} to={`/images/new`}>
@@ -37,12 +37,13 @@ function UserProfilePostedImage() {
 	}
 
 	return (
-		isLoaded && 
+		isLoaded && (
 			<div className="grid" style={{ "--colNum": colNum }}>
 				{images.reverse().map((image) => {
 					return (
-						<div key={image.id} style={{ cursor: "pointer" }}>
+						<div key={image.id}>
 							<OpenModalImageItem
+								style={{ cursor: "pointer" }}
 								modalComponent={<ImageModal id={image.id} />}
 								src={image.url}
 								alt={image.title ? image.title : "Image"}
@@ -51,6 +52,7 @@ function UserProfilePostedImage() {
 					);
 				})}
 			</div>
+		)
 	);
 }
 

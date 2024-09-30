@@ -5,7 +5,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useModal } from "../../context/Modal";
 import { deleteComment, getImageComments, postComment } from "../../redux/comment";
 import { MdDeleteForever } from "react-icons/md";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaCheck } from "react-icons/fa";
+import { GiCancel } from "react-icons/gi";
 import "./ImageModal.css";
 import { addFavToUser, delFavFromUser, getFavoritesThunk } from "../../redux/favorites";
 import { getUserStashes, stashAnImage, unStashAnImage } from "../../redux/stash";
@@ -28,6 +29,8 @@ function ImageModal({ id }) {
 	const [comment, setComment] = useState("");
 	const [favoriteCheck, setFavoriteCheck] = useState(false);
 	const [faveCount, setFaveCount] = useState(0);
+	const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+	const [confirmDelete, setConfirmDelete] = useState(false)
 
 	useEffect(() => {
 		const fetchAllData = async () => {
@@ -38,7 +41,13 @@ function ImageModal({ id }) {
 
 			if (imageData) {
 				setImage(imageData);
-				const initStashSet = new Set(imageData.Stashes.map((stash) => stash.id));
+				const initStashSet = new Set(
+					imageData.Stashes.map((stash) => {
+						if (!stash.errors) {
+							stash.id;
+						} else return;
+					})
+				);
 				setCheckedStashes(initStashSet);
 			}
 			setLoading(false);
@@ -111,15 +120,15 @@ function ImageModal({ id }) {
 		const currChecks = new Set(checkedStashes);
 		if (currChecks.has(stashId)) {
 			currChecks.delete(stashId);
-			uncheck(stashId);
+			uncheckStash(stashId);
 		} else {
 			currChecks.add(stashId);
-			check(stashId);
+			checkStash(stashId);
 		}
 		setCheckedStashes(currChecks);
 	};
 
-	const check = async (stashId) => {
+	const checkStash = async (stashId) => {
 		if (!sessionUser) return;
 
 		const alreadyThere = checkedStashes.has(image.id);
@@ -129,7 +138,7 @@ function ImageModal({ id }) {
 		}
 	};
 
-	const uncheck = async (stashId) => {
+	const uncheckStash = async (stashId) => {
 		if (!sessionUser) return;
 
 		const alreadyThere = checkedStashes.has(image.id);
@@ -158,6 +167,81 @@ function ImageModal({ id }) {
 		}
 	};
 
+	const handleClickOutside = () => {
+		if (confirmDeleteId) {
+			setConfirmDeleteId(null);
+		}
+	};
+
+	const deleteConfirm = (id) => {
+		if (confirmDeleteId === id) {
+			return (
+				<div>
+					<button
+						className="delete"
+						style={{ height: "58px", width: "60px", marginRight: "10px" }}
+						onClick={() => {
+							deleteCommentHandler(id);
+						}}>
+						Confirm
+					</button>
+					<button
+						className="delete"
+						style={{ height: "58px", width: "58px", marginLeft: "10px" }}
+						onClick={() => {
+							setConfirmDeleteId(null);
+						}}>
+						Cancel
+					</button>
+				</div>
+			);
+		} else {
+			return (
+				<button
+					className="delete"
+					onClick={() => {
+						setConfirmDeleteId(id);
+					}}>
+					Delete
+				</button>
+			);
+		}
+	};
+
+	const deleteMe = (bool) => {
+		if(bool) {
+			return (
+				<div style={{ display: "flex" }}>
+					<button
+						onClick={(e) => handleDelete(e)}
+						style={{ cursor: "pointer", background: "none", border: "none" }}>
+						<FaCheck style={{ height: "35px", width: "35px" }} />
+					</button>
+					<button
+						onClick={() => setConfirmDelete(false)}
+						style={{ cursor: "pointer", background: "none", border: "none" }}>
+						<GiCancel style={{ height: "35px", width: "35px" }} />
+					</button>
+				</div>
+			);
+		} else {
+			return (
+				<div style={{ display: "flex" }}>
+					<button
+						onClick={() => setConfirmDelete(true)}
+						style={{ cursor: "pointer", background: "none", border: "none" }}>
+						<MdDeleteForever style={{ height: "35px", width: "35px" }} />
+					</button>
+					<button
+						onClick={(e) => handleEdit(e)}
+						style={{ cursor: "pointer", background: "none", border: "none" }}>
+						<FaEdit style={{ height: "35px", width: "35px" }} />
+					</button>
+				</div>
+			);
+		}
+	}
+
 	if (loading || !image) {
 		return <h1 style={{ color: "white" }}>Loading...💥</h1>;
 	}
@@ -166,7 +250,7 @@ function ImageModal({ id }) {
 	const labels = image.Labels.map((label, el) => image.Labels[el].name);
 
 	return (
-		<div className="imgPage">
+		<div className="imgPage" onClick={handleClickOutside}>
 			<div className="imgUser">
 				<div className="img-modal">
 					<img src={image.url} alt={image.title} />
@@ -177,20 +261,7 @@ function ImageModal({ id }) {
 							{owner.firstName[0]}
 						</NavLink>
 						<h2>{owner.username}</h2>
-						{sessionUser && sessionUser.id == owner.id && (
-							<div style={{ display: "flex" }}>
-								<button
-									onClick={handleDelete}
-									style={{ cursor: "pointer", background: "none", border: "none" }}>
-									<MdDeleteForever style={{ height: "35px", width: "35px" }} />
-								</button>
-								<button
-									onClick={handleEdit}
-									style={{ cursor: "pointer", background: "none", border: "none" }}>
-									<FaEdit style={{ height: "35px", width: "35px" }} />
-								</button>
-							</div>
-						)}
+						{sessionUser && sessionUser.id == owner.id && deleteMe(confirmDelete)}
 					</div>
 					<div className="stashDropdown">
 						{sessionUser && (
@@ -198,7 +269,6 @@ function ImageModal({ id }) {
 								<button style={{ cursor: "pointer" }} className="dropbtn" onClick={drop}>
 									Add to Stash 👇
 								</button>
-								{/* TODO: WORK */}
 								{stashes && stashes.length > 0 && stashes[0] !== "Stashes not found" ? (
 									<div id="myDropdown" className="dropdown-content">
 										{stashes.map((stash) => {
@@ -249,13 +319,18 @@ function ImageModal({ id }) {
 					<div style={{ display: "flex", gap: "10px" }}>
 						{labels &&
 							labels.map((label, el) => {
-								return <h4 key={el}>{label}</h4>;
+								if (label !== "undefined") {
+									return <h4 key={el}>{label}</h4>;
+								}
 							})}
 					</div>
 				</div>
 			</span>
 			<span className="comments">
 				<h3>Comments</h3>
+				{comment.length > 250 && (
+					<p style={{ color: "red" }}>Comments should be less than 255 characters</p>
+				)}
 				{sessionUser && sessionUser.id !== owner.id && (
 					<form onSubmit={handleCommentSubmit}>
 						<textarea
@@ -263,7 +338,7 @@ function ImageModal({ id }) {
 							value={comment}
 							onChange={(e) => setComment(e.target.value)}
 						/>
-						<button className="comment" type="submit" disabled={comment.length < 3}>
+						<button className="comment" type="submit" disabled={comment.length > 250}>
 							Add a Comment
 						</button>
 					</form>
@@ -276,11 +351,7 @@ function ImageModal({ id }) {
 							<h5>{comment.User.username}</h5>
 							<p>{comment.comment}</p>
 						</div>
-						{sessionUser && sessionUser.id === comment.User.id && (
-							<button className="delete" onClick={() => deleteCommentHandler(comment.id)}>
-								Delete
-							</button>
-						)}
+						{sessionUser && sessionUser.id === comment.User.id && deleteConfirm(comment.id)}
 					</div>
 				))}
 			</span>

@@ -34,6 +34,7 @@ function Navigation() {
 
 		return () => document.removeEventListener("click", closeMenu);
 	}, [showMenu]);
+	console.log(searchLabel)
 
 	return (
 		<ul className="nav">
@@ -74,6 +75,7 @@ function Navigation() {
 						dispatch(getSearchLabel(searchLabel))
 						navigate(`/explore`)
 					}}
+					disabled={!searchLabel.length}
 				>
 					<FaSearch />
 				</button>

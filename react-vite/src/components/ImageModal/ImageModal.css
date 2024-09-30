@@ -97,6 +97,7 @@
 .comments > form {
 	display: flex;
 	align-items: flex-start;
+	margin-bottom: 40px;
 }
 
 .comments > form > textarea {
@@ -113,13 +114,24 @@
 	background-color: #555;
 	border: solid 2px #db570f;
 	color: white;
-    cursor: pointer;
+	cursor: pointer;
+}
+
+.comment:disabled {
+	cursor: default;
+	color: #555;
 }
 
 .content {
 	display: flex;
 	flex-direction: column;
 	padding: 10px 0 10px 0;
+	max-width: 80%;
+}
+
+
+.content > p {
+	overflow-wrap: break-word;
 }
 
 .content > h5,
@@ -128,9 +140,10 @@
 }
 
 .delete {
-    background-color: #555;
+	background-color: #555;
 	border: solid 2px #db570f;
 	color: white;
-    align-content: center;
-    cursor: pointer;
+	align-content: center;
+	cursor: pointer;
+	max-height: 58px;
 }

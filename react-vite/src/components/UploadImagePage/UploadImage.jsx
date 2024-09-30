@@ -39,7 +39,7 @@ const UploadImage = () => {
 					<input className="img-titf" type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
 				</label>
 				<label>
-					Labels (Optional)
+					Labels (Separated by Comma)
 					<input className="img-lblf" type="text" value={labels} onChange={(e) => setLabels(e.target.value)} />
 				</label>
 				<label>

@@ -5,6 +5,8 @@ import "./StashPage.css";
 import { getFavoritesThunk } from "../../redux/favorites";
 import { thunkGetUserById } from "../../redux/user";
 import { favoriteImages } from "../../redux/image";
+import OpenModalImageItem from "../ImageModal/OpenModalImageItem";
+import ImageModal from "../ImageModal/ImageModal";
 
 function FavoritesPage() {
     const navigate = useNavigate();
@@ -50,7 +52,18 @@ function FavoritesPage() {
 				{faves && faves.length ? (
 					<div className="grid" style={{ "--colNum": colNum }}>
 						{faves.map((image) => {
-							return <img src={image.url} key={image.id} />;
+							return (
+								<div key={image.id}>
+									<OpenModalImageItem
+										style={{ cursor: "pointer" }}
+										modalComponent={
+											<ImageModal id={image.id} /> // Pass detail directly to the modal
+										}
+										src={image.url}
+										alt={image.title ? image.title : "Image"}
+									/>
+								</div>
+							);
 						})}
 					</div>
 				) : (

@@ -23,9 +23,12 @@ const UpdateImage = () => {
 	useEffect(() => {
 		if (img) {
 			setTitle(img.title);
-			setDescription(img.description);
+			if (img.description !== "null") {
+				setDescription(img.description);
+			}
 			// TODO: Sukh work your magic
-			setLabels();
+			const imgLabels = img.Labels.map((label, el) => img.Labels[el].name);
+			setLabels(imgLabels);
 		}
 	}, [img]);
 
@@ -63,7 +66,7 @@ const UpdateImage = () => {
 					/>
 				</label>
 				<label>
-					Labels (Optional)
+					Labels (Separated by Comma)
 					<input
 						className="img-lblf"
 						type="text"
