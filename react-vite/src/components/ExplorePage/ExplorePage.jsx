@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getImageById, imageByLabel } from "../../redux/image";
+import { imageByLabel } from "../../redux/image";
 import { getLabelsForExplore } from "../../redux/label";
 import "./ExplorePage.css";
 import OpenModalImageItem from "../ImageModal/OpenModalImageItem";
@@ -11,7 +11,7 @@ function ExplorePage() {
 	
 	// For organizing the loaded images
 	const [colNum, setColNum] = useState(parseInt((window.innerWidth - 40) / 340));
-	const [detail, setDetail] = useState(null);
+	
 	useEffect(() => {
 		function handleColNum() {
 			setColNum(parseInt((window.innerWidth - 40) / 340));
@@ -54,13 +54,6 @@ function ExplorePage() {
 	}, [dispatch, label, labelFromState, setImagesAreLoaded]);
 	const images = Object.values(useSelector(state => state.image));
 
-	// For getting the image detail that the user clicked
-	useEffect(() => {
-		if (detail) {
-			dispatch(getImageById(detail));
-		}
-	}, [dispatch, detail]);
-
 	return (
 		imagesAreLoaded && images.length 
 			?
@@ -71,11 +64,10 @@ function ExplorePage() {
 								<div key={image.id} style={{ cursor: "pointer" }}>
 									<OpenModalImageItem
 										modalComponent={
-											<ImageModal id={detail} /> // Pass detail directly to the modal
+											<ImageModal id={image.id} /> // Pass detail directly to the modal
 										}
 										src={image.url}
 										alt={image.title ? image.title : "Image"}
-										onItemClick={() => setDetail(image.id)} // Set detail on click
 									/>
 								</div>
 							);

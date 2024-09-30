@@ -164,7 +164,6 @@ function ImageModal({ id }) {
 
 	const owner = image.User;
 	const labels = image.Labels.map((label, el) => image.Labels[el].name);
-	console.log(labels);
 
 	return (
 		<div className="imgPage">
