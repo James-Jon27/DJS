@@ -337,7 +337,7 @@ function ImageModal({ id }) {
 							value={comment}
 							onChange={(e) => setComment(e.target.value)}
 						/>
-						<button className="comment" type="submit" disabled={comment.length > 250}>
+						<button className="comment" type="submit" disabled={comment.length > 250 || comment.length < 1}>
 							Add a Comment
 						</button>
 					</form>
