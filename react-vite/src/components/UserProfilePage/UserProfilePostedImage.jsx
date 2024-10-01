@@ -36,6 +36,10 @@ function UserProfilePostedImage() {
 		);
 	}
 
+	if (!isLoaded) {
+		return <h1 style={{ textAlign: "center" }}>Loading...</h1>;
+	}
+
 	return (
 		isLoaded && (
 			<div className="grid" style={{ "--colNum": colNum }}>
