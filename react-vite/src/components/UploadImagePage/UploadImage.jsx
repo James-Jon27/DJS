@@ -37,7 +37,7 @@ const UploadImage = () => {
 
 	const disabled = () => {
 		if (
-			description.length > 250 ||
+			description.length > 255 ||
 			title.length > 50 ||
 			title.length < 1 ||
 			labels.length > 50 ||
@@ -54,7 +54,7 @@ const UploadImage = () => {
 			<form className="img-form" onSubmit={handleSubmit} encType="multipart/form-data">
 				<label>
 					Title
-					{title.length > 49 && (
+					{title.length > 50 && (
 						<p style={{ color: "red", fontSize: "1rem" }}>
 							Title can not be more than 50 characters
 						</p>
@@ -83,7 +83,7 @@ const UploadImage = () => {
 				</label>
 				<label>
 					Description (Optional)
-					{description.length > 250 && (
+					{description.length > 255 && (
 						<p style={{ color: "red", fontSize: "1rem" }}>
 							Description can not be more than 255 characters
 						</p>
