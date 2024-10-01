@@ -23,10 +23,16 @@ function HomePage() {
 
 	useEffect(() => {
 		dispatch(getLabelsForExplore())
-		dispatch(getImages()).then(() => setIsLoaded(true));
+		dispatch(getImages())
+		setIsLoaded(true);
 	}, [dispatch]);
 
 	const images = Object.values(useSelector((state) => state.image));
+	if(!isLoaded) {
+		return (
+			<h1 style={{ textAlign: "center" }}>Loading Images ...</h1>
+		);
+	}
 
 	return (
 		<div className="grid" style={{ "--colNum": colNum }}>

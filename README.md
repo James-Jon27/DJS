@@ -35,7 +35,8 @@ In the upper left hand corner of the page is a user interaction button where you
 
 ![](MDP/jdsS3.21.png) ![](MDP/jdsS3.31.png)
 
-When redirected and clicking on the user interaction button again you will see that it displays the user's username and email, with a log out button, that will log you out and take you back to an unlogged out home page.
+When redirected and clicking on the user interaction button again you will see that it displays the user's username and email, with a log out button, that will log you out and take you back to a logged out home page.
+
 ![](MDP/jdsS3.22.png)
 
 Clicking on the username will take you to your posted images, and you may click on the abs to switch back and forth between your stashes or posted images. As a new user you may not have anything to view.

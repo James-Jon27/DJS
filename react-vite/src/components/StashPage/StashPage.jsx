@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useNavigate, NavLink } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { deleteStashById, getStashById } from "../../redux/stash";
 import { MdDeleteForever } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
 import "./StashPage.css";
+import OpenModalImageItem from "../ImageModal/OpenModalImageItem";
+import ImageModal from "../ImageModal/ImageModal";
 
 function StashPage() {
 	const dispatch = useDispatch();
@@ -97,8 +99,8 @@ function StashPage() {
 		}
 	};
 
-	if (!stash) {
-		return <h1>Loading...</h1>;
+	if (!stash || !isLoaded) {
+		return <h1 style={{textAlign: "center"}}>Loading...</h1>;
 	}
 
 	const owner = stash.User;
@@ -117,9 +119,14 @@ function StashPage() {
 					<div className="grid" style={{ "--colNum": colNum }}>
 						{stash.Images.map((image) => {
 							return (
-								<NavLink key={image.id} to={`/user/${image.userId}/posted-images`}>
-									<img src={image.url} alt={image.title ? image.title : "Image"} />
-								</NavLink>
+								<div key={image.id}>
+									<OpenModalImageItem
+										style={{ cursor: "pointer" }}
+										modalComponent={<ImageModal id={image.id} />}
+										src={image.url}
+										alt={image.title ? image.title : "Image"}
+									/>
+								</div>
 							);
 						})}
 					</div>

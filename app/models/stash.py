@@ -38,5 +38,5 @@ class Stash(db.Model):
         return {
             **self.to_dict_basic(),
             "User" : self.user.to_dict_basic(),
-            "Images": [img.to_dict() for img in self.images]
+            "Images": [img.to_dict_basic() for img in self.images]
         }
