@@ -52,7 +52,7 @@ const UpdateImage = () => {
 
 	const disabled = () => {
 		if (
-			(description && description.length > 250) ||
+			(description && description.length > 255) ||
 			title.length > 50 ||
 			title.length < 1 ||
 			(labels && labels.length > 50)
@@ -68,7 +68,7 @@ const UpdateImage = () => {
 			<form className="img-form" onSubmit={handleSubmit} encType="multipart/form-data">
 				<label>
 					Title
-					{title.length > 49 && (
+					{title.length > 50 && (
 						<p style={{ color: "red", fontSize: "1rem" }}>
 							Title can not be more than 50 characters
 						</p>
@@ -83,7 +83,7 @@ const UpdateImage = () => {
 				</label>
 				<label>
 					Labels (Separated by Comma)
-					{labels && labels.length > 49 && (
+					{labels && labels.length > 50 && (
 						<p style={{ color: "red", fontSize: "1rem" }}>
 							A label can not be more than 50 characters
 						</p>
@@ -97,7 +97,7 @@ const UpdateImage = () => {
 				</label>
 				<label>
 					Description (Optional)
-					{description && description.length > 250 && (
+					{description && description.length > 255 && (
 						<p style={{ color: "red", fontSize: "1rem" }}>
 							Description can not be more than 255 characters
 						</p>
