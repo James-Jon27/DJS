@@ -23,6 +23,7 @@ export default function UploadStash() {
 		const res = await dispatch(createStashThunk(data));
 		//TODO: Navigate to stash page
 		if (res.id) {
+			dispatch()
 			setLoading(false);
 			nav(`/stashes/${res.id}`);
 		} else {

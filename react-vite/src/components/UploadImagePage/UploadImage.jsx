@@ -5,7 +5,7 @@ import { createImage } from "../../redux/image";
 import "./UploadImage.css";
 
 const UploadImage = () => {
-	const navigate = useNavigate(); // so that you can redirect after the image upload is successful
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const [image, setImage] = useState(null);
 	const [title, setTitle] = useState("");
@@ -23,8 +23,6 @@ const UploadImage = () => {
 		formData.append("description", description);
 		formData.append("labels", labels);
 
-		// aws uploads can be a bit slow—displaying
-		// some sort of loading message is a good idea
 		setImageLoading(true);
 		const serverResponse = await dispatch(createImage(formData));
 		if (serverResponse) {
