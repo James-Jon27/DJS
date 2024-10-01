@@ -69,7 +69,7 @@ const UploadImage = () => {
 				</label>
 				<label>
 					Labels (Separated by Comma)
-					{labels.replace(" ", "").length > 49 && (
+					{labels.replace(" ", "").length > 50 && (
 						<p style={{ color: "red", fontSize: "1rem" }}>
 							A label can not be more than 50 characters
 						</p>

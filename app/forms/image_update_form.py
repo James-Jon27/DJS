@@ -13,8 +13,8 @@ def validate_labels(form, field):
             labels[i] = label.strip()
 
         for label in labels:
-            if(len(label) > 49):
-                raise ValidationError('Each label must be less than 50 characters')
+            if(len(label) > 50):
+                raise ValidationError('Each label must be at most 50 characters!')
 
 
 class ImageUpdateForm(FlaskForm):
