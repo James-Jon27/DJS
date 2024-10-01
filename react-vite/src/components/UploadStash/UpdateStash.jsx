@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { getStashById, updateStashById } from "../../redux/stash";
-import HomePage from "../HomePage";
 import "./UploadStash.css";
 
 export default function UpdateStash() {
@@ -91,7 +90,6 @@ export default function UpdateStash() {
 				{loading && <p>Loading...</p>}
 			</form>
 			<div className="your-future">
-				<HomePage />
 			</div>
 		</div>
 	);

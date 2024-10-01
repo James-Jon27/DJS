@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createStashThunk } from "../../redux/stash";
 import "./UploadStash.css";
-import HomePage from "../HomePage";
 
 export default function UploadStash() {
 	const nav = useNavigate();
@@ -88,7 +87,6 @@ export default function UploadStash() {
 				{loading && <p>Loading...</p>}
 			</form>
 			<div className="your-future">
-				<HomePage />
 			</div>
 		</div>
 	);
