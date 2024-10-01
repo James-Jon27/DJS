@@ -72,7 +72,7 @@ export const createImage = (post) => async (dispatch) => {
         dispatch(addPost(data));
     } else {
         const data = await res.json();
-        console.log("There was an error making your post!")
+        // console.log("There was an error making your post!")
         return data
     }
 };
@@ -82,8 +82,15 @@ export const updateImage = (id, update) => async (dispatch) => {
         method: "PUT",
         body: update
     })
-    const data = await res.json();
-    dispatch(updateImg(data))
+    if (res.ok) {
+        const data = await res.json();
+        dispatch(updateImg(data))
+    }
+    else{
+        const data = await res.json();
+        // console.log("There was an error updating your post!")
+        return data
+    }
 }
 
 export const imageByLabel = (label) => async (dispatch) => {

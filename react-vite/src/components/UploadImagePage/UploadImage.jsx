@@ -28,7 +28,8 @@ const UploadImage = () => {
 		setImageLoading(true);
 		const serverResponse = await dispatch(createImage(formData));
 		if (serverResponse) {
-			setErrors(serverResponse);
+			setErrors(serverResponse.errors);
+			setImageLoading(false)
 			return errors;
 		} else {
 			navigate(`/user/${sessionUser.id}/posted-images`);
@@ -66,6 +67,11 @@ const UploadImage = () => {
 						onChange={(e) => setTitle(e.target.value)}
 						required
 					/>
+					{errors.title && (
+						<p style={{ color: "red", fontSize: "1rem" }}>
+							{errors.title}
+						</p>
+					)}
 				</label>
 				<label>
 					Labels (Separated by Comma)
@@ -80,6 +86,11 @@ const UploadImage = () => {
 						value={labels}
 						onChange={(e) => setLabels(e.target.value)}
 					/>
+					{errors.labels && (
+						<p style={{ color: "red", fontSize: "1rem" }}>
+							{errors.labels}
+						</p>
+					)}
 				</label>
 				<label>
 					Description (Optional)

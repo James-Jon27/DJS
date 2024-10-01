@@ -108,10 +108,9 @@ def upload_image():
 
         return new_image.to_dict()
 
-    if form.errors:
-        return {"errors": format_errors(form.errors)}, 400
+    
+    return {"errors": format_errors(form.errors)}, 400
 
-    return
 
 
 @image_routes.route("/<int:id>", methods=["PUT"])
@@ -154,7 +153,7 @@ def update_specific_image(id):
         return image.to_dict()
     
 
-    return format_errors(form.errors), 400
+    return {"errors": format_errors(form.errors)}, 400
 
 
 @image_routes.route("/<int:id>", methods=["DELETE"])

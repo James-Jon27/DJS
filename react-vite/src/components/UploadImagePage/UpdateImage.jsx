@@ -15,6 +15,7 @@ const UpdateImage = () => {
 	const [description, setDescription] = useState("");
 	const [labels, setLabels] = useState("");
 	const [imageLoading, setImageLoading] = useState(false);
+	const [errors, setErrors] = useState({})
 
 	useEffect(() => {
 		dispatch(getImageById(id));
@@ -45,9 +46,15 @@ const UpdateImage = () => {
 		// aws uploads can be a bit slow—displaying
 		// some sort of loading message is a good idea
 		setImageLoading(true);
-		await dispatch(updateImage(id, formData));
+		const serverResponse = await dispatch(updateImage(id, formData));
 		//TODO: navigate to user profile to view new image
-		navigate(`/user/${sessionUser.id}/posted-images`);
+		if (serverResponse) {
+			setErrors(serverResponse.errors);
+			setImageLoading(false)
+			return errors;
+		} else {
+			navigate(`/user/${sessionUser.id}/posted-images`);
+		}
 	};
 
 	const disabled = () => {
@@ -94,6 +101,11 @@ const UpdateImage = () => {
 						value={labels}
 						onChange={(e) => setLabels(e.target.value)}
 					/>
+					{errors.labels && (
+						<p style={{ color: "red", fontSize: "1rem" }}>
+							{errors.labels}
+						</p>
+					)}
 				</label>
 				<label>
 					Description (Optional)
