@@ -42,7 +42,7 @@ function HomePage() {
 						<OpenModalImageItem
 							style={{ cursor: "pointer" }}
 							modalComponent={
-								<ImageModal id={image.id} /> // Pass detail directly to the modal
+								<ImageModal id={image.id} />
 							}
 							src={image.url}
 							alt={image.title ? image.title : "Image"}
