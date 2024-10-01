@@ -31,6 +31,7 @@ function ImageModal({ id }) {
 	const [faveCount, setFaveCount] = useState(0);
 	const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 	const [confirmDelete, setConfirmDelete] = useState(false)
+	const [favLoad, setFavLoad] = useState(false)
 
 	useEffect(() => {
 		const fetchAllData = async () => {
@@ -149,8 +150,8 @@ function ImageModal({ id }) {
 	};
 
 	const favoriteToggle = async (e) => {
+		setFavLoad(true)
 		e.preventDefault();
-
 		if (sessionUser) {
 			const existingFavorite = Object.values(userFaves).find((fav) => fav.image_id === image.id);
 			if (existingFavorite) {
@@ -165,6 +166,7 @@ function ImageModal({ id }) {
 
 			await dispatch(getFavoritesThunk(sessionUser.id));
 		}
+		setFavLoad(false)
 	};
 
 	const handleClickOutside = () => {
@@ -297,6 +299,7 @@ function ImageModal({ id }) {
 						<div>
 							<button
 								onClick={favoriteToggle}
+								disabled={favLoad}
 								style={
 									favoriteCheck
 										? { cursor: "pointer", background: "#DB570F" }
