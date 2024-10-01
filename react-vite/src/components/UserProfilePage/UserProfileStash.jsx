@@ -18,6 +18,10 @@ function UserProfileStash() {
 
 	const userStashes = Object.values(useSelector((state) => state.stash));
 
+	if (!isLoaded) {
+		return <h1 style={{ textAlign: "center" }}>Loading...</h1>;
+	}
+
 	if (userStashes[0] === "Stashes not found" || !userStashes[0]) {
 		return (
 			isLoaded && (
