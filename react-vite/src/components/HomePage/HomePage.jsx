@@ -4,6 +4,7 @@ import { getImages } from "../../redux/image";
 import "./HomePage.css";
 import OpenModalImageItem from "../ImageModal/OpenModalImageItem";
 import ImageModal from "../ImageModal/ImageModal";
+import { getLabelsForExplore } from "../../redux/label";
 
 function HomePage() {
 	const [colNum, setColNum] = useState(parseInt((window.innerWidth - 40) / 340));
@@ -21,10 +22,17 @@ function HomePage() {
 	const [isLoaded, setIsLoaded] = useState(false);
 
 	useEffect(() => {
-		dispatch(getImages()).then(() => setIsLoaded(true));
+		dispatch(getLabelsForExplore())
+		dispatch(getImages())
+		setIsLoaded(true);
 	}, [dispatch]);
 
 	const images = Object.values(useSelector((state) => state.image));
+	if(!isLoaded) {
+		return (
+			<h1 style={{ textAlign: "center" }}>Loading Images ...</h1>
+		);
+	}
 
 	return (
 		<div className="grid" style={{ "--colNum": colNum }}>

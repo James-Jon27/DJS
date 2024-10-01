@@ -11,8 +11,9 @@ const UploadImage = () => {
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [labels, setLabels] = useState("");
+	const [errors, setErrors] = useState({});
 	const [imageLoading, setImageLoading] = useState(false);
-	const sessionUser = useSelector(state => state.session.user)
+	const sessionUser = useSelector((state) => state.session.user);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -25,9 +26,26 @@ const UploadImage = () => {
 		// aws uploads can be a bit slow—displaying
 		// some sort of loading message is a good idea
 		setImageLoading(true);
-		await dispatch(createImage(formData));
-        //TODO: navigate to user profile to view new image
-		navigate(`/user/${sessionUser.id}/posted-images`);
+		const serverResponse = await dispatch(createImage(formData));
+		if (serverResponse) {
+			setErrors(serverResponse);
+			return errors;
+		} else {
+			navigate(`/user/${sessionUser.id}/posted-images`);
+		}
+	};
+
+	const disabled = () => {
+		if (
+			description.length > 255 ||
+			title.length > 50 ||
+			title.length < 1 ||
+			labels.length > 50 ||
+			!image
+		) {
+			return true;
+		}
+		return false;
 	};
 
 	return (
@@ -36,22 +54,62 @@ const UploadImage = () => {
 			<form className="img-form" onSubmit={handleSubmit} encType="multipart/form-data">
 				<label>
 					Title
-					<input className="img-titf" type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
+					{title.length > 50 && (
+						<p style={{ color: "red", fontSize: "1rem" }}>
+							Title can not be more than 50 characters
+						</p>
+					)}
+					<input
+						className="img-titf"
+						type="text"
+						value={title}
+						onChange={(e) => setTitle(e.target.value)}
+						required
+					/>
 				</label>
 				<label>
 					Labels (Separated by Comma)
-					<input className="img-lblf" type="text" value={labels} onChange={(e) => setLabels(e.target.value)} />
+					{labels.length > 50 && (
+						<p style={{ color: "red", fontSize: "1rem" }}>
+							A label can not be more than 50 characters
+						</p>
+					)}
+					<input
+						className="img-lblf"
+						type="text"
+						value={labels}
+						onChange={(e) => setLabels(e.target.value)}
+					/>
 				</label>
 				<label>
 					Description (Optional)
-					<textarea className="img-descf" type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
+					{description.length > 255 && (
+						<p style={{ color: "red", fontSize: "1rem" }}>
+							Description can not be more than 255 characters
+						</p>
+					)}
+					<textarea
+						className="img-descf"
+						type="text"
+						value={description}
+						onChange={(e) => setDescription(e.target.value)}
+					/>
 				</label>
 				<label>
-					<input className="img-filef" type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} />
+					<input
+						className="img-filef"
+						type="file"
+						accept="image/*"
+						onChange={(e) => setImage(e.target.files[0])}
+					/>
 				</label>
-				{!sessionUser && <p style={{color:"red", fontWeight: "bold"}}>Please Log In to Create!</p>}
-				<button className="img-submit" type="submit">Post</button>
-				{imageLoading && <p style={{color: "white", fontSize: "1rem"}}>Loading...</p>}
+				{!sessionUser && (
+					<p style={{ color: "red", fontWeight: "bold" }}>Please Log In to Create!</p>
+				)}
+				<button className="img-submit" type="submit" disabled={disabled()}>
+					Post
+				</button>
+				{imageLoading && <p style={{ color: "white", fontSize: "1rem" }}>Loading...</p>}
 			</form>
 		</div>
 	);

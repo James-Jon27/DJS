@@ -71,7 +71,9 @@ export const createImage = (post) => async (dispatch) => {
         const data = await res.json();
         dispatch(addPost(data));
     } else {
+        const data = await res.json();
         console.log("There was an error making your post!")
+        return data
     }
 };
 
@@ -96,7 +98,7 @@ function imageReducer(state = {}, action){
             return { ...state, [action.payload.id]:action.payload }
         }
         case GET_IMAGES:{
-            return action.payload
+            return {...state, ...action.payload}
         }
         case GET_ONE_IMAGE:{
             return {...state, [action.payload.id]:action.payload}

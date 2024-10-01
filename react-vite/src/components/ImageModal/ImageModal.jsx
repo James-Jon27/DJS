@@ -9,8 +9,7 @@ import { FaEdit, FaCheck } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
 import "./ImageModal.css";
 import { addFavToUser, delFavFromUser, getFavoritesThunk } from "../../redux/favorites";
-import { getUserStashes, stashAnImage, unStashAnImage } from "../../redux/stash";
-import { thunkGetUserById } from "../../redux/user";
+import { stashAnImage, unStashAnImage } from "../../redux/stash";
 
 function ImageModal({ id }) {
 	const dispatch = useDispatch();
@@ -20,12 +19,10 @@ function ImageModal({ id }) {
 	const imageSelect = useSelector((state) => state.image);
 	const commentSelect = useSelector((state) => state.comment);
 	const userFaves = useSelector((state) => state.favorite);
-	const stashed = useSelector((state) => state.stash);
-	const stashes = Object.values(stashed);
 	const comments = Object.values(commentSelect);
 	const [loading, setLoading] = useState(true);
 	const [image, setImage] = useState(null);
-	const [checkedStashes, setCheckedStashes] = useState(new Set());
+	const [imageStashes, setImageStashes] = useState(new Set());
 	const [comment, setComment] = useState("");
 	const [favoriteCheck, setFavoriteCheck] = useState(false);
 	const [faveCount, setFaveCount] = useState(0);
@@ -34,36 +31,28 @@ function ImageModal({ id }) {
 	const [favLoad, setFavLoad] = useState(false)
 
 	useEffect(() => {
-		const fetchAllData = async () => {
 			setLoading(true);
-			await dispatch(getImageById(id));
-			await dispatch(getImageComments(id));
+			dispatch(getImageById(id));
+			dispatch(getImageComments(id));
 			const imageData = imageSelect[id];
 
 			if (imageData) {
 				setImage(imageData);
-				const initStashSet = new Set(
-					imageData.Stashes.map((stash) => {
-						if (!stash.errors) {
-							stash.id;
-						} else return;
-					})
-				);
-				setCheckedStashes(initStashSet);
+				const initStashSet = new Set();
+				if (image) {
+					const imgStash = Object.values(image.Stashes);
+					imgStash.filter((stash) => !stash.errors).forEach((stash) => initStashSet.add(stash.id));
+					setImageStashes(initStashSet);
+				}
 			}
 			setLoading(false);
-		};
 
-		if (id) {
-			fetchAllData();
-		}
-	}, [dispatch, id]);
+	}, [dispatch, id, sessionUser]);
 
-	useEffect(() => {
-		if (sessionUser) {
-			dispatch(getUserStashes(sessionUser.id));
-		}
-	}, [dispatch, sessionUser]);
+	let stashes;
+	if (sessionUser) {
+		stashes = Object.values(sessionUser.Stashes);
+	}
 
 	useEffect(() => {
 		if (image && sessionUser) {
@@ -118,7 +107,7 @@ function ImageModal({ id }) {
 	};
 
 	const checkbox = (stashId) => {
-		const currChecks = new Set(checkedStashes);
+		const currChecks = new Set(imageStashes);
 		if (currChecks.has(stashId)) {
 			currChecks.delete(stashId);
 			uncheckStash(stashId);
@@ -126,27 +115,26 @@ function ImageModal({ id }) {
 			currChecks.add(stashId);
 			checkStash(stashId);
 		}
-		setCheckedStashes(currChecks);
+		setImageStashes(currChecks);
 	};
-
 	const checkStash = async (stashId) => {
 		if (!sessionUser) return;
 
-		const alreadyThere = checkedStashes.has(image.id);
+		const imgStash = Object.values(image.Stashes)
+		const alreadyThere = imgStash.some((stash) => imageStashes.has(stash.id));
 		if (!alreadyThere) {
 			await dispatch(stashAnImage(image.id, stashId));
-			await dispatch(thunkGetUserById(sessionUser.id));
-		}
+		} else checkStash(stashId);
 	};
 
 	const uncheckStash = async (stashId) => {
 		if (!sessionUser) return;
 
-		const alreadyThere = checkedStashes.has(image.id);
+		const imgStash = Object.values(image.Stashes);
+		const alreadyThere = imgStash.some((stash) => imageStashes.has(stash.id));
 		if (alreadyThere) {
 			await dispatch(unStashAnImage(image.id, stashId));
-			await dispatch(thunkGetUserById(sessionUser.id));
-		}
+		} else uncheckStash(stashId);
 	};
 
 	const favoriteToggle = async (e) => {
@@ -211,7 +199,7 @@ function ImageModal({ id }) {
 	};
 
 	const deleteMe = (bool) => {
-		if(bool) {
+		if (bool) {
 			return (
 				<div style={{ display: "flex" }}>
 					<button
@@ -242,7 +230,7 @@ function ImageModal({ id }) {
 				</div>
 			);
 		}
-	}
+	};
 
 	if (loading || !image) {
 		return <h1 style={{ color: "white" }}>Loading...💥</h1>;
@@ -278,7 +266,7 @@ function ImageModal({ id }) {
 												<label key={stash.id}>
 													<input
 														type="checkbox"
-														checked={checkedStashes.has(stash.id)}
+														checked={imageStashes.has(stash.id)}
 														onChange={() => checkbox(stash.id)}
 													/>
 													{stash.name}
@@ -295,7 +283,6 @@ function ImageModal({ id }) {
 						)}
 					</div>
 					{sessionUser && (
-						// TODO: Favorite
 						<div>
 							<button
 								onClick={favoriteToggle}
@@ -315,7 +302,7 @@ function ImageModal({ id }) {
 			<span className="imgInfo">
 				<div>
 					{image.title && <h1>{image.title}</h1>}
-					{image.description && <p>{image.description}</p>}
+					{image.description && image.description !== "null" && <p>{image.description}</p>}
 				</div>
 				<div>
 					<h3>❤️ {faveCount} Favorites</h3>
@@ -341,11 +328,15 @@ function ImageModal({ id }) {
 							value={comment}
 							onChange={(e) => setComment(e.target.value)}
 						/>
-						<button className="comment" type="submit" disabled={comment.length > 250}>
+						<button
+							className="comment"
+							type="submit"
+							disabled={comment.length > 250 || comment.length < 1}>
 							Add a Comment
 						</button>
 					</form>
 				)}
+				{comments.length < 1 && <h4>No comments on post.</h4>}
 				{comments.reverse().map((comment) => (
 					<div
 						style={{ display: "flex", justifyContent: "space-between", marginTop: "10px" }}

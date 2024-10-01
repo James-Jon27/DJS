@@ -26,7 +26,6 @@ const UpdateImage = () => {
 			if (img.description !== "null") {
 				setDescription(img.description);
 			}
-			// TODO: Sukh work your magic
 			const imgLabels = img.Labels.map((label, el) => img.Labels[el].name);
 			setLabels(imgLabels);
 		}
@@ -51,12 +50,29 @@ const UpdateImage = () => {
 		navigate(`/user/${sessionUser.id}/posted-images`);
 	};
 
+	const disabled = () => {
+		if (
+			(description && description.length > 255) ||
+			title.length > 50 ||
+			title.length < 1 ||
+			(labels && labels.length > 50)
+		) {
+			return true;
+		}
+		return false;
+	};
+
 	return (
 		<div className="img-create">
 			<h1 style={{ textDecoration: "underline", fontSize: "3.5rem" }}>Update Your Image</h1>
 			<form className="img-form" onSubmit={handleSubmit} encType="multipart/form-data">
 				<label>
 					Title
+					{title.length > 50 && (
+						<p style={{ color: "red", fontSize: "1rem" }}>
+							Title can not be more than 50 characters
+						</p>
+					)}
 					<input
 						className="img-titf"
 						type="text"
@@ -67,6 +83,11 @@ const UpdateImage = () => {
 				</label>
 				<label>
 					Labels (Separated by Comma)
+					{labels && labels.length > 50 && (
+						<p style={{ color: "red", fontSize: "1rem" }}>
+							A label can not be more than 50 characters
+						</p>
+					)}
 					<input
 						className="img-lblf"
 						type="text"
@@ -76,6 +97,11 @@ const UpdateImage = () => {
 				</label>
 				<label>
 					Description (Optional)
+					{description && description.length > 255 && (
+						<p style={{ color: "red", fontSize: "1rem" }}>
+							Description can not be more than 255 characters
+						</p>
+					)}
 					<textarea
 						className="img-descf"
 						type="text"
@@ -83,7 +109,7 @@ const UpdateImage = () => {
 						onChange={(e) => setDescription(e.target.value)}
 					/>
 				</label>
-				<button className="img-submit" type="submit">
+				<button className="img-submit" type="submit" disabled={disabled()}>
 					Update
 				</button>
 				{imageLoading && <p style={{ color: "white", fontSize: "1rem" }}>Loading...</p>}
