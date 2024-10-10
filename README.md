@@ -1,5 +1,5 @@
 # Just Digital Stashes
-_ By [Sukhpreet Sidhu](https://github.com/sukhpreet-sidhu-AA), [Daniel Ho](https://github.com/dwho0937wei-dotcom), and [James Jones](https://github.com/James-Jon27)
+By [Sukhpreet Sidhu](https://github.com/sukhpreet-sidhu-AA), [Daniel Ho](https://github.com/dwho0937wei-dotcom), and [James Jones](https://github.com/James-Jon27)
 
 ## Introduction
 
