@@ -7,10 +7,14 @@ import ImageModal from "../ImageModal/ImageModal";
 import { NavLink, useParams } from "react-router-dom";
 
 function UserProfilePostedImage() {
+	const dispatch = useDispatch();
+	const { userId } = useParams();
 	const [colNum, setColNum] = useState(parseInt((window.innerWidth - 40) / 340));
 	const [isLoaded, setIsLoaded] = useState(false);
-	const { userId } = useParams();
-	const dispatch = useDispatch();
+	const allImages = Object.values(useSelector((state) => state.image));
+
+	const imgValues = Object.values(allImages)
+	const images = imgValues.filter(image => image.userId == userId)
 
 	useEffect(() => {
 		dispatch(userImages(userId)).then(() => setIsLoaded(true));
@@ -24,9 +28,8 @@ function UserProfilePostedImage() {
 		return () => window.removeEventListener("resize", handleColNum);
 	}, []);
 
-	const images = Object.values(useSelector((state) => state.image));
 
-	if (images[0] === "Images not found") {
+	if (images.length < 1) {
 		return (
 			<div className="Stashes">
 				<NavLink style={{ textDecoration: "none", color: "black" }} to={`/images/new`}>

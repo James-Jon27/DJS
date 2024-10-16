@@ -245,7 +245,10 @@ function ImageModal({ id }) {
 				</div>
 				<div className="userInt">
 					<div className="prof">
-						<NavLink className="circle-modal" to={`user/${owner.id}`} onClick={closeModal}>
+						<NavLink
+							className="circle-modal"
+							to={`user/${owner.id}/posted-images`}
+							onClick={closeModal}>
 							{owner.firstName[0]}
 						</NavLink>
 						<h2>{owner.username}</h2>

@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { imageByLabel } from "../../redux/image";
 import { getLabelsForExplore } from "../../redux/label";
-import "./ExplorePage.css";
 import OpenModalImageItem from "../ImageModal/OpenModalImageItem";
 import ImageModal from "../ImageModal/ImageModal";
 import { getSearchLabel } from "../../redux/searchLabel";
+import "./ExplorePage.css";
 
 function ExplorePage() {
 	// For organizing the loaded images

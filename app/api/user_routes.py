@@ -60,7 +60,7 @@ def user_faves(id):
         return {"errors": "Favorites not found"}, 404
     fav_holder = {}
     for favorite in favorites:
-        fav_holder[favorite.id] = favorite.to_dict_basic()
+        fav_holder[favorite.image_id] = favorite.to_dict_basic()
     return fav_holder
 
 
