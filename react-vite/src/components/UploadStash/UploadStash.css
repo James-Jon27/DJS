@@ -12,6 +12,7 @@ body {
 	background: #0A6494;
 	color: white;
 	padding-bottom: 125px;
+	height: 100vh;
 }
 
 .stash-form {

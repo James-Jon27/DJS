@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createStashThunk } from "../../redux/stash";
 import "./UploadStash.css";
+import { thunkAuthenticate } from "../../redux/session";
 
 export default function UploadStash() {
 	const nav = useNavigate();
@@ -24,6 +25,7 @@ export default function UploadStash() {
 		//TODO: Navigate to stash page
 		if (res.id) {
 			setLoading(false);
+			await dispatch(thunkAuthenticate())
 			nav(`/stashes/${res.id}`);
 		} else {
 			return await res.json();

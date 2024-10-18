@@ -19,12 +19,14 @@ function FavoritesPage() {
 	const user = useSelector((state) => state.user);
 	const { userId } = useParams();
 
-	// ! find every id associated with user favorite and iterate through every id and find such an image 
+	// ! find every id associated with user favorite and iterate through every id and find such an image
 	//! in the “images” Redux storage
 	const images = Object.values(image);
 	const favesIds = Object.keys(favImg);
 	const faves = images.filter((image) => {
-		if (favesIds.includes(image.id.toString())) return image;
+		if (image.id) {
+			if (favesIds.includes(image.id.toString())) return image;
+		}
 	});
 
 	useEffect(() => {
