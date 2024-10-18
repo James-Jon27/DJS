@@ -13,8 +13,8 @@ function UserProfilePostedImage() {
 	const [isLoaded, setIsLoaded] = useState(false);
 	const allImages = Object.values(useSelector((state) => state.image));
 
-	const imgValues = Object.values(allImages)
-	const images = imgValues.filter(image => image.userId == userId)
+	const imgValues = Object.values(allImages);
+	const images = imgValues.filter((image) => image.userId == userId);
 
 	useEffect(() => {
 		dispatch(userImages(userId)).then(() => setIsLoaded(true));
@@ -27,7 +27,6 @@ function UserProfilePostedImage() {
 		window.addEventListener("resize", handleColNum);
 		return () => window.removeEventListener("resize", handleColNum);
 	}, []);
-
 
 	if (images.length < 1) {
 		return (
@@ -44,22 +43,20 @@ function UserProfilePostedImage() {
 	}
 
 	return (
-		isLoaded && (
-			<div className="grid" style={{ "--colNum": colNum }}>
-				{images.reverse().map((image) => {
-					return (
-						<div key={image.id}>
-							<OpenModalImageItem
-								style={{ cursor: "pointer" }}
-								modalComponent={<ImageModal id={image.id} />}
-								src={image.url}
-								alt={image.title ? image.title : "Image"}
-							/>
-						</div>
-					);
-				})}
-			</div>
-		)
+		<div className="grid" style={{ "--colNum": colNum }}>
+			{images.reverse().map((image) => {
+				return (
+					<div key={image.id}>
+						<OpenModalImageItem
+							style={{ cursor: "pointer" }}
+							modalComponent={<ImageModal id={image.id} />}
+							src={image.url}
+							alt={image.title ? image.title : "Image"}
+						/>
+					</div>
+				);
+			})}
+		</div>
 	);
 }
 

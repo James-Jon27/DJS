@@ -7,9 +7,9 @@ import { deleteComment, getImageComments, postComment } from "../../redux/commen
 import { MdDeleteForever } from "react-icons/md";
 import { FaEdit, FaCheck } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
-import "./ImageModal.css";
 import { addFavToUser, delFavFromUser, getFavoritesThunk } from "../../redux/favorites";
 import { stashAnImage, unStashAnImage } from "../../redux/stash";
+import "./ImageModal.css";
 
 function ImageModal({ id }) {
 	const dispatch = useDispatch();
@@ -20,7 +20,7 @@ function ImageModal({ id }) {
 	const commentSelect = useSelector((state) => state.comment);
 	const userFaves = useSelector((state) => state.favorite);
 	const comments = Object.values(commentSelect);
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 	const [image, setImage] = useState(null);
 	const [imageStashes, setImageStashes] = useState(new Set());
 	const [comment, setComment] = useState("");
@@ -28,36 +28,36 @@ function ImageModal({ id }) {
 	const [faveCount, setFaveCount] = useState(0);
 	const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 	const [confirmDelete, setConfirmDelete] = useState(false);
+	const [stashes, setStashes] = useState([]);
+	const [hold, setHold] = useState(false);
 
 	useEffect(() => {
-			setLoading(true);
-			dispatch(getImageById(id));
-			dispatch(getImageComments(id));
+		const fetchData = async () => {
+			await dispatch(getImageById(id));
+			await dispatch(getImageComments(id));
 			const imageData = imageSelect[id];
 
 			if (imageData) {
 				setImage(imageData);
 				const initStashSet = new Set();
-				if (image) {
-					const imgStash = Object.values(image.Stashes);
-					imgStash.filter((stash) => !stash.errors).forEach((stash) => initStashSet.add(stash.id));
-					setImageStashes(initStashSet);
-				}
+				const imgStash = Object.values(imageData.Stashes);
+				imgStash.filter((stash) => !stash.errors).forEach((stash) => initStashSet.add(stash.id));
+				setImageStashes(initStashSet);
 			}
-			setLoading(false);
+			setLoading(true);
+		};
 
-	}, [dispatch, id, sessionUser]);
-
-	let stashes;
-	if (sessionUser) {
-		stashes = Object.values(sessionUser.Stashes);
-	}
+		if (!loading && id && imageSelect) {
+			fetchData();
+		}
+	}, [dispatch, id, imageSelect]);
 
 	useEffect(() => {
 		if (image && sessionUser) {
 			const isFavorite = image.Favorites.some((fav) => fav.user_id === sessionUser.id);
 			setFavoriteCheck(isFavorite);
 			setFaveCount(image.Favorites.length);
+			setStashes(Object.values(sessionUser.Stashes));
 		}
 	}, [sessionUser, image]);
 
@@ -119,7 +119,7 @@ function ImageModal({ id }) {
 	const checkStash = async (stashId) => {
 		if (!sessionUser) return;
 
-		const imgStash = Object.values(image.Stashes)
+		const imgStash = Object.values(image.Stashes);
 		const alreadyThere = imgStash.some((stash) => imageStashes.has(stash.id));
 		if (!alreadyThere) {
 			await dispatch(stashAnImage(image.id, stashId));
@@ -136,11 +136,9 @@ function ImageModal({ id }) {
 		} else uncheckStash(stashId);
 	};
 
-	const favoriteToggle = async (e) => {
-		e.preventDefault();
-
+	const favoriteToggle = async (existingFavorite) => {
+		setHold(true);
 		if (sessionUser) {
-			const existingFavorite = Object.values(userFaves).find((fav) => fav.image_id === image.id);
 			if (existingFavorite) {
 				await dispatch(delFavFromUser(existingFavorite.id));
 				setFaveCount((prevCount) => prevCount - 1);
@@ -153,6 +151,40 @@ function ImageModal({ id }) {
 
 			await dispatch(getFavoritesThunk(sessionUser.id));
 		}
+		setHold(false);
+	};
+
+	const favoriteButton = () => {
+		const existingFavorite = Object.values(userFaves).find((fav) => fav.image_id === image.id);
+		if (hold) {
+			return (
+				<div>
+					<button
+						style={
+							favoriteCheck ? { cursor: "pointer", background: "#DB570F" } : { cursor: "pointer" }
+						}
+						className="favorite">
+						🩵🩵🩵
+					</button>
+				</div>
+			);
+		} else
+			return (
+				<div>
+					<button
+						onClick={(e) => {
+							e.stopPropagation(), favoriteToggle(existingFavorite);
+						}}
+						style={
+							favoriteCheck
+								? { fontSize: "2rem", cursor: "pointer", background: "#DB570F" }
+								: { fontSize: "2rem", cursor: "pointer" }
+						}
+						className="favorite">
+						Favorite
+					</button>
+				</div>
+			);
 	};
 
 	const handleClickOutside = () => {
@@ -230,7 +262,7 @@ function ImageModal({ id }) {
 		}
 	};
 
-	if (loading || !image) {
+	if (!loading || !image) {
 		return <h1 style={{ color: "white" }}>Loading...💥</h1>;
 	}
 
@@ -268,7 +300,7 @@ function ImageModal({ id }) {
 													<input
 														type="checkbox"
 														checked={imageStashes.has(stash.id)}
-														onChange={() => checkbox(stash.id)}
+														onChange={(e) => checkbox(stash.id)}
 													/>
 													{stash.name}
 												</label>
@@ -283,20 +315,7 @@ function ImageModal({ id }) {
 							</div>
 						)}
 					</div>
-					{sessionUser && (
-						<div>
-							<button
-								onClick={favoriteToggle}
-								style={
-									favoriteCheck
-										? { cursor: "pointer", background: "#DB570F" }
-										: { cursor: "pointer" }
-								}
-								className="favorite">
-								Favorite
-							</button>
-						</div>
-					)}
+					{sessionUser && favoriteButton()}
 				</div>
 			</div>
 			<span className="imgInfo">

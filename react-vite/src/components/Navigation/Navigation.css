@@ -1,5 +1,7 @@
 html, body {
-	background: #02669c;
+	margin: 0;
+	background: #02669c3d;
+	height: 100vh;
 }
 
 .nav {

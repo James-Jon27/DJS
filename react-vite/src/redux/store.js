@@ -13,6 +13,7 @@ import labelReducer from "./label";
 import searchLabelReducer from "./searchLabel";
 import userReducer from "./user";
 import favoriteReducer from "./favorites";
+import labelImageReducer from "./labelImages";
 
 
 
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   stash: stashReducer,
   comment: commentReducer,
   label: labelReducer,
+  labelMatch: labelImageReducer,
   search_label: searchLabelReducer,
   user: userReducer,
   favorite: favoriteReducer

@@ -26,7 +26,6 @@ function ExplorePage() {
 	const [imagesAreLoaded, setImagesAreLoaded] = useState(false);
 
 	// For loading the available labels
-	// TODO: Find only labels with images, NOT COMPLETE
 	useEffect(() => {
 		if (!labelsAreLoaded) {
 			dispatch(getLabelsForExplore()).then(() => setLabelsAreLoaded(true));
@@ -45,7 +44,7 @@ function ExplorePage() {
 	// If the user's input label is empty in state, then fill it in with a random available label
 	// For loading the images with the specified label
 	useEffect(() => {
-		setImagesAreLoaded(false)
+		setImagesAreLoaded(false);
 		if (label) {
 			if (!labelFromState) {
 				dispatch(getSearchLabel(label));
@@ -54,10 +53,12 @@ function ExplorePage() {
 		}
 	}, [dispatch, label, labelFromState, setImagesAreLoaded]);
 
-	const images = Object.values(useSelector((state) => state.image));
+	const images = Object.values(useSelector((state) => state.labelMatch));
 
 	if (!imagesAreLoaded) {
-		return <h1 style={{ textAlign: "center" }}>Loading Images with the &quot;{label}&quot; label...</h1>;
+		return (
+			<h1 style={{ textAlign: "center" }}>Loading Images with the &quot;{label}&quot; label...</h1>
+		);
 	}
 
 	return images.length ? (
@@ -67,9 +68,7 @@ function ExplorePage() {
 					<div key={image.id}>
 						<OpenModalImageItem
 							style={{ cursor: "pointer" }}
-							modalComponent={
-								<ImageModal id={image.id} />
-							}
+							modalComponent={<ImageModal id={image.id} />}
 							src={image.url}
 							alt={image.title ? image.title : "Image"}
 						/>
